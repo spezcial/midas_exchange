@@ -1,0 +1,105 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "copy": "Copy",
+    "copied": "Copied",
+    "search": "Search",
+    "filter": "Filter"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "howItWorks": "How It Works",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "wallets": "Wallets",
+    "exchange": "Exchange",
+    "history": "History",
+    "profile": "Profile",
+    "referral": "Referral Program",
+    "support": "Support",
+    "logout": "Logout",
+    "admin": "Admin Panel"
+  },
+  "auth": {
+    "login": {
+      "title": "Login to Account",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Login",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    },
+    "register": {
+      "title": "Registration",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "referralCode": "Referral Code (optional)",
+      "terms": "I accept the terms of use",
+      "submit": "Register",
+      "haveAccount": "Already have an account?",
+      "login": "Login"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Secure Cryptocurrency Exchange in Kazakhstan",
+      "subtitle": "Buy and sell BTC, ETH, USDT for tenge with minimal fees",
+      "cta": "Start Exchange"
+    },
+    "calculator": {
+      "title": "Exchange Calculator",
+      "from": "You Give",
+      "to": "You Get",
+      "amount": "Amount",
+      "rate": "Rate",
+      "fee": "Fee",
+      "total": "To Receive",
+      "exchange": "Exchange"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "balance": {
+      "title": "Total Balance",
+      "hidden": "Balance Hidden",
+      "show": "Show",
+      "hide": "Hide"
+    }
+  },
+  "wallets": {
+    "title": "Wallets",
+    "balance": "Balance",
+    "available": "Available",
+    "locked": "Locked",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "history": "History",
+    "address": "Address",
+    "network": "Network"
+  },
+  "exchange": {
+    "title": "Exchange",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "min": "Minimum",
+    "max": "Maximum",
+    "rate": "Exchange Rate",
+    "fee": "Fee",
+    "total": "To Receive",
+    "exchange": "Exchange"
+  }
+}
