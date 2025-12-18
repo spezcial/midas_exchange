@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import {
   Facebook,
   Twitter,
@@ -14,7 +13,6 @@ import {
 } from "lucide-react";
 
 export function Footer() {
-  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (

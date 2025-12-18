@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2, Shield } from "lucide-react";
-import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -21,84 +20,68 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuthStore } from "@/store/authStore";
-import type { User } from "@/types";
 
-const registerSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Обязательное поле")
-    .email("Некорректный email адрес"),
-  password: z
-    .string()
-    .min(8, "Пароль должен содержать минимум 8 символов")
-    .regex(/[A-Z]/, "Пароль должен содержать заглавную букву")
-    .regex(/[0-9]/, "Пароль должен содержать цифру"),
-  confirmPassword: z.string(),
-  referralCode: z.string().optional(),
-  agreeToTerms: z.boolean().refine(val => val === true, {
-    message: "Необходимо принять условия использования",
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Пароли не совпадают",
-  path: ["confirmPassword"],
-});
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type RegisterFormValues = {
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  confirm_password: string;
+  referral_code?: string;
+  agree_to_terms: boolean;
+};
 
 export function Register() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login } = useAuthStore();
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const register = useAuthStore((state) => state.register);
+  const is_loading = useAuthStore((state) => state.is_loading);
+
+  const register_schema = z.object({
+    email: z
+      .string()
+      .min(1, t("errors.required"))
+      .email(t("errors.email")),
+    first_name: z.string(),
+    last_name: z.string(),
+    password: z
+      .string()
+      .min(8, t("errors.passwordMinLength"))
+      .regex(/[A-Z]/, t("errors.passwordUppercase"))
+      .regex(/[0-9]/, t("errors.passwordNumber")),
+    confirm_password: z.string(),
+    referral_code: z.string().optional(),
+    agree_to_terms: z.boolean().refine(val => val === true, {
+      message: t("errors.termsRequired"),
+    }),
+  }).refine((data) => data.password === data.confirm_password, {
+    message: t("errors.passwordMatch"),
+    path: ["confirm_password"],
+  });
+
+  const [show_password, set_show_password] = useState(false);
+  const [show_confirm_password, set_show_confirm_password] = useState(false);
 
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(register_schema),
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
-      referralCode: searchParams.get("ref") || "",
-      agreeToTerms: false,
+      first_name: "",
+      last_name: "",
+      confirm_password: "",
+      referral_code: searchParams.get("ref") || "",
+      agree_to_terms: false,
     },
   });
 
-  const onSubmit = async (values: RegisterFormValues) => {
-    setIsLoading(true);
-    
+  const on_submit = async (values: RegisterFormValues) => {
     try {
-      // Симуляция API запроса
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Создание mock пользователя
-      const newUser: User = {
-        id: Math.random().toString(36).substr(2, 9),
-        email: values.email,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        kycLevel: 0,
-        isBlocked: false,
-        twoFactorEnabled: false,
-        referralCode: Math.random().toString(36).substr(2, 8).toUpperCase(),
-        referredBy: values.referralCode || undefined,
-      };
-
-      // Создание mock токена
-      const token = "mock_jwt_token_" + Math.random().toString(36);
-      
-      // Авторизация пользователя
-      login(newUser, token);
-      
-      toast.success(t("messages.registerSuccess"));
-      navigate("/dashboard");
-      
+      await register(values.email, values.first_name, values.last_name, values.password, values.referral_code);
+      // No manual navigation needed - PublicRoute will redirect automatically
     } catch (error) {
-      toast.error("Ошибка при регистрации. Попробуйте снова.");
-    } finally {
-      setIsLoading(false);
+      // Error is already handled by the store and toast
+      console.error("Registration failed:", error);
     }
   };
 
@@ -113,14 +96,14 @@ export function Register() {
             {t("auth.register.title")}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Создайте аккаунт для торговли криптовалютой
+            {t("auth.register.subtitle")}
           </p>
         </div>
 
         <Card>
           <CardContent className="p-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(on_submit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="email"
@@ -132,13 +115,51 @@ export function Register() {
                           placeholder="your@email.com"
                           type="email"
                           autoComplete="email"
-                          disabled={isLoading}
+                          disabled={is_loading}
                           {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="first_name"
+                    render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("auth.register.first_name")}</FormLabel>
+                          <FormControl>
+                            <Input
+                                placeholder=""
+                                type="text"
+                                disabled={is_loading}
+                                {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="last_name"
+                    render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("auth.register.last_name")}</FormLabel>
+                          <FormControl>
+                            <Input
+                                placeholder=""
+                                type="text"
+                                disabled={is_loading}
+                                {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                    )}
                 />
 
                 <FormField
@@ -151,9 +172,9 @@ export function Register() {
                         <div className="relative">
                           <Input
                             placeholder="••••••••"
-                            type={showPassword ? "text" : "password"}
+                            type={show_password ? "text" : "password"}
                             autoComplete="new-password"
-                            disabled={isLoading}
+                            disabled={is_loading}
                             {...field}
                           />
                           <Button
@@ -161,10 +182,10 @@ export function Register() {
                             variant="ghost"
                             size="sm"
                             className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowPassword(!showPassword)}
-                            disabled={isLoading}
+                            onClick={() => set_show_password(!show_password)}
+                            disabled={is_loading}
                           >
-                            {showPassword ? (
+                            {show_password ? (
                               <EyeOff className="h-4 w-4" />
                             ) : (
                               <Eye className="h-4 w-4" />
@@ -182,7 +203,7 @@ export function Register() {
 
                 <FormField
                   control={form.control}
-                  name="confirmPassword"
+                  name="confirm_password"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("auth.register.confirmPassword")}</FormLabel>
@@ -190,9 +211,9 @@ export function Register() {
                         <div className="relative">
                           <Input
                             placeholder="••••••••"
-                            type={showConfirmPassword ? "text" : "password"}
+                            type={show_confirm_password ? "text" : "password"}
                             autoComplete="new-password"
-                            disabled={isLoading}
+                            disabled={is_loading}
                             {...field}
                           />
                           <Button
@@ -200,10 +221,10 @@ export function Register() {
                             variant="ghost"
                             size="sm"
                             className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            disabled={isLoading}
+                            onClick={() => set_show_confirm_password(!show_confirm_password)}
+                            disabled={is_loading}
                           >
-                            {showConfirmPassword ? (
+                            {show_confirm_password ? (
                               <EyeOff className="h-4 w-4" />
                             ) : (
                               <Eye className="h-4 w-4" />
@@ -216,9 +237,9 @@ export function Register() {
                   )}
                 />
 
-                <FormField
+                {/*<FormField
                   control={form.control}
-                  name="referralCode"
+                  name="referral_code"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("auth.register.referralCode")}</FormLabel>
@@ -232,18 +253,18 @@ export function Register() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                />*/}
 
                 <FormField
                   control={form.control}
-                  name="agreeToTerms"
+                  name="agree_to_terms"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
-                          disabled={isLoading}
+                          disabled={is_loading}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -253,14 +274,14 @@ export function Register() {
                             to="/terms"
                             className="text-primary hover:underline"
                           >
-                            условия использования
+                            {t("auth.register.termsText")}
                           </Link>{" "}
-                          и{" "}
+                          {t("auth.register.andText")}{" "}
                           <Link
                             to="/privacy"
                             className="text-primary hover:underline"
                           >
-                            политику конфиденциальности
+                            {t("auth.register.privacyText")}
                           </Link>
                         </FormLabel>
                         <FormMessage />
@@ -273,9 +294,9 @@ export function Register() {
                   type="submit"
                   className="w-full"
                   size="lg"
-                  disabled={isLoading}
+                  disabled={is_loading}
                 >
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {is_loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {t("auth.register.submit")}
                 </Button>
               </form>

@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(
+export function format_currency(
   amount: number,
   currency: string,
   locale: string = "ru-RU"
@@ -19,7 +19,7 @@ export function formatCurrency(
   return formatter.format(amount);
 }
 
-export function formatNumber(
+export function format_number(
   number: number,
   locale: string = "ru-RU",
   decimals: number = 2
@@ -30,22 +30,22 @@ export function formatNumber(
   }).format(number);
 }
 
-export function maskEmail(email: string): string {
-  const [localPart, domain] = email.split("@");
-  const maskedLocal = localPart.slice(0, 2) + "***";
-  return `${maskedLocal}@${domain}`;
+export function mask_email(email: string): string {
+  const [local_part, domain] = email.split("@");
+  const masked_local = local_part.slice(0, 2) + "***";
+  return `${masked_local}@${domain}`;
 }
 
-export function maskWalletAddress(address: string): string {
+export function mask_wallet_address(address: string): string {
   if (address.length < 10) return address;
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-export function copyToClipboard(text: string): Promise<void> {
+export function copy_to_clipboard(text: string): Promise<void> {
   return navigator.clipboard.writeText(text);
 }
 
-export function getInitials(name: string): string {
+export function get_initials(name: string): string {
   return name
     .split(" ")
     .map((part) => part[0])

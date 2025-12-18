@@ -2,9 +2,8 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import {
   Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
+  type FieldPath,
+  type FieldValues,
   FormProvider,
   useFormContext,
 } from "react-hook-form"
@@ -30,7 +29,7 @@ const FormField = <
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: React.ComponentPropsWithoutRef<typeof Controller<TFieldValues, TName>>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
@@ -54,9 +53,9 @@ const useFormField = () => {
   return {
     id,
     name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
+    form_item_id: `${id}-form-item`,
+    form_description_id: `${id}-form-item-description`,
+    form_message_id: `${id}-form-item-message`,
     ...fieldState,
   }
 }
@@ -87,13 +86,13 @@ const FormLabel = React.forwardRef<
   React.ElementRef<typeof Label>,
   React.ComponentPropsWithoutRef<typeof Label>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField()
+  const { error, form_item_id } = useFormField()
 
   return (
     <Label
       ref={ref}
       className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
+      htmlFor={form_item_id}
       {...props}
     />
   )
@@ -104,16 +103,16 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+  const { error, form_item_id, form_description_id, form_message_id } = useFormField()
 
   return (
     <Slot
       ref={ref}
-      id={formItemId}
+      id={form_item_id}
       aria-describedby={
         !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
+          ? `${form_description_id}`
+          : `${form_description_id} ${form_message_id}`
       }
       aria-invalid={!!error}
       {...props}
@@ -126,12 +125,12 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField()
+  const { form_description_id } = useFormField()
 
   return (
     <p
       ref={ref}
-      id={formDescriptionId}
+      id={form_description_id}
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
@@ -143,7 +142,7 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField()
+  const { error, form_message_id } = useFormField()
   const body = error ? String(error?.message) : children
 
   if (!body) {
@@ -153,7 +152,7 @@ const FormMessage = React.forwardRef<
   return (
     <p
       ref={ref}
-      id={formMessageId}
+      id={form_message_id}
       className={cn("text-sm font-medium text-destructive", className)}
       {...props}
     >

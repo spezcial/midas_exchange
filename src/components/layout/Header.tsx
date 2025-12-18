@@ -30,7 +30,9 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const is_authenticated = useAuthStore((state) => state.is_authenticated);
+  const logout = useAuthStore((state) => state.logout);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -76,7 +78,7 @@ export function Header() {
               <Link to="/how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
                 {t("nav.howItWorks")}
               </Link>
-              {isAuthenticated && (
+              {is_authenticated && user?.role !== "admin" && (
                 <>
                   <Link to="/exchange" className="text-sm font-medium hover:text-primary transition-colors">
                     {t("nav.exchange")}
@@ -123,7 +125,7 @@ export function Header() {
               {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
-            {isAuthenticated ? (
+            {is_authenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
@@ -137,26 +139,41 @@ export function Header() {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-                    <User className="mr-2 h-4 w-4" />
-                    {t("nav.dashboard")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/wallets")}>
-                    <Wallet className="mr-2 h-4 w-4" />
-                    {t("nav.wallets")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/history")}>
-                    <History className="mr-2 h-4 w-4" />
-                    {t("nav.history")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/referral")}>
-                    <Users className="mr-2 h-4 w-4" />
-                    {t("nav.referral")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/profile")}>
-                    <Settings className="mr-2 h-4 w-4" />
-                    {t("nav.profile")}
-                  </DropdownMenuItem>
+                  {user?.role === "admin" ? (
+                    <>
+                      <DropdownMenuItem onClick={() => navigate("/admin/exchanges")}>
+                        <User className="mr-2 h-4 w-4" />
+                        Обмены
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/admin/exchange-rates")}>
+                        <User className="mr-2 h-4 w-4" />
+                        Курсы обмена
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                        <User className="mr-2 h-4 w-4" />
+                        {t("nav.dashboard")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/wallets")}>
+                        <Wallet className="mr-2 h-4 w-4" />
+                        {t("nav.wallets")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/history")}>
+                        <History className="mr-2 h-4 w-4" />
+                        {t("nav.history")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/referral")}>
+                        <Users className="mr-2 h-4 w-4" />
+                        {t("nav.referral")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/profile")}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        {t("nav.profile")}
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
@@ -218,7 +235,7 @@ export function Header() {
               >
                 {t("nav.howItWorks")}
               </Link>
-              {isAuthenticated && (
+              {is_authenticated && user?.role !== "admin" && (
                 <>
                   <Link
                     to="/exchange"
@@ -240,6 +257,24 @@ export function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {t("nav.dashboard")}
+                  </Link>
+                </>
+              )}
+              {is_authenticated && user?.role === "admin" && (
+                <>
+                  <Link
+                    to="/admin/exchanges"
+                    className="px-4 py-2 text-sm font-medium hover:bg-accent rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Обмены
+                  </Link>
+                  <Link
+                    to="/admin/exchange-rates"
+                    className="px-4 py-2 text-sm font-medium hover:bg-accent rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Курсы обмена
                   </Link>
                 </>
               )}

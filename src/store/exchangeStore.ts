@@ -1,105 +1,152 @@
 import { create } from "zustand";
 import type { Currency, ExchangeRate } from "@/types";
+import { exchangeService } from "@/api/services/exchangeService";
+import toast from "react-hot-toast";
 
 interface ExchangeState {
-  fromCurrency: Currency;
-  toCurrency: Currency;
-  fromAmount: number;
-  toAmount: number;
+  from_currency: Currency;
+  to_currency: Currency;
+  from_amount: number;
+  to_amount: number;
   rate: number;
   fee: number;
   rates: ExchangeRate[];
-  isRateFixed: boolean;
-  rateExpiresAt: Date | null;
-  setFromCurrency: (currency: Currency) => void;
-  setToCurrency: (currency: Currency) => void;
-  setFromAmount: (amount: number) => void;
-  setToAmount: (amount: number) => void;
-  setRates: (rates: ExchangeRate[]) => void;
-  calculateExchange: () => void;
-  fixRate: (seconds: number) => void;
-  swapCurrencies: () => void;
+  is_rate_fixed: boolean;
+  rate_expires_at: Date | null;
+  is_loading: boolean;
+  error: string | null;
+  set_from_currency: (currency: Currency) => void;
+  set_to_currency: (currency: Currency) => void;
+  set_from_amount: (amount: number) => void;
+  set_to_amount: (amount: number) => void;
+  set_rates: (rates: ExchangeRate[]) => void;
+  calculate_exchange: () => void;
+  fix_rate: (seconds: number) => void;
+  swap_currencies: () => void;
+  load_rates: () => Promise<void>;
+  execute_exchange: () => Promise<boolean>;
 }
 
 export const useExchangeStore = create<ExchangeState>((set, get) => ({
-  fromCurrency: "USD",
-  toCurrency: "BTC",
-  fromAmount: 100,
-  toAmount: 0,
+  from_currency: "USD",
+  to_currency: "BTC",
+  from_amount: 100,
+  to_amount: 0,
   rate: 0,
   fee: 0,
   rates: [],
-  isRateFixed: false,
-  rateExpiresAt: null,
-  
-  setFromCurrency: (currency) => {
-    set({ fromCurrency: currency });
-    get().calculateExchange();
+  is_rate_fixed: false,
+  rate_expires_at: null,
+  is_loading: false,
+  error: null,
+
+  set_from_currency: (currency) => {
+    set({ from_currency: currency });
+    get().calculate_exchange();
   },
-  
-  setToCurrency: (currency) => {
-    set({ toCurrency: currency });
-    get().calculateExchange();
+
+  set_to_currency: (currency) => {
+    set({ to_currency: currency });
+    get().calculate_exchange();
   },
-  
-  setFromAmount: (amount) => {
-    set({ fromAmount: amount });
-    get().calculateExchange();
+
+  set_from_amount: (amount) => {
+    set({ from_amount: amount });
+    get().calculate_exchange();
   },
-  
-  setToAmount: (amount) => {
-    set({ toAmount: amount });
-    // Calculate fromAmount based on toAmount
+
+  set_to_amount: (amount) => {
+    set({ to_amount: amount });
+    // Calculate from_amount based on to_amount
     const state = get();
-    const rateInfo = state.rates.find(
-      (r) => r.from === state.fromCurrency && r.to === state.toCurrency
+    const rate_info = state.rates.find(
+      (r) => r.from === state.from_currency && r.to === state.to_currency
     );
-    if (rateInfo) {
-      const fromAmount = amount / rateInfo.rate * (1 + rateInfo.fee);
-      set({ fromAmount });
+    if (rate_info) {
+      const from_amount = (amount / rate_info.rate) * (1 + rate_info.fee);
+      set({ from_amount });
     }
   },
-  
-  setRates: (rates) => {
+
+  set_rates: (rates) => {
     set({ rates });
-    get().calculateExchange();
+    get().calculate_exchange();
   },
-  
-  calculateExchange: () => {
+
+  calculate_exchange: () => {
     const state = get();
-    const rateInfo = state.rates.find(
-      (r) => r.from === state.fromCurrency && r.to === state.toCurrency
+    const rate_info = state.rates.find(
+      (r) => r.from === state.from_currency && r.to === state.to_currency
     );
-    
-    if (rateInfo) {
-      const feeAmount = state.fromAmount * rateInfo.fee;
-      const toAmount = (state.fromAmount - feeAmount) * rateInfo.rate;
+
+    if (rate_info) {
+      const fee_amount = state.from_amount * rate_info.fee;
+      const to_amount = (state.from_amount - fee_amount) * rate_info.rate;
       set({
-        toAmount,
-        rate: rateInfo.rate,
-        fee: rateInfo.fee,
+        to_amount,
+        rate: rate_info.rate,
+        fee: rate_info.fee,
       });
     }
   },
-  
-  fixRate: (seconds) => {
-    const expiresAt = new Date();
-    expiresAt.setSeconds(expiresAt.getSeconds() + seconds);
-    set({ isRateFixed: true, rateExpiresAt: expiresAt });
-    
+
+  fix_rate: (seconds) => {
+    const expires_at = new Date();
+    expires_at.setSeconds(expires_at.getSeconds() + seconds);
+    set({ is_rate_fixed: true, rate_expires_at: expires_at });
+
     setTimeout(() => {
-      set({ isRateFixed: false, rateExpiresAt: null });
+      set({ is_rate_fixed: false, rate_expires_at: null });
     }, seconds * 1000);
   },
-  
-  swapCurrencies: () => {
+
+  swap_currencies: () => {
     const state = get();
     set({
-      fromCurrency: state.toCurrency,
-      toCurrency: state.fromCurrency,
-      fromAmount: state.toAmount,
-      toAmount: state.fromAmount,
+      from_currency: state.to_currency,
+      to_currency: state.from_currency,
+      from_amount: state.to_amount,
+      to_amount: state.from_amount,
     });
-    get().calculateExchange();
+    get().calculate_exchange();
+  },
+
+  load_rates: async () => {
+    try {
+      set({ is_loading: true, error: null });
+      const rates = await exchangeService.get_rates();
+      set({ rates, is_loading: false });
+      get().calculate_exchange();
+    } catch (error: any) {
+      const error_message = error.response?.data?.error || "Failed to load exchange rates";
+      set({ is_loading: false, error: error_message });
+      toast.error(error_message);
+    }
+  },
+
+  execute_exchange: async (): Promise<boolean> => {
+    try {
+      const state = get();
+      set({ is_loading: true, error: null });
+
+      await exchangeService.execute({
+        from_currency: state.from_currency,
+        to_currency: state.to_currency,
+        amount: state.from_amount,
+      });
+
+      set({ is_loading: false });
+      toast.success(`Successfully exchanged ${state.from_amount} ${state.from_currency} to ${state.to_amount.toFixed(8)} ${state.to_currency}`);
+
+      // Reset form
+      set({ from_amount: 0, to_amount: 0 });
+
+      return true;
+    } catch (error: any) {
+      const error_message = error.response?.data?.error || "Failed to execute exchange";
+      set({ is_loading: false, error: error_message });
+      toast.error(error_message);
+      return false;
+    }
   },
 }));

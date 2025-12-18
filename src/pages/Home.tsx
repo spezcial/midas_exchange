@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { 
@@ -31,44 +31,44 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useExchangeStore } from "@/store/exchangeStore";
-import { formatCurrency, formatNumber } from "@/lib/utils";
+import { format_number } from "@/lib/utils";
 import type { Currency } from "@/types";
 
-const mockRates = [
-  { from: "USD" as Currency, to: "BTC" as Currency, rate: 0.000023, fee: 0.02, min: 10, max: 100000, updatedAt: new Date() },
-  { from: "BTC" as Currency, to: "USD" as Currency, rate: 43478, fee: 0.02, min: 0.0001, max: 10, updatedAt: new Date() },
-  { from: "USD" as Currency, to: "ETH" as Currency, rate: 0.00042, fee: 0.02, min: 10, max: 100000, updatedAt: new Date() },
-  { from: "ETH" as Currency, to: "USD" as Currency, rate: 2380, fee: 0.02, min: 0.001, max: 100, updatedAt: new Date() },
-  { from: "KZT" as Currency, to: "BTC" as Currency, rate: 0.00000005, fee: 0.025, min: 5000, max: 50000000, updatedAt: new Date() },
-  { from: "BTC" as Currency, to: "KZT" as Currency, rate: 20000000, fee: 0.025, min: 0.0001, max: 10, updatedAt: new Date() },
-  { from: "KZT" as Currency, to: "USDT" as Currency, rate: 0.0022, fee: 0.015, min: 5000, max: 50000000, updatedAt: new Date() },
-  { from: "USDT" as Currency, to: "KZT" as Currency, rate: 455, fee: 0.015, min: 10, max: 100000, updatedAt: new Date() },
+const mock_rates = [
+  { from: "USD" as Currency, to: "BTC" as Currency, rate: 0.000023, fee: 0.02, min: 10, max: 100000, updated_at: new Date() },
+  { from: "BTC" as Currency, to: "USD" as Currency, rate: 43478, fee: 0.02, min: 0.0001, max: 10, updated_at: new Date() },
+  { from: "USD" as Currency, to: "ETH" as Currency, rate: 0.00042, fee: 0.02, min: 10, max: 100000, updated_at: new Date() },
+  { from: "ETH" as Currency, to: "USD" as Currency, rate: 2380, fee: 0.02, min: 0.001, max: 100, updated_at: new Date() },
+  { from: "KZT" as Currency, to: "BTC" as Currency, rate: 0.00000005, fee: 0.025, min: 5000, max: 50000000, updated_at: new Date() },
+  { from: "BTC" as Currency, to: "KZT" as Currency, rate: 20000000, fee: 0.025, min: 0.0001, max: 10, updated_at: new Date() },
+  { from: "KZT" as Currency, to: "USDT" as Currency, rate: 0.0022, fee: 0.015, min: 5000, max: 50000000, updated_at: new Date() },
+  { from: "USDT" as Currency, to: "KZT" as Currency, rate: 455, fee: 0.015, min: 10, max: 100000, updated_at: new Date() },
 ];
 
 export function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
-    fromCurrency,
-    toCurrency,
-    fromAmount,
-    toAmount,
+    from_currency,
+    to_currency,
+    from_amount,
+    to_amount,
     rate,
     fee,
-    setFromCurrency,
-    setToCurrency,
-    setFromAmount,
-    setRates,
-    swapCurrencies,
+    set_from_currency,
+    set_to_currency,
+    set_from_amount,
+    set_rates,
+    swap_currencies,
   } = useExchangeStore();
 
   useEffect(() => {
-    setRates(mockRates);
-  }, [setRates]);
+    set_rates(mock_rates);
+  }, [set_rates]);
 
   const currencies: Currency[] = ["KZT", "USD", "BTC", "ETH", "USDT"];
 
-  const getCurrencyIcon = (currency: Currency) => {
+  const get_currency_icon = (currency: Currency) => {
     const icons = {
       KZT: "₸",
       USD: "$",
@@ -109,7 +109,7 @@ export function Home() {
     { label: t("home.stats.uptime"), value: "99.9%", icon: Shield },
   ];
 
-  const faqItems = [
+  const faq_items = [
     {
       question: "Как быстро проходят транзакции?",
       answer: "Обмен криптовалют происходит мгновенно после подтверждения в блокчейне. Вывод на банковские карты занимает от 5 до 30 минут.",
@@ -158,19 +158,19 @@ export function Home() {
                     <div className="flex-1">
                       <Input
                         type="number"
-                        value={fromAmount}
-                        onChange={(e) => setFromAmount(parseFloat(e.target.value) || 0)}
+                        value={from_amount}
+                        onChange={(e) => set_from_amount(parseFloat(e.target.value) || 0)}
                         placeholder="0.00"
                       />
                     </div>
-                    <Select value={fromCurrency} onValueChange={(value) => setFromCurrency(value as Currency)}>
+                    <Select value={from_currency} onValueChange={(value) => set_from_currency(value as Currency)}>
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         {currencies.map((currency) => (
                           <SelectItem key={currency} value={currency}>
-                            <span className="mr-2">{getCurrencyIcon(currency)}</span>
+                            <span className="mr-2">{get_currency_icon(currency)}</span>
                             {currency}
                           </SelectItem>
                         ))}
@@ -183,7 +183,7 @@ export function Home() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={swapCurrencies}
+                    onClick={swap_currencies}
                     className="rounded-full"
                   >
                     <ArrowDownUp className="h-4 w-4" />
@@ -196,20 +196,20 @@ export function Home() {
                     <div className="flex-1">
                       <Input
                         type="number"
-                        value={toAmount.toFixed(8)}
+                        value={to_amount.toFixed(8)}
                         readOnly
                         placeholder="0.00"
                         className="bg-muted"
                       />
                     </div>
-                    <Select value={toCurrency} onValueChange={(value) => setToCurrency(value as Currency)}>
+                    <Select value={to_currency} onValueChange={(value) => set_to_currency(value as Currency)}>
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         {currencies.map((currency) => (
                           <SelectItem key={currency} value={currency}>
-                            <span className="mr-2">{getCurrencyIcon(currency)}</span>
+                            <span className="mr-2">{get_currency_icon(currency)}</span>
                             {currency}
                           </SelectItem>
                         ))}
@@ -223,7 +223,7 @@ export function Home() {
                 <div className="flex justify-between text-sm">
                   <span>{t("home.calculator.rate")}</span>
                   <span className="font-medium">
-                    1 {fromCurrency} = {formatNumber(rate, "ru-RU", 8)} {toCurrency}
+                    1 {from_currency} = {format_number(rate, "ru-RU", 8)} {to_currency}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -233,7 +233,7 @@ export function Home() {
                 <div className="flex justify-between text-sm font-bold pt-2 border-t">
                   <span>{t("home.calculator.total")}</span>
                   <span>
-                    {formatNumber(toAmount, "ru-RU", 8)} {toCurrency}
+                    {format_number(to_amount, "ru-RU", 8)} {to_currency}
                   </span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export function Home() {
             {t("home.faq.title")}
           </h2>
           <Accordion type="single" collapsible className="max-w-2xl mx-auto">
-            {faqItems.map((item, index) => (
+            {faq_items.map((item, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger>{item.question}</AccordionTrigger>
                 <AccordionContent>{item.answer}</AccordionContent>
