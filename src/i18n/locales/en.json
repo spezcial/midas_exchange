@@ -11,7 +11,14 @@
     "copy": "Copy",
     "copied": "Copied",
     "search": "Search",
-    "filter": "Filter"
+    "filter": "Filter",
+    "close": "Close",
+    "back": "Back",
+    "view": "View",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "optional": "Optional",
+    "submitting": "Submitting..."
   },
   "nav": {
     "home": "Home",
@@ -101,5 +108,70 @@
     "fee": "Fee",
     "total": "To Receive",
     "exchange": "Exchange"
+  },
+  "admin": {
+    "nav": {
+      "exchanges": "Exchanges",
+      "exchangeRates": "Exchange Rates",
+      "users": "Users"
+    },
+    "exchanges": {
+      "title": "Manage Exchanges",
+      "subtitle": "View all user exchanges",
+      "viewDetails": "View Details",
+      "allStatuses": "All Statuses",
+      "id": "ID",
+      "user": "User",
+      "pair": "Pair",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions",
+      "noExchanges": "No exchanges found",
+      "received": "Received"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage all users and their accounts",
+      "searchByEmail": "Search by Email",
+      "totalUsers": "Total Users",
+      "id": "ID",
+      "email": "Email",
+      "name": "Name",
+      "kycLevel": "KYC Level",
+      "status": "Status",
+      "registeredAt": "Registered",
+      "actions": "Actions",
+      "noUsers": "No users found",
+      "blocked": "Blocked",
+      "active": "Active",
+      "view": "View",
+      "phone": "Phone",
+      "referralCode": "Referral Code",
+      "referredBy": "Referred By",
+      "twoFactor": "2FA"
+    },
+    "userDetail": {
+      "title": "User Details",
+      "information": "User Information",
+      "wallets": "Wallets",
+      "deposit": "Deposit",
+      "manualDeposit": "Manual Deposit",
+      "depositDescription": "Add funds to user's wallet",
+      "currency": "Currency",
+      "amount": "Amount",
+      "txHash": "Transaction Hash",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter a description for this deposit",
+      "warning": "Warning",
+      "depositWarning": "This will immediately add funds to the user's wallet. Please verify all details before submitting.",
+      "confirmDeposit": "Confirm Deposit",
+      "depositSuccess": "Deposit completed successfully",
+      "depositFailed": "Failed to deposit",
+      "noWallets": "No wallets found"
+    }
+  },
+  "messages": {
+    "loadUsersFailed": "Failed to load users",
+    "loadUserFailed": "Failed to load user"
   }
 }

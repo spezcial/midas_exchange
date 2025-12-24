@@ -20,6 +20,8 @@ import { About } from "@/pages/About";
 import { HowItWorks } from "@/pages/HowItWorks";
 import { AdminExchanges } from "@/pages/AdminExchanges";
 import { AdminExchangeRates } from "@/pages/AdminExchangeRates";
+import { AdminUsers } from "@/pages/AdminUsers";
+import { AdminUserDetail } from "@/pages/AdminUserDetail";
 
 // Helper component to prevent admin access to client routes
 function ClientRoute({ children }: { children: React.ReactNode }) {
@@ -83,6 +85,8 @@ export function AppRoutes() {
         {/* Admin routes */}
         <Route path="/admin/exchanges" element={<AdminRoute><AdminExchanges /></AdminRoute>} />
         <Route path="/admin/exchange-rates" element={<AdminRoute><AdminExchangeRates /></AdminRoute>} />
+        <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+        <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetail /></AdminRoute>} />
       </Route>
     </Routes>
   );

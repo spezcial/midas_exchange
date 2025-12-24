@@ -35,6 +35,7 @@ export function DashboardLayout() {
   const admin_nav_items = [
     { path: "/admin/exchanges", icon: "📋", label: t("admin.nav.exchanges") },
     { path: "/admin/exchange-rates", icon: "💱", label: t("admin.nav.exchangeRates") },
+    { path: "/admin/users", icon: "👥", label: t("admin.nav.users") },
   ];
 
   const languages = [
