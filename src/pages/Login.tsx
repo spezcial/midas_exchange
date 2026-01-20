@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, Shield } from "lucide-react";
+import { Eye, EyeOff, Loader2, Shield, Chrome } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,7 +29,9 @@ type LoginFormValues = {
 export function Login() {
   const { t } = useTranslation();
   const login = useAuthStore((state) => state.login);
+  const initiate_google_login = useAuthStore((state) => state.initiate_google_login);
   const is_loading = useAuthStore((state) => state.is_loading);
+  const [google_loading, set_google_loading] = useState(false);
 
   const login_schema = z.object({
     email: z
@@ -56,6 +58,16 @@ export function Login() {
       await login(values.email, values.password, values.remember_me ? values.remember_me : false);
     } catch (error) {
       console.error("Login failed:", error);
+    }
+  };
+
+  const handle_google_login = async () => {
+    try {
+      set_google_loading(true);
+      await initiate_google_login();
+    } catch (error) {
+      console.error("Google login failed:", error);
+      set_google_loading(false);
     }
   };
 
@@ -164,13 +176,40 @@ export function Login() {
                 type="submit"
                 className="w-full"
                 size="lg"
-                disabled={is_loading}
+                disabled={is_loading || google_loading}
               >
                 {is_loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {t("auth.login.submit")}
               </Button>
             </form>
           </Form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                {t("auth.login.orContinueWith")}
+              </span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            size="lg"
+            onClick={handle_google_login}
+            disabled={is_loading || google_loading}
+          >
+            {google_loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Chrome className="mr-2 h-4 w-4" />
+            )}
+            {t("auth.login.googleButton")}
+          </Button>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">

@@ -59,7 +59,22 @@
       "noAccount": "Нет аккаунта?",
       "register": "Зарегистрироваться",
       "twoFactor": "Двухфакторная аутентификация",
-      "twoFactorCode": "Код 2FA"
+      "twoFactorCode": "Код 2FA",
+      "orContinueWith": "Или продолжить через",
+      "googleButton": "Продолжить с Google"
+    },
+    "google": {
+      "authenticating": "Авторизация через Google...",
+      "errorTitle": "Ошибка авторизации",
+      "errorFromGoogle": "Авторизация через Google была отменена или не удалась.",
+      "invalidState": "Недействительное состояние сессии. Попробуйте снова.",
+      "noCode": "Код авторизации не получен.",
+      "authFailed": "Авторизация не удалась. Попробуйте снова.",
+      "backToLogin": "Вернуться к входу",
+      "emailRegisteredTitle": "Аккаунт уже существует",
+      "emailAlreadyRegistered": "Этот email уже зарегистрирован с паролем. Пожалуйста, используйте email и пароль для входа.",
+      "loginWithPassword": "Войти с паролем",
+      "emailRegisteredHint": "Если вы забыли пароль, вы можете сбросить его на странице входа."
     },
     "register": {
       "title": "Регистрация",
@@ -77,7 +92,9 @@
       "submit": "Зарегистрироваться",
       "haveAccount": "Уже есть аккаунт?",
       "login": "Войти",
-      "passwordRequirements": "Минимум 8 символов, одна заглавная буква и цифра"
+      "passwordRequirements": "Минимум 8 символов, одна заглавная буква и цифра",
+      "orContinueWith": "Или продолжить через",
+      "googleButton": "Продолжить с Google"
     },
     "forgotPassword": {
       "title": "Восстановление пароля",

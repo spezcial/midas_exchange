@@ -17,6 +17,8 @@ interface AuthState {
   set_loading: (loading: boolean) => void;
   check_auth: () => Promise<void>;
   clear_error: () => void;
+  initiate_google_login: () => Promise<void>;
+  complete_google_login: (code: string, state: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -93,6 +95,37 @@ export const useAuthStore = create<AuthState>()(
       },
 
       clear_error: () => set({ error: null }),
+
+      initiate_google_login: async () => {
+        try {
+          set({ is_loading: true, error: null });
+          const { auth_url, state } = await authService.get_google_oauth_url();
+          // Store state for verification in callback
+          sessionStorage.setItem('oauth_state', state);
+
+          // Redirect to Google
+          window.location.href = auth_url;
+        } catch (error) {
+          const error_message = "Failed to initiate Google login.";
+          set({ is_loading: false, error: error_message });
+          toast.error(error_message);
+          throw error;
+        }
+      },
+
+      complete_google_login: async (code: string, state: string) => {
+        try {
+          set({ is_loading: true, error: null });
+          const { user, access_token, refresh_token } = await authService.google_callback({ code, state });
+          set({ user, access_token, refresh_token, is_authenticated: true, is_loading: false });
+          toast.success("Login successful!");
+        } catch (error: unknown) {
+          const error_message = (error as { response?: { data?: { error?: string } } })?.response?.data?.error || "Google login failed.";
+          set({ is_loading: false, error: error_message });
+          toast.error(error_message);
+          throw error;
+        }
+      },
     }),
     {
       name: "auth-storage",

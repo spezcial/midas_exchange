@@ -45,7 +45,22 @@
       "forgotPassword": "Forgot password?",
       "submit": "Login",
       "noAccount": "Don't have an account?",
-      "register": "Register"
+      "register": "Register",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Continue with Google"
+    },
+    "google": {
+      "authenticating": "Authenticating with Google...",
+      "errorTitle": "Authentication Error",
+      "errorFromGoogle": "Google authentication was cancelled or failed.",
+      "invalidState": "Invalid session state. Please try again.",
+      "noCode": "No authorization code received.",
+      "authFailed": "Authentication failed. Please try again.",
+      "backToLogin": "Back to Login",
+      "emailRegisteredTitle": "Account Already Exists",
+      "emailAlreadyRegistered": "This email is already registered with a password. Please use your email and password to log in.",
+      "loginWithPassword": "Login with Password",
+      "emailRegisteredHint": "If you forgot your password, you can reset it on the login page."
     },
     "register": {
       "title": "Registration",
@@ -56,7 +71,9 @@
       "terms": "I accept the terms of use",
       "submit": "Register",
       "haveAccount": "Already have an account?",
-      "login": "Login"
+      "login": "Login",
+      "orContinueWith": "Or continue with",
+      "googleButton": "Continue with Google"
     }
   },
   "home": {

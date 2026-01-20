@@ -36,6 +36,19 @@ export interface BackendAuthResponse {
   };
 }
 
+export interface GoogleOAuthUrlResponse {
+  success: boolean;
+  data: {
+    auth_url: string;
+    state: string;
+  };
+}
+
+export interface GoogleCallbackData {
+  code: string;
+  state: string;
+}
+
 export const authService = {
   /**
    * Register a new user
@@ -76,6 +89,22 @@ export const authService = {
       "/auth/refresh",
       { refresh_token }
     );
+    return response.data.data;
+  },
+
+  /**
+   * Get Google OAuth URL
+   */
+  get_google_oauth_url: async (): Promise<GoogleOAuthUrlResponse["data"]> => {
+    const response = await apiClient.get<GoogleOAuthUrlResponse>("/auth/google/url");
+    return response.data.data;
+  },
+
+  /**
+   * Exchange Google authorization code for tokens
+   */
+  google_callback: async (data: GoogleCallbackData): Promise<BackendAuthResponse["data"]> => {
+    const response = await apiClient.post<BackendAuthResponse>("/auth/google/callback", data);
     return response.data.data;
   },
 };

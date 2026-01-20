@@ -10,6 +10,7 @@ import { PublicRoute } from "./PublicRoute";
 import { Home } from "@/pages/Home";
 import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
+import { GoogleOAuthCallback } from "@/pages/GoogleOAuthCallback";
 import { Dashboard } from "@/pages/Dashboard";
 import { Exchange } from "@/pages/Exchange";
 import { Wallets } from "@/pages/Wallets";
@@ -66,6 +67,9 @@ export function AppRoutes() {
           }
         />
       </Route>
+
+      {/* OAuth callback route (standalone, no layout) */}
+      <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
 
       {/* Protected client routes */}
       <Route

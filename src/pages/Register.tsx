@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, Shield } from "lucide-react";
+import { Eye, EyeOff, Loader2, Shield, Chrome } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -35,7 +35,9 @@ export function Register() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const register = useAuthStore((state) => state.register);
+  const initiate_google_login = useAuthStore((state) => state.initiate_google_login);
   const is_loading = useAuthStore((state) => state.is_loading);
+  const [google_loading, set_google_loading] = useState(false);
 
   const register_schema = z.object({
     email: z
@@ -82,6 +84,16 @@ export function Register() {
     } catch (error) {
       // Error is already handled by the store and toast
       console.error("Registration failed:", error);
+    }
+  };
+
+  const handle_google_register = async () => {
+    try {
+      set_google_loading(true);
+      await initiate_google_login();
+    } catch (error) {
+      console.error("Google registration failed:", error);
+      set_google_loading(false);
     }
   };
 
@@ -294,13 +306,40 @@ export function Register() {
                   type="submit"
                   className="w-full"
                   size="lg"
-                  disabled={is_loading}
+                  disabled={is_loading || google_loading}
                 >
                   {is_loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {t("auth.register.submit")}
                 </Button>
               </form>
             </Form>
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">
+                  {t("auth.register.orContinueWith")}
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              size="lg"
+              onClick={handle_google_register}
+              disabled={is_loading || google_loading}
+            >
+              {google_loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Chrome className="mr-2 h-4 w-4" />
+              )}
+              {t("auth.register.googleButton")}
+            </Button>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">

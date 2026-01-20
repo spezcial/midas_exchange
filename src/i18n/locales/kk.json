@@ -45,7 +45,22 @@
       "forgotPassword": "Құпия сөзді ұмыттыңыз ба?",
       "submit": "Кіру",
       "noAccount": "Аккаунт жоқ па?",
-      "register": "Тіркелу"
+      "register": "Тіркелу",
+      "orContinueWith": "Немесе арқылы жалғастыру",
+      "googleButton": "Google арқылы жалғастыру"
+    },
+    "google": {
+      "authenticating": "Google арқылы авторизация...",
+      "errorTitle": "Авторизация қатесі",
+      "errorFromGoogle": "Google авторизациясы тоқтатылды немесе сәтсіз болды.",
+      "invalidState": "Жарамсыз сессия күйі. Қайта әрекеттеніңіз.",
+      "noCode": "Авторизация коды алынбады.",
+      "authFailed": "Авторизация сәтсіз болды. Қайта әрекеттеніңіз.",
+      "backToLogin": "Кіруге оралу",
+      "emailRegisteredTitle": "Аккаунт бұрыннан бар",
+      "emailAlreadyRegistered": "Бұл email құпия сөзбен тіркелген. Кіру үшін email мен құпия сөзді пайдаланыңыз.",
+      "loginWithPassword": "Құпия сөзбен кіру",
+      "emailRegisteredHint": "Құпия сөзді ұмытсаңыз, кіру бетінде қалпына келтіре аласыз."
     },
     "register": {
       "title": "Тіркелу",
@@ -56,7 +71,9 @@
       "terms": "Пайдалану шарттарын қабылдаймын",
       "submit": "Тіркелу",
       "haveAccount": "Аккаунт бар ма?",
-      "login": "Кіру"
+      "login": "Кіру",
+      "orContinueWith": "Немесе арқылы жалғастыру",
+      "googleButton": "Google арқылы жалғастыру"
     }
   },
   "home": {
