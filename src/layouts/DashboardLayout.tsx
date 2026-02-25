@@ -2,7 +2,19 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
-import { Globe } from "lucide-react";
+import {
+  Globe,
+  Wallet,
+  ArrowLeftRight,
+  History,
+  UserCircle,
+  Share2,
+  ClipboardList,
+  TrendingUp,
+  Users,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,25 +35,24 @@ export function DashboardLayout() {
   const user = useAuthStore((state) => state.user);
   const is_admin = user?.role === "admin";
 
-  const nav_items = [
-    { path: "/dashboard", icon: "🏠", label: t("nav.dashboard") },
-    { path: "/wallets", icon: "💳", label: t("nav.wallets") },
-    { path: "/exchange", icon: "🔄", label: t("nav.exchange") },
-    { path: "/history", icon: "📊", label: t("nav.history") },
-    { path: "/profile", icon: "⚙️", label: t("nav.profile") },
-    { path: "/referral", icon: "🎁", label: t("nav.referral") },
+  const nav_items: { path: string; icon: LucideIcon; label: string }[] = [
+    { path: "/wallets", icon: Wallet, label: t("nav.wallets") },
+    { path: "/exchange", icon: ArrowLeftRight, label: t("nav.exchange") },
+    { path: "/history", icon: History, label: t("nav.history") },
+    { path: "/profile", icon: UserCircle, label: t("nav.profile") },
+    { path: "/referral", icon: Share2, label: t("nav.referral") },
   ];
 
-  const admin_nav_items = [
-    { path: "/admin/exchanges", icon: "📋", label: t("admin.nav.exchanges") },
-    { path: "/admin/exchange-rates", icon: "💱", label: t("admin.nav.exchangeRates") },
-    { path: "/admin/users", icon: "👥", label: t("admin.nav.users") },
+  const admin_nav_items: { path: string; icon: LucideIcon; label: string }[] = [
+    { path: "/admin/exchanges", icon: ClipboardList, label: t("admin.nav.exchanges") },
+    { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
+    { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
   ];
 
   const languages = [
-    { code: "ru", name: "Русский", flag: "🇷🇺" },
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "kk", name: "Қазақша", flag: "🇰🇿" },
+    { code: "ru", name: "Русский", short: "RU" },
+    { code: "en", name: "English", short: "EN" },
+    { code: "kk", name: "Қазақша", short: "KZ" },
   ];
 
   const changeLanguage = (lang: string) => {
@@ -67,7 +78,7 @@ export function DashboardLayout() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="w-full gap-2">
                   <Globe className="h-4 w-4" />
-                  <span>{languages.find((l) => l.code === i18n.language)?.flag}</span>
+                  <span className="text-xs font-semibold">{languages.find((l) => l.code === i18n.language)?.short}</span>
                   <span className="flex-1 text-left">{languages.find((l) => l.code === i18n.language)?.name}</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -78,7 +89,7 @@ export function DashboardLayout() {
                     onClick={() => changeLanguage(lang.code)}
                     className={i18n.language === lang.code ? "bg-accent" : ""}
                   >
-                    <span className="mr-2">{lang.flag}</span>
+                    <span className="mr-2 text-xs font-semibold text-muted-foreground">{lang.short}</span>
                     {lang.name}
                   </DropdownMenuItem>
                 ))}
@@ -96,12 +107,12 @@ export function DashboardLayout() {
                   to={item.path}
                   className={cn(
                     "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
-                    location.pathname === item.path
+                    location.pathname === item.path || location.pathname.startsWith(item.path + "/")
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-600 hover:bg-gray-50"
                   )}
                 >
-                  <span className="text-xl">{item.icon}</span>
+                  <item.icon className="h-5 w-5 shrink-0" />
                   <span className="font-medium">{item.label}</span>
                 </Link>
               ))
@@ -118,7 +129,7 @@ export function DashboardLayout() {
                       : "text-gray-600 hover:bg-gray-50"
                   )}
                 >
-                  <span className="text-xl">{item.icon}</span>
+                  <item.icon className="h-5 w-5 shrink-0" />
                   <span className="font-medium">{item.label}</span>
                 </Link>
               ))
@@ -132,7 +143,7 @@ export function DashboardLayout() {
             onClick={handle_logout}
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            <span className="text-xl">🚪</span>
+            <LogOut className="h-5 w-5 shrink-0" />
             <span className="font-medium">{t("nav.logout")}</span>
           </button>
         </div>

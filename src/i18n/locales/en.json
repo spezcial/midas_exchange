@@ -18,7 +18,8 @@
     "enabled": "Enabled",
     "disabled": "Disabled",
     "optional": "Optional",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "saving": "Saving..."
   },
   "nav": {
     "home": "Home",
@@ -114,6 +115,31 @@
     "address": "Address",
     "network": "Network"
   },
+  "profile": {
+    "title": "Profile",
+    "accountInfo": "Account Information",
+    "email": "Email",
+    "kycLevel": "KYC Level",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "middleName": "Middle Name",
+    "middleNamePlaceholder": "Middle name",
+    "phone": "Phone",
+    "phonePlaceholder": "+7 (700) 000-00-00",
+    "saveChanges": "Save Changes",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "changePasswordBtn": "Change Password",
+    "updateSuccess": "Profile updated",
+    "updateFailed": "Failed to update profile",
+    "passwordMismatch": "Passwords do not match",
+    "passwordChanged": "Password changed successfully",
+    "passwordFailed": "Failed to change password"
+  },
   "exchange": {
     "title": "Exchange",
     "from": "From",
@@ -167,6 +193,22 @@
       "referredBy": "Referred By",
       "twoFactor": "2FA"
     },
+    "userProfile": {
+      "title": "User Profile",
+      "information": "Profile Information",
+      "noProfile": "No profile yet",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "firstNamePlaceholder": "Enter first name",
+      "lastNamePlaceholder": "Enter last name",
+      "middleNamePlaceholder": "Enter middle name",
+      "phone": "Phone",
+      "phonePlaceholder": "+7 (700) 000-00-00",
+      "kycLevel": "KYC Level",
+      "update": "Update Profile",
+      "create": "Create Profile"
+    },
     "userDetail": {
       "title": "User Details",
       "information": "User Information",
@@ -184,11 +226,19 @@
       "confirmDeposit": "Confirm Deposit",
       "depositSuccess": "Deposit completed successfully",
       "depositFailed": "Failed to deposit",
-      "noWallets": "No wallets found"
+      "noWallets": "No wallets found",
+      "tabs": {
+        "details": "Details & Wallets",
+        "profile": "Profile"
+      }
     }
   },
   "messages": {
     "loadUsersFailed": "Failed to load users",
-    "loadUserFailed": "Failed to load user"
+    "loadUserFailed": "Failed to load user",
+    "loadProfileFailed": "Failed to load profile",
+    "profileUpdated": "Profile updated",
+    "profileCreated": "Profile created",
+    "saveProfileFailed": "Failed to save profile"
   }
 }

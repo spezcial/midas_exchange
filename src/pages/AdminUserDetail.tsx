@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { adminUsersService } from "@/api/services/adminUsersService";
 import type { User, Wallet } from "@/types";
@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { ArrowLeft, Wallet as WalletIcon, CheckCircle2, XCircle, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ManualDepositModal } from "@/components/modals/ManualDepositModal";
+import { cn } from "@/lib/utils";
 
 export function AdminUserDetail() {
   const { id } = useParams<{ id: string }>();
@@ -111,6 +112,28 @@ export function AdminUserDetail() {
             {t("admin.userDetail.title") || "User Details"}
           </h1>
         </div>
+      </div>
+
+      {/* Tab navigation */}
+      <div className="flex border-b border-gray-200">
+        <Link
+          to={`/admin/users/${id}`}
+          className={cn(
+            "px-5 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
+            "border-blue-600 text-blue-600"
+          )}
+        >
+          {t("admin.userDetail.tabs.details") || "Details & Wallets"}
+        </Link>
+        <Link
+          to={`/admin/users/${id}/profile`}
+          className={cn(
+            "px-5 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
+            "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+          )}
+        >
+          {t("admin.userDetail.tabs.profile") || "Profile"}
+        </Link>
       </div>
 
       {/* User Information Card */}

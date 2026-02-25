@@ -29,7 +29,9 @@
     "to": "до",
     "of": "из",
     "page": "Страница",
-    "exchanges": "обменов"
+    "exchanges": "обменов",
+    "optional": "Необязательно",
+    "saving": "Сохранение..."
   },
   "nav": {
     "home": "Главная",
@@ -369,6 +371,28 @@
   },
   "profile": {
     "title": "Профиль",
+    "accountInfo": "Информация об аккаунте",
+    "email": "Email",
+    "kycLevel": "Уровень KYC",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "firstNamePlaceholder": "Введите имя",
+    "lastNamePlaceholder": "Введите фамилию",
+    "middleName": "Отчество",
+    "middleNamePlaceholder": "Введите отчество",
+    "phone": "Телефон",
+    "phonePlaceholder": "+7 (700) 000-00-00",
+    "saveChanges": "Сохранить изменения",
+    "changePassword": "Изменить пароль",
+    "currentPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "changePasswordBtn": "Изменить пароль",
+    "updateSuccess": "Профиль обновлен",
+    "updateFailed": "Не удалось обновить профиль",
+    "passwordMismatch": "Пароли не совпадают",
+    "passwordChanged": "Пароль успешно изменен",
+    "passwordFailed": "Не удалось изменить пароль",
     "personalInfo": {
       "title": "Личная информация",
       "email": "Email",
@@ -541,6 +565,22 @@
       "referredBy": "Пригласил",
       "twoFactor": "2FA"
     },
+    "userProfile": {
+      "title": "Профиль пользователя",
+      "information": "Информация профиля",
+      "noProfile": "Профиль не создан",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "middleName": "Отчество",
+      "firstNamePlaceholder": "Введите имя",
+      "lastNamePlaceholder": "Введите фамилию",
+      "middleNamePlaceholder": "Введите отчество",
+      "phone": "Телефон",
+      "phonePlaceholder": "+7 (700) 000-00-00",
+      "kycLevel": "Уровень KYC",
+      "update": "Обновить профиль",
+      "create": "Создать профиль"
+    },
     "userDetail": {
       "title": "Детали пользователя",
       "information": "Информация о пользователе",
@@ -558,7 +598,11 @@
       "confirmDeposit": "Подтвердить пополнение",
       "depositSuccess": "Пополнение выполнено успешно",
       "depositFailed": "Не удалось выполнить пополнение",
-      "noWallets": "Кошельки не найдены"
+      "noWallets": "Кошельки не найдены",
+      "tabs": {
+        "details": "Детали и кошельки",
+        "profile": "Профиль"
+      }
     },
     "kyc": {
       "title": "Верификация KYC/KYB",
@@ -648,6 +692,9 @@
     "copyFailed": "Не удалось скопировать адрес",
     "exchangeFailed": "Ошибка при выполнении обмена",
     "loadUsersFailed": "Не удалось загрузить пользователей",
-    "loadUserFailed": "Не удалось загрузить пользователя"
+    "loadUserFailed": "Не удалось загрузить пользователя",
+    "loadProfileFailed": "Не удалось загрузить профиль",
+    "profileCreated": "Профиль создан",
+    "saveProfileFailed": "Не удалось сохранить профиль"
   }
 }

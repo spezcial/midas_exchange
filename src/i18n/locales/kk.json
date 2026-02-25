@@ -18,7 +18,8 @@
     "enabled": "Қосулы",
     "disabled": "Өшірулі",
     "optional": "Міндетті емес",
-    "submitting": "Жіберілуде..."
+    "submitting": "Жіберілуде...",
+    "saving": "Сақталуда..."
   },
   "nav": {
     "home": "Басты бет",
@@ -114,6 +115,31 @@
     "address": "Мекенжай",
     "network": "Желі"
   },
+  "profile": {
+    "title": "Профиль",
+    "accountInfo": "Аккаунт туралы ақпарат",
+    "email": "Email",
+    "kycLevel": "KYC деңгейі",
+    "firstName": "Аты",
+    "lastName": "Тегі",
+    "firstNamePlaceholder": "Атыңызды енгізіңіз",
+    "lastNamePlaceholder": "Тегіңізді енгізіңіз",
+    "middleName": "Әкесінің аты",
+    "middleNamePlaceholder": "Әкесінің атын енгізіңіз",
+    "phone": "Телефон",
+    "phonePlaceholder": "+7 (700) 000-00-00",
+    "saveChanges": "Өзгерістерді сақтау",
+    "changePassword": "Құпия сөзді өзгерту",
+    "currentPassword": "Ағымдағы құпия сөз",
+    "newPassword": "Жаңа құпия сөз",
+    "confirmPassword": "Жаңа құпия сөзді растау",
+    "changePasswordBtn": "Құпия сөзді өзгерту",
+    "updateSuccess": "Профиль жаңартылды",
+    "updateFailed": "Профильді жаңарту сәтсіз аяқталды",
+    "passwordMismatch": "Құпия сөздер сәйкес келмейді",
+    "passwordChanged": "Құпия сөз сәтті өзгертілді",
+    "passwordFailed": "Құпия сөзді өзгерту сәтсіз аяқталды"
+  },
   "exchange": {
     "title": "Айырбас",
     "from": "Кімнен",
@@ -167,6 +193,22 @@
       "referredBy": "Шақырушы",
       "twoFactor": "2FA"
     },
+    "userProfile": {
+      "title": "Пайдаланушы профилі",
+      "information": "Профиль туралы ақпарат",
+      "noProfile": "Профиль әлі жоқ",
+      "firstName": "Аты",
+      "lastName": "Тегі",
+      "middleName": "Әкесінің аты",
+      "firstNamePlaceholder": "Атын енгізіңіз",
+      "lastNamePlaceholder": "Тегін енгізіңіз",
+      "middleNamePlaceholder": "Әкесінің атын енгізіңіз",
+      "phone": "Телефон",
+      "phonePlaceholder": "+7 (700) 000-00-00",
+      "kycLevel": "KYC деңгейі",
+      "update": "Профильді жаңарту",
+      "create": "Профиль жасау"
+    },
     "userDetail": {
       "title": "Пайдаланушы мәліметтері",
       "information": "Пайдаланушы туралы ақпарат",
@@ -184,11 +226,19 @@
       "confirmDeposit": "Толтыруды растау",
       "depositSuccess": "Толтыру сәтті орындалды",
       "depositFailed": "Толтыру орындалмады",
-      "noWallets": "Әмияндар табылмады"
+      "noWallets": "Әмияндар табылмады",
+      "tabs": {
+        "details": "Мәліметтер және әмияндар",
+        "profile": "Профиль"
+      }
     }
   },
   "messages": {
     "loadUsersFailed": "Пайдаланушыларды жүктеу сәтсіз аяқталды",
-    "loadUserFailed": "Пайдаланушыны жүктеу сәтсіз аяқталды"
+    "loadUserFailed": "Пайдаланушыны жүктеу сәтсіз аяқталды",
+    "loadProfileFailed": "Профильді жүктеу сәтсіз аяқталды",
+    "profileUpdated": "Профиль жаңартылды",
+    "profileCreated": "Профиль жасалды",
+    "saveProfileFailed": "Профильді сақтау сәтсіз аяқталды"
   }
 }

@@ -1,5 +1,5 @@
 import { apiClient } from "../client";
-import type { User, Wallet } from "@/types";
+import type { User, Wallet, UserProfile, UserProfilePayload } from "@/types";
 
 export interface UsersListResponse {
   success: boolean;
@@ -54,5 +54,29 @@ export const adminUsersService = {
   manual_deposit: async (data: ManualDepositData): Promise<ManualDepositResponse> => {
     const response = await apiClient.post<ManualDepositResponse>("/admin/wallets/deposit", data);
     return response.data;
+  },
+
+  /**
+   * Get user profile (admin only)
+   */
+  get_user_profile: async (user_id: number): Promise<UserProfile> => {
+    const response = await apiClient.get<{ success: boolean; data: UserProfile }>(`/admin/users/${user_id}/profile`);
+    return response.data.data;
+  },
+
+  /**
+   * Create user profile - initial fill (admin only)
+   */
+  create_user_profile: async (user_id: number, data: UserProfilePayload): Promise<UserProfile> => {
+    const response = await apiClient.post<{ success: boolean; data: UserProfile }>(`/admin/users/${user_id}/profile`, data);
+    return response.data.data;
+  },
+
+  /**
+   * Update user profile (admin only)
+   */
+  update_user_profile: async (user_id: number, data: UserProfilePayload): Promise<UserProfile> => {
+    const response = await apiClient.put<{ success: boolean; data: UserProfile }>(`/admin/users/${user_id}/profile`, data);
+    return response.data.data;
   },
 };

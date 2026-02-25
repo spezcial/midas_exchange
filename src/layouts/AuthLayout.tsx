@@ -13,9 +13,9 @@ export function AuthLayout() {
   const { i18n } = useTranslation();
 
   const languages = [
-    { code: "ru", name: "Русский", flag: "🇷🇺" },
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "kk", name: "Қазақша", flag: "🇰🇿" },
+    { code: "ru", name: "Русский", short: "RU" },
+    { code: "en", name: "English", short: "EN" },
+    { code: "kk", name: "Қазақша", short: "KZ" },
   ];
 
   const changeLanguage = (lang: string) => {
@@ -30,7 +30,7 @@ export function AuthLayout() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-2">
               <Globe className="h-4 w-4" />
-              <span>{languages.find((l) => l.code === i18n.language)?.flag}</span>
+              <span className="text-xs font-semibold">{languages.find((l) => l.code === i18n.language)?.short}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -40,7 +40,7 @@ export function AuthLayout() {
                 onClick={() => changeLanguage(lang.code)}
                 className={i18n.language === lang.code ? "bg-accent" : ""}
               >
-                <span className="mr-2">{lang.flag}</span>
+                <span className="mr-2 text-xs font-semibold text-muted-foreground">{lang.short}</span>
                 {lang.name}
               </DropdownMenuItem>
             ))}

@@ -16,7 +16,7 @@ export function PublicRoute({ children }: PublicRouteProps) {
     if (user?.role === "admin") {
       return <Navigate to="/admin/exchanges" replace />;
     }
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/exchange" replace />;
   }
 
   return <>{children}</>;

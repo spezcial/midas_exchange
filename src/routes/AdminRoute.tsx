@@ -18,7 +18,7 @@ export function AdminRoute({ children }: AdminRouteProps) {
   // Check if user is admin
   if (user?.role !== "admin") {
     // Redirect non-admin users to dashboard
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/exchange" replace />;
   }
 
   return <>{children}</>;

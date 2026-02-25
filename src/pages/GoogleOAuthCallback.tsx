@@ -81,7 +81,7 @@ export function GoogleOAuthCallback() {
       if (user.role === "admin") {
         navigate("/admin/exchanges", { replace: true });
       } else {
-        navigate("/dashboard", { replace: true });
+        navigate("/exchange", { replace: true });
       }
     }
   }, [is_authenticated, user, navigate]);

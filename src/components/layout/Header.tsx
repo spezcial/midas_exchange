@@ -51,9 +51,9 @@ export function Header() {
   };
 
   const languages = [
-    { code: "ru", name: "Русский", flag: "🇷🇺" },
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "kk", name: "Қазақша", flag: "🇰🇿" },
+    { code: "ru", name: "Русский", short: "RU" },
+    { code: "en", name: "English", short: "EN" },
+    { code: "kk", name: "Қазақша", short: "KZ" },
   ];
 
   return (
@@ -96,8 +96,8 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-1">
                   <Globe className="h-4 w-4" />
-                  <span className="hidden sm:inline">
-                    {languages.find((l) => l.code === i18n.language)?.flag}
+                  <span className="hidden sm:inline text-xs font-semibold">
+                    {languages.find((l) => l.code === i18n.language)?.short}
                   </span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
@@ -109,7 +109,7 @@ export function Header() {
                     onClick={() => changeLanguage(lang.code)}
                     className={cn(i18n.language === lang.code && "bg-accent")}
                   >
-                    <span className="mr-2">{lang.flag}</span>
+                    <span className="mr-2 text-xs font-semibold text-muted-foreground">{lang.short}</span>
                     {lang.name}
                   </DropdownMenuItem>
                 ))}

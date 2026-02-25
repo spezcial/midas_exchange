@@ -195,3 +195,20 @@ export interface AdminExchangesListResponse {
   exchanges: AdminCurrencyExchange[];
   total: number;
 }
+
+export interface UserProfile {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  middle_name?: string;
+  kyc_level: 0 | 1 | 2 | 3;
+}
+
+export interface UserProfilePayload {
+  first_name: string;
+  last_name: string;
+  middle_name?: string;
+  phone?: string;
+  kyc_level: 0 | 1 | 2 | 3;
+}
