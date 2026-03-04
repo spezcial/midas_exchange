@@ -147,3 +147,32 @@ Wrap routes with `ProtectedRoute` component to require authentication:
   <YourComponent />
 </ProtectedRoute>
 ```
+
+---
+
+## RBAC — 7 Roles + Staff Management (implemented)
+
+The backend has 7 roles. All roles use `/api/v1/auth/login`. The `role` field is in the login response `user` object.
+
+### Role values (`UserRole` exported from `src/api/services/authService.ts`)
+
+```ts
+type UserRole = "client" | "admin" | "super_admin" | "operator" | "support" | "aml_specialist" | "compliance";
+```
+
+### Route guards
+- `AdminRoute` — allows `admin` and `super_admin`
+- `SuperAdminRoute` — allows `super_admin` only (redirects to `/admin/exchanges` otherwise)
+- `ClientRoute` — redirects any staff role (`admin`, `super_admin`, `operator`, `support`, `aml_specialist`, `compliance`) to `/admin/exchanges`
+
+### Staff management
+- Service: `src/api/services/staffService.ts` — endpoints at `/admin/super/staff` (no `{ success, data }` envelope)
+- Page: `src/pages/AdminStaff.tsx` — staff table with create/edit/deactivate; temp password shown once after creation
+- Route: `/admin/staff` protected by `SuperAdminRoute`
+- Sidebar "Staff" link visible only when `user.role === "super_admin"`
+
+### Staff role dropdown options (no `"client"`)
+`admin | super_admin | operator | support | aml_specialist | compliance`
+
+### Bootstrap
+First `super_admin` must be inserted directly in the DB. After that, login via `/api/v1/auth/login`.

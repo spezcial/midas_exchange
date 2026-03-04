@@ -1,12 +1,21 @@
 import { apiClient } from "../client";
 
+export type UserRole =
+  | "client"
+  | "admin"
+  | "super_admin"
+  | "operator"
+  | "support"
+  | "aml_specialist"
+  | "compliance";
+
 // Backend user structure
 export interface BackendUser {
   id: number;
   email: string;
   first_name: string;
   last_name: string;
-  role: string;
+  role: UserRole;
   is_active: boolean;
   is_verified: boolean;
   created_at: string;

@@ -156,7 +156,35 @@
     "nav": {
       "exchanges": "Exchanges",
       "exchangeRates": "Exchange Rates",
-      "users": "Users"
+      "users": "Users",
+      "staff": "Staff"
+    },
+    "staff": {
+      "title": "Staff Management",
+      "subtitle": "Manage staff members and their roles",
+      "createBtn": "Create Staff",
+      "createTitle": "Create Staff Member",
+      "editTitle": "Edit Staff Member",
+      "tempPasswordTitle": "Staff Member Created",
+      "tempPasswordWarning": "This password is shown only once and cannot be retrieved again. Copy it now.",
+      "confirmedCopy": "I have copied the password",
+      "email": "Email",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "name": "Name",
+      "role": "Role",
+      "isActive": "Active",
+      "total": "Total staff",
+      "noStaff": "No staff members found",
+      "create": "Create",
+      "deactivate": "Deactivate",
+      "deactivateConfirm": "Deactivate",
+      "createFailed": "Failed to create staff member",
+      "updateSuccess": "Staff member updated",
+      "updateFailed": "Failed to update staff member",
+      "deactivateSuccess": "Staff member deactivated",
+      "deactivateFailed": "Failed to deactivate staff member",
+      "loadFailed": "Failed to load staff"
     },
     "exchanges": {
       "title": "Manage Exchanges",

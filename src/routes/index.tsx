@@ -1,10 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "@/store/authStore";
 import { RootLayout } from "@/layouts/RootLayout";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { AdminRoute } from "./AdminRoute";
+import { SuperAdminRoute } from "./SuperAdminRoute";
 import { PublicRoute } from "./PublicRoute";
+import type { UserRole } from "@/api/services/authService";
 
 // Import pages from /src/pages
 import { Home } from "@/pages/Home";
@@ -24,20 +27,20 @@ import { AdminExchangeRates } from "@/pages/AdminExchangeRates";
 import { AdminUsers } from "@/pages/AdminUsers";
 import { AdminUserDetail } from "@/pages/AdminUserDetail";
 import { AdminUserProfile } from "@/pages/AdminUserProfile";
+import { AdminStaff } from "@/pages/AdminStaff";
 
-// Helper component to prevent admin access to client routes
+const STAFF_ROLES: UserRole[] = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
+
+// Helper component to prevent staff access to client routes
 function ClientRoute({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user);
 
-  if (user?.role === "admin") {
+  if (STAFF_ROLES.includes(user?.role as UserRole)) {
     return <Navigate to="/admin/exchanges" replace />;
   }
 
   return <>{children}</>;
 }
-
-// Import useAuthStore for ClientRoute
-import { useAuthStore } from "@/store/authStore";
 
 export function AppRoutes() {
   return (
@@ -93,6 +96,9 @@ export function AppRoutes() {
         <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
         <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetail /></AdminRoute>} />
         <Route path="/admin/users/:id/profile" element={<AdminRoute><AdminUserProfile /></AdminRoute>} />
+
+        {/* Super admin routes */}
+        <Route path="/admin/staff" element={<SuperAdminRoute><AdminStaff /></SuperAdminRoute>} />
       </Route>
     </Routes>
   );

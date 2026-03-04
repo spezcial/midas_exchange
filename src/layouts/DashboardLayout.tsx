@@ -12,6 +12,7 @@ import {
   ClipboardList,
   TrendingUp,
   Users,
+  UserCog,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
@@ -33,7 +34,9 @@ export function DashboardLayout() {
     navigate("/");
   };
   const user = useAuthStore((state) => state.user);
-  const is_admin = user?.role === "admin";
+  const STAFF_ROLES = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
+  const is_staff = STAFF_ROLES.includes(user?.role ?? "");
+  const is_super_admin = user?.role === "super_admin";
 
   const nav_items: { path: string; icon: LucideIcon; label: string }[] = [
     { path: "/wallets", icon: Wallet, label: t("nav.wallets") },
@@ -47,6 +50,7 @@ export function DashboardLayout() {
     { path: "/admin/exchanges", icon: ClipboardList, label: t("admin.nav.exchanges") },
     { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
     { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
+    ...(is_super_admin ? [{ path: "/admin/staff", icon: UserCog, label: t("admin.nav.staff") }] : []),
   ];
 
   const languages = [
@@ -99,7 +103,7 @@ export function DashboardLayout() {
 
           {/* Navigation */}
           <nav className="space-y-2">
-            {is_admin ? (
+            {is_staff ? (
               /* Admin Navigation */
               admin_nav_items.map((item) => (
                 <Link
