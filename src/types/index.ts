@@ -196,6 +196,81 @@ export interface AdminExchangesListResponse {
   total: number;
 }
 
+// OTC Types
+export type OTCOrderStatus =
+  | "awaiting_review"
+  | "negotiating"
+  | "awaiting_payment"
+  | "payment_received"
+  | "completed"
+  | "cancelled"
+  | "expired";
+
+export type OTCMessageType = "text" | "offer";
+export type OTCOfferStatus = "pending" | "accepted" | "rejected";
+
+export interface OTCOrder {
+  id: number;
+  uid: string;
+  user_id: number;
+  operator_id: number | null;
+  from_currency_id: number;
+  to_currency_id: number;
+  from_amount: number;
+  proposed_rate: number;
+  agreed_rate: number | null;
+  agreed_from_amount: number | null;
+  to_amount: number | null;
+  status: OTCOrderStatus;
+  comment: string | null;
+  cancel_reason: string | null;
+  cancelled_by: string | null;
+  payment_deadline: string | null;
+  created_at: string;
+  updated_at: string;
+  unread_count: number;
+}
+
+export interface OTCMessage {
+  id: number;
+  order_id: number;
+  sender_id: number;
+  sender_role: string;
+  message_type: OTCMessageType;
+  content: string | null;
+  offer_rate: number | null;
+  offer_from_amount: number | null;
+  offer_to_amount: number | null;
+  offer_status: OTCOfferStatus | null;
+  is_read: boolean;
+  read_at: string | null;
+  created_at: string;
+}
+
+export interface OTCOrderDetail extends OTCOrder {
+  from_currency: CurrencyInfo;
+  to_currency: CurrencyInfo;
+  messages: OTCMessage[];
+}
+
+export interface OTCConfigWithCurrencies {
+  id: number;
+  from_currency_id: number;
+  to_currency_id: number;
+  min_from_amount: number;
+  payment_timeout_min: number;
+  is_active: boolean;
+  from_currency: CurrencyInfo;
+  to_currency: CurrencyInfo;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OTCOrdersListResponse {
+  orders: OTCOrder[];
+  total: number;
+}
+
 export interface UserProfile {
   id: number;
   email: string;

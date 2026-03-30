@@ -28,6 +28,12 @@ import { AdminUsers } from "@/pages/AdminUsers";
 import { AdminUserDetail } from "@/pages/AdminUserDetail";
 import { AdminUserProfile } from "@/pages/AdminUserProfile";
 import { AdminStaff } from "@/pages/AdminStaff";
+import { OTCOrders } from "@/pages/OTCOrders";
+import { OTCOrderDetail } from "@/pages/OTCOrderDetail";
+import { AdminOTCOrders } from "@/pages/AdminOTCOrders";
+import { AdminOTCOrderDetail } from "@/pages/AdminOTCOrderDetail";
+import { AdminOTCConfig } from "@/pages/AdminOTCConfig";
+import { OperatorRoute } from "./OperatorRoute";
 
 const STAFF_ROLES: UserRole[] = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
 
@@ -89,6 +95,8 @@ export function AppRoutes() {
         <Route path="/history" element={<ClientRoute><History /></ClientRoute>} />
         <Route path="/profile" element={<ClientRoute><Profile /></ClientRoute>} />
         <Route path="/referral" element={<ClientRoute><Referral /></ClientRoute>} />
+        <Route path="/otc" element={<ClientRoute><OTCOrders /></ClientRoute>} />
+        <Route path="/otc/:uid" element={<ClientRoute><OTCOrderDetail /></ClientRoute>} />
 
         {/* Admin routes */}
         <Route path="/admin/exchanges" element={<AdminRoute><AdminExchanges /></AdminRoute>} />
@@ -97,8 +105,14 @@ export function AppRoutes() {
         <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetail /></AdminRoute>} />
         <Route path="/admin/users/:id/profile" element={<AdminRoute><AdminUserProfile /></AdminRoute>} />
 
+        {/* OTC operator/admin routes */}
+        <Route path="/admin/otc" element={<OperatorRoute><AdminOTCOrders /></OperatorRoute>} />
+        <Route path="/admin/otc/:uid" element={<OperatorRoute><AdminOTCOrderDetail /></OperatorRoute>} />
+
         {/* Super admin routes */}
         <Route path="/admin/staff" element={<SuperAdminRoute><AdminStaff /></SuperAdminRoute>} />
+        {/* Must come before /admin/otc/:uid to avoid matching "config" as a uid */}
+        <Route path="/admin/otc/config" element={<SuperAdminRoute><AdminOTCConfig /></SuperAdminRoute>} />
       </Route>
     </Routes>
   );

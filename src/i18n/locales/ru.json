@@ -31,7 +31,13 @@
     "page": "Страница",
     "exchanges": "обменов",
     "optional": "Необязательно",
-    "saving": "Сохранение..."
+    "saving": "Сохранение...",
+    "saved": "Сохранено",
+    "deleted": "Удалено",
+    "create": "Создать",
+    "active": "Активен",
+    "inactive": "Неактивен",
+    "confirmDelete": "Вы уверены, что хотите удалить?"
   },
   "nav": {
     "home": "Главная",
@@ -47,7 +53,8 @@
     "referral": "Реферальная программа",
     "support": "Поддержка",
     "logout": "Выйти",
-    "admin": "Админ панель"
+    "admin": "Админ панель",
+    "otc": "OTC Сделки"
   },
   "auth": {
     "login": {
@@ -473,7 +480,9 @@
       "exchanges": "Обмены",
       "exchangeRates": "Курсы обмена",
       "users": "Пользователи",
-      "staff": "Сотрудники"
+      "staff": "Сотрудники",
+      "otc": "OTC Сделки",
+      "otcConfig": "Настройки OTC"
     },
     "staff": {
       "title": "Управление сотрудниками",
@@ -668,6 +677,110 @@
       "resolved": "Решенные",
       "assign": "Назначить",
       "reply": "Ответить"
+    }
+  },
+  "otc": {
+    "title": "OTC Сделки",
+    "subtitle": "Внебиржевые сделки по договорной цене",
+    "createOrder": "Новая сделка",
+    "orderDetail": "Детали сделки",
+    "noOrders": "Нет сделок",
+    "noOrdersDescription": "У вас ещё нет OTC сделок",
+    "statuses": {
+      "awaiting_review": "Ожидает рассмотрения",
+      "negotiating": "Переговоры",
+      "awaiting_payment": "Ожидает оплаты",
+      "payment_received": "Оплата получена",
+      "completed": "Завершена",
+      "cancelled": "Отменена",
+      "expired": "Истекла"
+    },
+    "fields": {
+      "fromCurrency": "Продаёте",
+      "toCurrency": "Покупаете",
+      "fromAmount": "Сумма",
+      "proposedRate": "Предлагаемый курс",
+      "agreedRate": "Согласованный курс",
+      "agreedFromAmount": "Согласованная сумма",
+      "toAmount": "Сумма к получению",
+      "comment": "Комментарий",
+      "paymentDeadline": "Срок оплаты",
+      "cancelReason": "Причина отмены"
+    },
+    "chat": {
+      "title": "Переписка",
+      "messagePlaceholder": "Введите сообщение...",
+      "send": "Отправить",
+      "sendOffer": "Предложить курс",
+      "offerRate": "Курс",
+      "offerAmount": "Сумма",
+      "offerReceive": "Получите",
+      "accept": "Принять",
+      "reject": "Отклонить",
+      "accepted": "Принято",
+      "rejected": "Отклонено"
+    },
+    "actions": {
+      "cancel": "Отменить сделку",
+      "cancelReason": "Причина отмены",
+      "take": "Взять в работу",
+      "confirmPayment": "Подтвердить оплату",
+      "complete": "Завершить сделку"
+    },
+    "create": {
+      "title": "Новая OTC сделка",
+      "description": "Запросите внебиржевой обмен по договорной цене. Требуется KYC уровень 2+.",
+      "kycRequired": "Для OTC сделок необходим KYC уровень 2 или выше",
+      "fromCurrency": "Продаёте",
+      "toCurrency": "Покупаете",
+      "pair": "Валютная пара",
+      "amount": "Сумма продажи",
+      "proposedRate": "Предлагаемый курс",
+      "comment": "Комментарий (необязательно)",
+      "commentPlaceholder": "Срочно, пожалуйста ответьте быстро",
+      "submit": "Отправить заявку",
+      "minAmount": "Минимальная сумма",
+      "noPairsAvailable": "Нет доступных валютных пар для OTC"
+    },
+    "config": {
+      "title": "Настройки OTC пар",
+      "subtitle": "Управление доступными валютными парами и лимитами",
+      "addPair": "Добавить пару",
+      "pair": "Пара",
+      "minAmount": "Мин. сумма",
+      "timeout": "Срок оплаты",
+      "minutes": "мин",
+      "active": "Активна",
+      "noPairs": "Нет настроенных пар"
+    },
+    "countdown": {
+      "label": "Осталось для оплаты",
+      "expired": "Срок истёк"
+    },
+    "messages": {
+      "orderCreated": "Заявка создана",
+      "orderCancelled": "Сделка отменена",
+      "orderTaken": "Сделка взята в работу",
+      "paymentConfirmed": "Оплата подтверждена",
+      "orderCompleted": "Сделка завершена",
+      "offerSent": "Предложение отправлено",
+      "offerAccepted": "Предложение принято",
+      "offerRejected": "Предложение отклонено"
+    },
+    "admin": {
+      "title": "OTC Сделки",
+      "subtitle": "Управление внебиржевыми сделками",
+      "allStatuses": "Все статусы",
+      "noOrders": "Нет сделок",
+      "columns": {
+        "id": "ID",
+        "user": "Клиент",
+        "pair": "Пара",
+        "amount": "Сумма",
+        "status": "Статус",
+        "date": "Дата",
+        "actions": "Действия"
+      }
     }
   },
   "errors": {

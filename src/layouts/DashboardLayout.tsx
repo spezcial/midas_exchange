@@ -14,6 +14,8 @@ import {
   Users,
   UserCog,
   LogOut,
+  Handshake,
+  Settings2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,10 +39,12 @@ export function DashboardLayout() {
   const STAFF_ROLES = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
   const is_staff = STAFF_ROLES.includes(user?.role ?? "");
   const is_super_admin = user?.role === "super_admin";
+  const is_operator_or_admin = ["operator", "admin", "super_admin"].includes(user?.role ?? "");
 
   const nav_items: { path: string; icon: LucideIcon; label: string }[] = [
     { path: "/wallets", icon: Wallet, label: t("nav.wallets") },
     { path: "/exchange", icon: ArrowLeftRight, label: t("nav.exchange") },
+    { path: "/otc", icon: Handshake, label: t("nav.otc") },
     { path: "/history", icon: History, label: t("nav.history") },
     { path: "/profile", icon: UserCircle, label: t("nav.profile") },
     { path: "/referral", icon: Share2, label: t("nav.referral") },
@@ -50,7 +54,9 @@ export function DashboardLayout() {
     { path: "/admin/exchanges", icon: ClipboardList, label: t("admin.nav.exchanges") },
     { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
     { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
+    ...(is_operator_or_admin ? [{ path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") }] : []),
     ...(is_super_admin ? [{ path: "/admin/staff", icon: UserCog, label: t("admin.nav.staff") }] : []),
+    ...(is_super_admin ? [{ path: "/admin/otc/config", icon: Settings2, label: t("admin.nav.otcConfig") }] : []),
   ];
 
   const languages = [
@@ -128,7 +134,7 @@ export function DashboardLayout() {
                   to={item.path}
                   className={cn(
                     "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
-                    location.pathname === item.path
+                    location.pathname === item.path || location.pathname.startsWith(item.path + "/")
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-600 hover:bg-gray-50"
                   )}

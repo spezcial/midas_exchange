@@ -19,7 +19,14 @@
     "disabled": "Disabled",
     "optional": "Optional",
     "submitting": "Submitting...",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "create": "Create",
+    "active": "Active",
+    "inactive": "Inactive",
+    "select": "Select",
+    "confirmDelete": "Are you sure you want to delete?"
   },
   "nav": {
     "home": "Home",
@@ -157,7 +164,9 @@
       "exchanges": "Exchanges",
       "exchangeRates": "Exchange Rates",
       "users": "Users",
-      "staff": "Staff"
+      "staff": "Staff",
+      "otc": "OTC Orders",
+      "otcConfig": "OTC Settings"
     },
     "staff": {
       "title": "Staff Management",
@@ -267,6 +276,36 @@
     "loadProfileFailed": "Failed to load profile",
     "profileUpdated": "Profile updated",
     "profileCreated": "Profile created",
-    "saveProfileFailed": "Failed to save profile"
+    "saveProfileFailed": "Failed to save profile",
+    "loadFailed": "Failed to load data"
+  },
+  "errors": {
+    "required": "Required field",
+    "invalidAmount": "Invalid amount"
+  },
+  "otc": {
+    "create": {
+      "pair": "Currency Pair",
+      "fromCurrency": "From Currency",
+      "toCurrency": "To Currency",
+      "minAmount": "Minimum amount",
+      "noPairsAvailable": "No OTC pairs are currently available"
+    },
+    "config": {
+      "title": "OTC Pair Settings",
+      "subtitle": "Manage available currency pairs and limits",
+      "addPair": "Add Pair",
+      "pair": "Pair",
+      "minAmount": "Min Amount",
+      "timeout": "Payment Timeout",
+      "minutes": "min",
+      "active": "Active",
+      "noPairs": "No pairs configured"
+    },
+    "admin": {
+      "columns": {
+        "actions": "Actions"
+      }
+    }
   }
 }
