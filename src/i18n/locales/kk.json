@@ -167,7 +167,8 @@
       "users": "Пайдаланушылар",
       "staff": "Қызметкерлер",
       "otc": "OTC Тапсырыстар",
-      "otcConfig": "OTC Баптаулары"
+      "otcConfig": "OTC Баптаулары",
+      "otcAnalytics": "OTC Аналитика"
     },
     "staff": {
       "title": "Қызметкерлерді басқару",
@@ -306,6 +307,45 @@
     "admin": {
       "columns": {
         "actions": "Әрекеттер"
+      },
+      "export": "CSV жүктеу",
+      "filters": {
+        "fromDate": "Басталу күні",
+        "toDate": "Аяқталу күні"
+      },
+      "auditLog": {
+        "title": "Оператор әрекеттерінің журналы",
+        "load": "Журналды жүктеу",
+        "empty": "Әрекеттер жоқ",
+        "actions": {
+          "took_order": "Тапсырысты алды",
+          "sent_offer": "Ұсыныс жіберді",
+          "accepted_offer": "Ұсынысты қабылдады",
+          "rejected_offer": "Ұсынысты қабылдамады",
+          "confirmed_payment": "Төлемді растады",
+          "completed": "Тапсырысты аяқтады",
+          "cancelled": "Тапсырысты болдырмады"
+        }
+      },
+      "analytics": {
+        "title": "OTC Аналитика",
+        "subtitle": "OTC мәмілелер статистикасы",
+        "granularity": "Детализация",
+        "granularities": {
+          "day": "Күн бойынша",
+          "week": "Апта бойынша",
+          "month": "Ай бойынша"
+        },
+        "totalOrders": "Барлық тапсырыстар",
+        "completed": "Аяқталған",
+        "cancelledExpired": "Болдырылмаған / Мерзімі өткен",
+        "conversionRate": "конверсия",
+        "avgSpread": "Орташа спред",
+        "totalVolume": "Жалпы көлем",
+        "volumeOverTime": "Кезең бойынша көлем",
+        "ordersBreakdown": "Тапсырыстар бөлінісі",
+        "volume": "Көлем",
+        "other": "Басқа"
       }
     }
   }

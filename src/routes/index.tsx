@@ -33,6 +33,7 @@ import { OTCOrderDetail } from "@/pages/OTCOrderDetail";
 import { AdminOTCOrders } from "@/pages/AdminOTCOrders";
 import { AdminOTCOrderDetail } from "@/pages/AdminOTCOrderDetail";
 import { AdminOTCConfig } from "@/pages/AdminOTCConfig";
+import { AdminOTCAnalytics } from "@/pages/AdminOTCAnalytics";
 import { OperatorRoute } from "./OperatorRoute";
 
 const STAFF_ROLES: UserRole[] = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
@@ -107,11 +108,12 @@ export function AppRoutes() {
 
         {/* OTC operator/admin routes */}
         <Route path="/admin/otc" element={<OperatorRoute><AdminOTCOrders /></OperatorRoute>} />
+        {/* Static OTC sub-routes must come before the :uid wildcard */}
+        <Route path="/admin/otc/analytics" element={<OperatorRoute><AdminOTCAnalytics /></OperatorRoute>} />
         <Route path="/admin/otc/:uid" element={<OperatorRoute><AdminOTCOrderDetail /></OperatorRoute>} />
 
         {/* Super admin routes */}
         <Route path="/admin/staff" element={<SuperAdminRoute><AdminStaff /></SuperAdminRoute>} />
-        {/* Must come before /admin/otc/:uid to avoid matching "config" as a uid */}
         <Route path="/admin/otc/config" element={<SuperAdminRoute><AdminOTCConfig /></SuperAdminRoute>} />
       </Route>
     </Routes>

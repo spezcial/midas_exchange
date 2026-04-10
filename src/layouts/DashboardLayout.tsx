@@ -16,6 +16,7 @@ import {
   LogOut,
   Handshake,
   Settings2,
+  BarChart2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,7 @@ export function DashboardLayout() {
     { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
     { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
     ...(is_operator_or_admin ? [{ path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") }] : []),
+    ...(is_operator_or_admin ? [{ path: "/admin/otc/analytics", icon: BarChart2, label: t("admin.nav.otcAnalytics") }] : []),
     ...(is_super_admin ? [{ path: "/admin/staff", icon: UserCog, label: t("admin.nav.staff") }] : []),
     ...(is_super_admin ? [{ path: "/admin/otc/config", icon: Settings2, label: t("admin.nav.otcConfig") }] : []),
   ];

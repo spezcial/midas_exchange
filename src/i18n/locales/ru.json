@@ -482,7 +482,8 @@
       "users": "Пользователи",
       "staff": "Сотрудники",
       "otc": "OTC Сделки",
-      "otcConfig": "Настройки OTC"
+      "otcConfig": "Настройки OTC",
+      "otcAnalytics": "Аналитика OTC"
     },
     "staff": {
       "title": "Управление сотрудниками",
@@ -780,6 +781,45 @@
         "status": "Статус",
         "date": "Дата",
         "actions": "Действия"
+      },
+      "export": "Экспорт CSV",
+      "filters": {
+        "fromDate": "С даты",
+        "toDate": "По дату"
+      },
+      "auditLog": {
+        "title": "Лог действий оператора",
+        "load": "Загрузить лог",
+        "empty": "Действий ещё нет",
+        "actions": {
+          "took_order": "Взял в работу",
+          "sent_offer": "Отправил предложение",
+          "accepted_offer": "Принял предложение",
+          "rejected_offer": "Отклонил предложение",
+          "confirmed_payment": "Подтвердил оплату",
+          "completed": "Завершил сделку",
+          "cancelled": "Отменил сделку"
+        }
+      },
+      "analytics": {
+        "title": "Аналитика OTC",
+        "subtitle": "Статистика и показатели OTC сделок",
+        "granularity": "Детализация",
+        "granularities": {
+          "day": "По дням",
+          "week": "По неделям",
+          "month": "По месяцам"
+        },
+        "totalOrders": "Всего сделок",
+        "completed": "Завершено",
+        "cancelledExpired": "Отменено / Истекло",
+        "conversionRate": "конверсия",
+        "avgSpread": "Средний спред",
+        "totalVolume": "Объём",
+        "volumeOverTime": "Объём по периодам",
+        "ordersBreakdown": "Распределение сделок",
+        "volume": "Объём",
+        "other": "Прочее"
       }
     }
   },

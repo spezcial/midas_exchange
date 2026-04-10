@@ -3,14 +3,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { ArrowLeft, Send, X, CheckCircle, PlayCircle, Banknote } from "lucide-react";
+import { ArrowLeft, Send, X, CheckCircle, PlayCircle, Banknote, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { otcService, type SendOTCOfferPayload } from "@/api/services/otcService";
 import { useAuthStore } from "@/store/authStore";
-import type { OTCOrderDetail as OTCOrderDetailType, OTCOrderStatus, OTCMessage } from "@/types";
+import type { OTCOrderDetail as OTCOrderDetailType, OTCOrderStatus, OTCMessage, OTCAuditLog } from "@/types";
 
 const TERMINAL_STATUSES: OTCOrderStatus[] = ["completed", "cancelled", "expired"];
 
@@ -168,6 +168,8 @@ export function AdminOTCOrderDetail() {
   const [order, set_order] = useState<OTCOrderDetailType | null>(null);
   const [is_loading, set_is_loading] = useState(true);
   const [action_loading, set_action_loading] = useState(false);
+  const [audit_logs, set_audit_logs] = useState<OTCAuditLog[]>([]);
+  const [show_audit, set_show_audit] = useState(false);
 
   // Chat
   const [text, set_text] = useState("");
@@ -187,10 +189,22 @@ export function AdminOTCOrderDetail() {
     try {
       const data = await otcService.admin_get_order(uid);
       set_order(data);
-    } catch (err: any) {
-      if (err?.response?.status === 404) navigate("/admin/otc");
+    } catch (err: unknown) {
+      const e = err as { response?: { status?: number } };
+      if (e?.response?.status === 404) navigate("/admin/otc");
     } finally {
       set_is_loading(false);
+    }
+  };
+
+  const load_audit_logs = async () => {
+    if (!uid) return;
+    try {
+      const logs = await otcService.admin_get_audit_log(uid);
+      set_audit_logs(logs);
+      set_show_audit(true);
+    } catch {
+      toast.error(t("messages.loadFailed"));
     }
   };
 
@@ -522,6 +536,45 @@ export function AdminOTCOrderDetail() {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Audit log */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4 text-gray-500" />
+            <h2 className="font-semibold text-gray-900">{t("otc.admin.auditLog.title")}</h2>
+          </div>
+          {!show_audit && (
+            <Button variant="outline" size="sm" onClick={load_audit_logs}>
+              {t("otc.admin.auditLog.load")}
+            </Button>
+          )}
+        </div>
+        {show_audit && (
+          <div className="divide-y">
+            {audit_logs.length === 0 ? (
+              <p className="px-6 py-4 text-sm text-gray-400">{t("otc.admin.auditLog.empty")}</p>
+            ) : (
+              audit_logs.map((log) => (
+                <div key={log.id} className="px-6 py-3 flex items-start gap-4 text-sm">
+                  <span className="text-gray-400 text-xs mt-0.5 shrink-0 min-w-[120px]">
+                    {format(new Date(log.created_at), "dd.MM.yy HH:mm:ss")}
+                  </span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 font-medium shrink-0">
+                    {log.actor_role}
+                  </span>
+                  <span className="font-medium text-gray-800">{t(`otc.admin.auditLog.actions.${log.action}`, { defaultValue: log.action })}</span>
+                  {log.details && (
+                    <span className="text-gray-500 text-xs font-mono truncate max-w-xs">
+                      {JSON.stringify(log.details)}
+                    </span>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>

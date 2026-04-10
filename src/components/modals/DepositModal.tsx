@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Wallet } from "@/types";
-import { ArrowDownCircle, Copy, Check, QrCode } from "lucide-react";
+import { ArrowDownCircle, Copy, Check } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import toast from "react-hot-toast";
 
 interface DepositModalProps {
@@ -32,10 +33,7 @@ export function DepositModal({
 
   if (!wallet) return null;
 
-  // Mock deposit address - in production this would come from the backend
-  const deposit_address = wallet.currency.is_crypto
-    ? `${wallet.currency.code.toLowerCase()}_deposit_address_${Math.random().toString(36).substring(7)}`
-    : null;
+  const deposit_address = wallet.currency.is_crypto ? wallet.deposit_address ?? null : null;
 
   const handle_copy_address = async () => {
     if (deposit_address) {
@@ -74,36 +72,45 @@ export function DepositModal({
               <div className="space-y-4">
                 <div>
                   <Label>{t("wallets.depositModal.depositAddress")}</Label>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Input
-                      value={deposit_address || ""}
-                      readOnly
-                      className="font-mono text-sm"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={handle_copy_address}
-                      className="shrink-0"
-                    >
-                      {address_copied ? (
-                        <Check className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {t("wallets.depositModal.sendTo", { currency: wallet.currency.code })}
-                  </p>
+                  {deposit_address ? (
+                    <>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Input
+                          value={deposit_address}
+                          readOnly
+                          className="font-mono text-sm"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={handle_copy_address}
+                          className="shrink-0"
+                        >
+                          {address_copied ? (
+                            <Check className="h-4 w-4 text-green-600" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {t("wallets.depositModal.sendTo", { currency: wallet.currency.code })}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {t("wallets.depositModal.addressNotReady", { defaultValue: "Deposit address is being generated. Please try again shortly." })}
+                    </p>
+                  )}
                 </div>
 
-                {/* QR Code Placeholder */}
-                <div className="bg-gray-50 border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center">
-                  <QrCode className="h-32 w-32 text-gray-300 mb-2" />
-                  <p className="text-sm text-gray-500">{t("wallets.depositModal.qrCode")}</p>
-                </div>
+                {/* QR Code */}
+                {deposit_address && (
+                  <div className="flex justify-center p-4 bg-white border rounded-lg">
+                    <QRCodeSVG value={deposit_address} size={180} />
+                  </div>
+                )}
 
                 {/* Important Notes */}
                 <div className="rounded-lg bg-blue-50 p-4 border border-blue-200">

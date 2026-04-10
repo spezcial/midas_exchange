@@ -43,6 +43,7 @@ export interface Wallet {
   locked: number;
   created_at: string;
   currency: CurrencyInfo;
+  deposit_address?: string | null;
 }
 
 export type TransactionType = "deposit" | "withdrawal" | "exchange" | "referral";
@@ -269,6 +270,52 @@ export interface OTCConfigWithCurrencies {
 export interface OTCOrdersListResponse {
   orders: OTCOrder[];
   total: number;
+}
+
+export interface OTCAuditLog {
+  id: number;
+  order_id: number;
+  actor_id: number;
+  actor_role: string;
+  action: string;
+  details: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface OTCAnalyticsSummary {
+  total_orders: number;
+  completed: number;
+  cancelled: number;
+  expired: number;
+  conversion_rate: number;
+  total_volume: number;
+  avg_spread_pct: number;
+}
+
+export interface OTCAnalyticsPeriod {
+  period: string;
+  total: number;
+  completed: number;
+  cancelled: number;
+  expired: number;
+  volume: number;
+}
+
+export interface OTCAnalytics {
+  summary: OTCAnalyticsSummary;
+  by_period: OTCAnalyticsPeriod[];
+}
+
+export interface AdminListOTCOrdersParams {
+  status?: string;
+  email?: string;
+  from_date?: string;
+  to_date?: string;
+  from_currency_id?: number;
+  to_currency_id?: number;
+  operator_id?: number;
+  limit?: number;
+  offset?: number;
 }
 
 export interface UserProfile {

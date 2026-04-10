@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { ArrowRight, Eye, PlayCircle, MessageCircle } from "lucide-react";
+import { ArrowRight, Eye, PlayCircle, MessageCircle, Download, BarChart2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,9 +34,14 @@ export function AdminOTCOrders() {
   const [orders, set_orders] = useState<OTCOrder[]>([]);
   const [total, set_total] = useState(0);
   const [is_loading, set_is_loading] = useState(false);
+  const [is_exporting, set_is_exporting] = useState(false);
+  const [taking, set_taking] = useState<string | null>(null);
+
+  // Filters
   const [status_filter, set_status_filter] = useState("all");
   const [email_filter, set_email_filter] = useState("");
-  const [taking, set_taking] = useState<string | null>(null);
+  const [from_date, set_from_date] = useState("");
+  const [to_date, set_to_date] = useState("");
 
   const status_options = [
     { value: "all", label: t("otc.admin.allStatuses") },
@@ -49,13 +54,19 @@ export function AdminOTCOrders() {
     { value: "expired", label: t("otc.statuses.expired") },
   ];
 
+  const build_params = () => {
+    const params: Record<string, string> = {};
+    if (status_filter !== "all") params.status = status_filter;
+    if (email_filter.trim()) params.email = email_filter.trim();
+    if (from_date) params.from_date = from_date;
+    if (to_date) params.to_date = to_date;
+    return params;
+  };
+
   const load_orders = async () => {
     try {
       set_is_loading(true);
-      const params: { status?: string; email?: string } = {};
-      if (status_filter !== "all") params.status = status_filter;
-      if (email_filter.trim()) params.email = email_filter.trim();
-      const res = await otcService.admin_list_orders(params);
+      const res = await otcService.admin_list_orders(build_params());
       set_orders(res.orders ?? []);
       set_total(res.total ?? 0);
     } catch {
@@ -67,7 +78,7 @@ export function AdminOTCOrders() {
 
   useEffect(() => {
     load_orders();
-  }, [status_filter, email_filter]);
+  }, [status_filter, email_filter, from_date, to_date]);
 
   const take_order = async (uid: string) => {
     try {
@@ -75,23 +86,55 @@ export function AdminOTCOrders() {
       await otcService.admin_take_order(uid);
       toast.success(t("otc.messages.orderTaken"));
       load_orders();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error ?? t("messages.loadFailed"));
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { error?: string } } };
+      toast.error(e?.response?.data?.error ?? t("messages.loadFailed"));
     } finally {
       set_taking(null);
     }
   };
 
+  const export_csv = async () => {
+    try {
+      set_is_exporting(true);
+      const blob = await otcService.admin_export_orders(build_params());
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `otc_orders_${format(new Date(), "yyyyMMdd_HHmm")}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error(t("messages.loadFailed"));
+    } finally {
+      set_is_exporting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t("otc.admin.title")}</h1>
-        <p className="text-gray-600 mt-2">{t("otc.admin.subtitle")}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">{t("otc.admin.title")}</h1>
+          <p className="text-gray-600 mt-2">{t("otc.admin.subtitle")}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link to="/admin/otc/analytics">
+            <Button variant="outline" size="sm">
+              <BarChart2 className="h-4 w-4 mr-1.5" />
+              {t("otc.admin.analytics.title")}
+            </Button>
+          </Link>
+          <Button variant="outline" size="sm" onClick={export_csv} disabled={is_exporting}>
+            <Download className="h-4 w-4 mr-1.5" />
+            {is_exporting ? t("common.loading") : t("otc.admin.export")}
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <Label>{t("otc.admin.columns.status")}</Label>
             <Select value={status_filter} onValueChange={set_status_filter}>
@@ -115,6 +158,24 @@ export function AdminOTCOrders() {
               value={email_filter}
               onChange={(e) => set_email_filter(e.target.value)}
               placeholder="user@example.com"
+            />
+          </div>
+          <div>
+            <Label>{t("otc.admin.filters.fromDate")}</Label>
+            <Input
+              type="date"
+              className="mt-2"
+              value={from_date}
+              onChange={(e) => set_from_date(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>{t("otc.admin.filters.toDate")}</Label>
+            <Input
+              type="date"
+              className="mt-2"
+              value={to_date}
+              onChange={(e) => set_to_date(e.target.value)}
             />
           </div>
         </div>

@@ -150,6 +150,12 @@ Wrap routes with `ProtectedRoute` component to require authentication:
 
 ---
 
+## Maintenance Rule
+
+**Always update this CLAUDE.md** when adding new pages, routes, API services, or significant architectural changes. Keep the "OTC Features" section and route tables in sync with actual code.
+
+---
+
 ## RBAC — 7 Roles + Staff Management (implemented)
 
 The backend has 7 roles. All roles use `/api/v1/auth/login`. The `role` field is in the login response `user` object.
@@ -176,3 +182,31 @@ type UserRole = "client" | "admin" | "super_admin" | "operator" | "support" | "a
 
 ### Bootstrap
 First `super_admin` must be inserted directly in the DB. After that, login via `/api/v1/auth/login`.
+
+---
+
+## OTC Features (OTC-013, implemented 2026-04-03)
+
+### New Admin Routes
+| Path | Component | Access |
+|---|---|---|
+| `/admin/otc` | `AdminOTCOrders` | operator/admin/super_admin |
+| `/admin/otc/analytics` | `AdminOTCAnalytics` | operator/admin/super_admin |
+| `/admin/otc/:uid` | `AdminOTCOrderDetail` | operator/admin/super_admin |
+| `/admin/otc/config` | `AdminOTCConfig` | super_admin only |
+
+### New API Methods (`src/api/services/otcService.ts`)
+- `admin_get_audit_log(uid)` — GET `/admin/otc/orders/:uid/audit-log`
+- `admin_get_analytics({ from, to, granularity })` — GET `/admin/otc/analytics`
+- `admin_export_orders(params)` — GET `/admin/otc/orders/export` (returns Blob for CSV download)
+
+### Extended List Filters (`AdminListOTCOrdersParams` in `src/types/index.ts`)
+`status`, `email`, `from_date`, `to_date`, `from_currency_id`, `to_currency_id`, `operator_id`
+
+### New Types (`src/types/index.ts`)
+- `OTCAuditLog` — single operator action entry
+- `OTCAnalytics` / `OTCAnalyticsSummary` / `OTCAnalyticsPeriod` — analytics response shapes
+- `AdminListOTCOrdersParams` — moved here from service file (canonical location)
+
+### i18n Keys Added
+`admin.nav.otcAnalytics`, `otc.admin.export`, `otc.admin.filters.*`, `otc.admin.auditLog.*`, `otc.admin.analytics.*` — in all 3 locales (en/ru/kk).

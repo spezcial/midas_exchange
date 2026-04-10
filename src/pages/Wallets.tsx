@@ -166,7 +166,7 @@ export function Wallets() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wallets.map((wallet) => (
+          {wallets.filter((wallet) => wallet.currency.is_active).map((wallet) => (
             <div
               key={wallet.currency.code}
               className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"

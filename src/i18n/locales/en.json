@@ -166,7 +166,8 @@
       "users": "Users",
       "staff": "Staff",
       "otc": "OTC Orders",
-      "otcConfig": "OTC Settings"
+      "otcConfig": "OTC Settings",
+      "otcAnalytics": "OTC Analytics"
     },
     "staff": {
       "title": "Staff Management",
@@ -305,6 +306,45 @@
     "admin": {
       "columns": {
         "actions": "Actions"
+      },
+      "export": "Export CSV",
+      "filters": {
+        "fromDate": "From Date",
+        "toDate": "To Date"
+      },
+      "auditLog": {
+        "title": "Operator Action Log",
+        "load": "Load Log",
+        "empty": "No actions recorded yet",
+        "actions": {
+          "took_order": "Took order",
+          "sent_offer": "Sent offer",
+          "accepted_offer": "Accepted offer",
+          "rejected_offer": "Rejected offer",
+          "confirmed_payment": "Confirmed payment",
+          "completed": "Completed order",
+          "cancelled": "Cancelled order"
+        }
+      },
+      "analytics": {
+        "title": "OTC Analytics",
+        "subtitle": "Order statistics and performance overview",
+        "granularity": "Granularity",
+        "granularities": {
+          "day": "By Day",
+          "week": "By Week",
+          "month": "By Month"
+        },
+        "totalOrders": "Total Orders",
+        "completed": "Completed",
+        "cancelledExpired": "Cancelled / Expired",
+        "conversionRate": "conversion",
+        "avgSpread": "Avg Spread",
+        "totalVolume": "Total Volume",
+        "volumeOverTime": "Volume Over Time",
+        "ordersBreakdown": "Orders Breakdown",
+        "volume": "Volume",
+        "other": "Other"
       }
     }
   }

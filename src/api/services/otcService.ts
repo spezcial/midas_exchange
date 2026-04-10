@@ -1,5 +1,14 @@
 import { apiClient } from "../client";
-import type { OTCOrder, OTCOrderDetail, OTCMessage, OTCOrdersListResponse, OTCConfigWithCurrencies } from "@/types";
+import type {
+  OTCOrder,
+  OTCOrderDetail,
+  OTCMessage,
+  OTCOrdersListResponse,
+  OTCConfigWithCurrencies,
+  OTCAuditLog,
+  OTCAnalytics,
+  AdminListOTCOrdersParams,
+} from "@/types";
 
 export interface CreateOTCOrderPayload {
   from_currency_id: number;
@@ -20,9 +29,7 @@ export interface ListOTCOrdersParams {
   offset?: number;
 }
 
-export interface AdminListOTCOrdersParams extends ListOTCOrdersParams {
-  email?: string;
-}
+export type { AdminListOTCOrdersParams };
 
 export const otcService = {
   // Client endpoints
@@ -140,5 +147,31 @@ export const otcService = {
 
   admin_cancel_order: async (uid: string, reason?: string): Promise<void> => {
     await apiClient.delete(`/admin/otc/orders/${uid}`, { data: { reason: reason ?? "" } });
+  },
+
+  // Audit log
+  admin_get_audit_log: async (uid: string): Promise<OTCAuditLog[]> => {
+    const response = await apiClient.get(`/admin/otc/orders/${uid}/audit-log`);
+    const data = response.data?.data ?? response.data;
+    return data?.audit_log ?? [];
+  },
+
+  // Analytics
+  admin_get_analytics: async (params: {
+    from?: string;
+    to?: string;
+    granularity?: "day" | "week" | "month";
+  }): Promise<OTCAnalytics> => {
+    const response = await apiClient.get("/admin/otc/analytics", { params });
+    return response.data?.data ?? response.data;
+  },
+
+  // CSV export — returns a Blob for download
+  admin_export_orders: async (params: AdminListOTCOrdersParams): Promise<Blob> => {
+    const response = await apiClient.get("/admin/otc/orders/export", {
+      params,
+      responseType: "blob",
+    });
+    return response.data;
   },
 };
