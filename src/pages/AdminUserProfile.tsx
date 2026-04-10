@@ -53,7 +53,7 @@ export function AdminUserProfile() {
         if (error?.response?.status === 404) {
           set_profile_exists(false);
         } else {
-          toast.error(t("messages.loadProfileFailed") || "Failed to load profile");
+          toast.error(t("messages.loadProfileFailed"));
         }
       } finally {
         set_is_loading(false);
@@ -90,13 +90,9 @@ export function AdminUserProfile() {
         phone: (saved as any).phone || "",
         kyc_level: saved.kyc_level,
       });
-      toast.success(
-        profile_exists
-          ? t("messages.profileUpdated") || "Profile updated"
-          : t("messages.profileCreated") || "Profile created"
-      );
+      toast.success(profile_exists ? t("messages.profileUpdated") : t("messages.profileCreated"));
     } catch {
-      toast.error(t("messages.saveProfileFailed") || "Failed to save profile");
+      toast.error(t("messages.saveProfileFailed"));
     } finally {
       set_is_submitting(false);
     }
@@ -120,10 +116,10 @@ export function AdminUserProfile() {
           className="gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          {t("common.back") || "Back"}
+          {t("common.back")}
         </Button>
         <h1 className="text-3xl font-bold text-gray-900">
-          {t("admin.userProfile.title") || "User Profile"}
+          {t("admin.userProfile.title")}
         </h1>
       </div>
 
@@ -136,7 +132,7 @@ export function AdminUserProfile() {
             "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
           )}
         >
-          {t("admin.userDetail.tabs.details") || "Details & Wallets"}
+          {t("admin.userDetail.tabs.details")}
         </Link>
         <Link
           to={`/admin/users/${id}/profile`}
@@ -145,7 +141,7 @@ export function AdminUserProfile() {
             "border-blue-600 text-blue-600"
           )}
         >
-          {t("admin.userDetail.tabs.profile") || "Profile"}
+          {t("admin.userDetail.tabs.profile")}
         </Link>
       </div>
 
@@ -157,7 +153,7 @@ export function AdminUserProfile() {
           </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-900">
-              {t("admin.userProfile.information") || "Profile Information"}
+              {t("admin.userProfile.information")}
             </h2>
             {profile && (
               <p className="text-sm text-gray-500">{profile.email}</p>
@@ -165,20 +161,20 @@ export function AdminUserProfile() {
           </div>
           {!profile_exists && !is_loading && (
             <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              {t("admin.userProfile.noProfile") || "No profile yet"}
+              {t("admin.userProfile.noProfile")}
             </span>
           )}
         </div>
 
         {is_loading ? (
           <div className="flex items-center justify-center h-40">
-            <p className="text-gray-500">{t("common.loading") || "Loading..."}</p>
+            <p className="text-gray-500">{t("common.loading")}</p>
           </div>
         ) : (
           <form onSubmit={handle_submit} className="space-y-5 max-w-md">
             <div className="space-y-1.5">
               <Label htmlFor="first_name">
-                {t("admin.userProfile.firstName") || "First Name"}
+                {t("admin.userProfile.firstName")}
               </Label>
               <Input
                 id="first_name"
@@ -186,13 +182,13 @@ export function AdminUserProfile() {
                 onChange={(e) =>
                   set_form_data((prev) => ({ ...prev, first_name: e.target.value }))
                 }
-                placeholder={t("admin.userProfile.firstNamePlaceholder") || "Enter first name"}
+                placeholder={t("admin.userProfile.firstNamePlaceholder")}
               />
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="last_name">
-                {t("admin.userProfile.lastName") || "Last Name"}
+                {t("admin.userProfile.lastName")}
               </Label>
               <Input
                 id="last_name"
@@ -200,15 +196,15 @@ export function AdminUserProfile() {
                 onChange={(e) =>
                   set_form_data((prev) => ({ ...prev, last_name: e.target.value }))
                 }
-                placeholder={t("admin.userProfile.lastNamePlaceholder") || "Enter last name"}
+                placeholder={t("admin.userProfile.lastNamePlaceholder")}
               />
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="middle_name">
-                {t("admin.userProfile.middleName") || "Middle Name"}
+                {t("admin.userProfile.middleName")}
                 <span className="ml-1 text-xs text-gray-400">
-                  ({t("common.optional") || "optional"})
+                  ({t("common.optional")})
                 </span>
               </Label>
               <Input
@@ -217,7 +213,7 @@ export function AdminUserProfile() {
                 onChange={(e) =>
                   set_form_data((prev) => ({ ...prev, middle_name: e.target.value }))
                 }
-                placeholder={t("admin.userProfile.middleNamePlaceholder") || "Enter middle name"}
+                placeholder={t("admin.userProfile.middleNamePlaceholder")}
               />
             </div>
 
@@ -225,8 +221,8 @@ export function AdminUserProfile() {
               <Label htmlFor="phone">
                 <span className="flex items-center gap-1.5">
                   <Phone className="h-3.5 w-3.5 text-gray-400" />
-                  {t("admin.userProfile.phone") || "Phone"}
-                  <span className="text-xs text-gray-400">({t("common.optional") || "optional"})</span>
+                  {t("admin.userProfile.phone")}
+                  <span className="text-xs text-gray-400">({t("common.optional")})</span>
                 </span>
               </Label>
               <Input
@@ -235,13 +231,13 @@ export function AdminUserProfile() {
                 onChange={(e) =>
                   set_form_data((prev) => ({ ...prev, phone: e.target.value }))
                 }
-                placeholder={t("admin.userProfile.phonePlaceholder") || "+7 (700) 000-00-00"}
+                placeholder={t("admin.userProfile.phonePlaceholder")}
               />
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="kyc_level">
-                {t("admin.userProfile.kycLevel") || "KYC Level"}
+                {t("admin.userProfile.kycLevel")}
               </Label>
               <Select
                 value={form_data.kyc_level.toString()}
@@ -268,10 +264,10 @@ export function AdminUserProfile() {
             <div className="pt-2">
               <Button type="submit" disabled={is_submitting}>
                 {is_submitting
-                  ? t("common.saving") || "Saving..."
+                  ? t("common.saving")
                   : profile_exists
-                  ? t("admin.userProfile.update") || "Update Profile"
-                  : t("admin.userProfile.create") || "Create Profile"}
+                  ? t("admin.userProfile.update")
+                  : t("admin.userProfile.create")}
               </Button>
             </div>
           </form>

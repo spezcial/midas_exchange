@@ -66,12 +66,6 @@ export function Wallets() {
     set_is_withdraw_modal_open(true);
   };
 
-  const handle_deposit_success = () => {
-    load_wallets();
-    set_is_deposit_modal_open(false);
-    set_selected_wallet(null);
-  };
-
   const handle_withdraw_success = () => {
     load_wallets();
     set_is_withdraw_modal_open(false);
@@ -262,7 +256,6 @@ export function Wallets() {
           set_is_deposit_modal_open(false);
           set_selected_wallet(null);
         }}
-        on_success={handle_deposit_success}
       />
 
       <WithdrawModal

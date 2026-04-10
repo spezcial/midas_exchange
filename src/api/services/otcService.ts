@@ -29,8 +29,6 @@ export interface ListOTCOrdersParams {
   offset?: number;
 }
 
-export type { AdminListOTCOrdersParams };
-
 export const otcService = {
   // Client endpoints
   get_active_configs: async (): Promise<OTCConfigWithCurrencies[]> => {

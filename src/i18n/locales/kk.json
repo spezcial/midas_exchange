@@ -26,7 +26,9 @@
     "active": "Белсенді",
     "inactive": "Белсенді емес",
     "select": "Таңдау",
-    "confirmDelete": "Шынымен жойғыңыз келе ме?"
+    "confirmDelete": "Шынымен жойғыңыз келе ме?",
+    "total": "Барлығы",
+    "submit": "Жіберу"
   },
   "nav": {
     "home": "Басты бет",
@@ -286,6 +288,19 @@
     "invalidAmount": "Жарамсыз сома"
   },
   "otc": {
+    "fields": {
+      "fromCurrency": "Сататын валюта",
+      "toCurrency": "Алатын валюта",
+      "fromAmount": "Сома",
+      "proposedRate": "Ұсынылған бағам",
+      "agreedRate": "Келісілген бағам",
+      "agreedFromAmount": "Келісілген сома",
+      "toAmount": "Алатын сома",
+      "comment": "Пікір",
+      "paymentDeadline": "Төлем мерзімі",
+      "cancelReason": "Бас тарту себебі",
+      "operator": "Оператор"
+    },
     "create": {
       "pair": "Валюта жұбы",
       "fromCurrency": "Сататын валюта",

@@ -72,8 +72,8 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       set({ is_loading: true, error: null });
       const wallets = await walletService.get_wallets();
       set({ wallets, is_loading: false });
-    } catch (error: any) {
-      const error_message = error.response?.data?.error || "Failed to load wallets";
+    } catch (err: unknown) {
+      const error_message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? "Failed to load wallets";
       set({ is_loading: false, error: error_message });
       toast.error(error_message);
     }
@@ -86,8 +86,8 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       set({ wallets: result.wallets, is_loading: false });
       toast.success(`Successfully deposited ${amount} ${currency}`);
       return true;
-    } catch (error: any) {
-      const error_message = error.response?.data?.error || "Failed to deposit funds";
+    } catch (err: unknown) {
+      const error_message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? "Failed to deposit funds";
       set({ is_loading: false, error: error_message });
       toast.error(error_message);
       return false;
@@ -101,8 +101,8 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       set({ wallets: result.wallets, is_loading: false });
       toast.success(`Withdrawal of ${amount} ${currency} initiated`);
       return true;
-    } catch (error: any) {
-      const error_message = error.response?.data?.error || "Failed to withdraw funds";
+    } catch (err: unknown) {
+      const error_message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? "Failed to withdraw funds";
       set({ is_loading: false, error: error_message });
       toast.error(error_message);
       return false;

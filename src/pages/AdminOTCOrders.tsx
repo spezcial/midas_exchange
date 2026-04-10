@@ -180,7 +180,7 @@ export function AdminOTCOrders() {
           </div>
         </div>
         <div className="mt-4 text-sm text-gray-600">
-          {t("history.title")}: {total}
+          {t("common.total")}: {total}
         </div>
       </div>
 

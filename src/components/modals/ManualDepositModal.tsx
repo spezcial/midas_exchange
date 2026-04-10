@@ -78,7 +78,7 @@ export function ManualDepositModal({
       });
 
       toast.success(
-        t("admin.userDetail.depositSuccess") || "Deposit completed successfully"
+        t("admin.userDetail.depositSuccess")
       );
 
       reset();
@@ -87,8 +87,7 @@ export function ManualDepositModal({
       console.error("Failed to deposit:", error);
       const error_message =
         error.response?.data?.error ||
-        t("admin.userDetail.depositFailed") ||
-        "Failed to deposit";
+        t("admin.userDetail.depositFailed");
       toast.error(error_message);
     } finally {
       set_is_submitting(false);
@@ -102,12 +101,11 @@ export function ManualDepositModal({
           <div className="flex items-center gap-2">
             <PlusCircle className="h-5 w-5 text-green-600" />
             <DialogTitle>
-              {t("admin.userDetail.manualDeposit") || "Manual Deposit"}
+              {t("admin.userDetail.manualDeposit")}
             </DialogTitle>
           </div>
           <DialogDescription>
-            {t("admin.userDetail.depositDescription") ||
-              `Add funds to user's ${currency_code} wallet`}
+            {t("admin.userDetail.depositDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -115,14 +113,14 @@ export function ManualDepositModal({
           <div className="space-y-4 py-4">
             {/* Currency Display */}
             <div>
-              <Label>{t("admin.userDetail.currency") || "Currency"}</Label>
+              <Label>{t("admin.userDetail.currency")}</Label>
               <Input value={currency_code} disabled className="mt-2" />
             </div>
 
             {/* Amount Input */}
             <div>
               <Label htmlFor="amount">
-                {t("admin.userDetail.amount") || "Amount"} *
+                {t("admin.userDetail.amount")} *
               </Label>
               <Input
                 id="amount"
@@ -143,9 +141,9 @@ export function ManualDepositModal({
             {/* Transaction Hash Input (Optional) */}
             <div>
               <Label htmlFor="tx_hash">
-                {t("admin.userDetail.txHash") || "Transaction Hash"}{" "}
+                {t("admin.userDetail.txHash")}{" "}
                 <span className="text-gray-400">
-                  ({t("common.optional") || "Optional"})
+                  ({t("common.optional")})
                 </span>
               </Label>
               <Input
@@ -166,17 +164,14 @@ export function ManualDepositModal({
             {/* Description Input (Optional) */}
             <div>
               <Label htmlFor="description">
-                {t("admin.userDetail.description") || "Description"}{" "}
+                {t("admin.userDetail.description")}{" "}
                 <span className="text-gray-400">
-                  ({t("common.optional") || "Optional"})
+                  ({t("common.optional")})
                 </span>
               </Label>
               <Textarea
                 id="description"
-                placeholder={
-                  t("admin.userDetail.descriptionPlaceholder") ||
-                  "Enter a description for this deposit"
-                }
+                placeholder={t("admin.userDetail.descriptionPlaceholder")}
                 {...register("description")}
                 className="mt-2"
                 rows={3}
@@ -192,11 +187,10 @@ export function ManualDepositModal({
             {/* Warning Note */}
             <div className="rounded-lg bg-yellow-50 p-4 border border-yellow-200">
               <p className="text-sm font-medium text-yellow-900 mb-1">
-                {t("admin.userDetail.warning") || "Warning"}
+                {t("admin.userDetail.warning")}
               </p>
               <p className="text-sm text-yellow-800">
-                {t("admin.userDetail.depositWarning") ||
-                  "This will immediately add funds to the user's wallet. Please verify all details before submitting."}
+                {t("admin.userDetail.depositWarning")}
               </p>
             </div>
           </div>
@@ -208,12 +202,10 @@ export function ManualDepositModal({
               variant="outline"
               disabled={is_submitting}
             >
-              {t("common.cancel") || "Cancel"}
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={is_submitting}>
-              {is_submitting
-                ? t("common.submitting") || "Submitting..."
-                : t("admin.userDetail.confirmDeposit") || "Confirm Deposit"}
+              {is_submitting ? t("common.submitting") : t("admin.userDetail.confirmDeposit")}
             </Button>
           </DialogFooter>
         </form>

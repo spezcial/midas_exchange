@@ -58,9 +58,9 @@ export function Profile() {
         phone: (updated as any).phone || "",
       });
       update_user(updated as any);
-      toast.success(t("profile.updateSuccess") || "Profile updated");
+      toast.success(t("profile.updateSuccess"));
     } catch {
-      toast.error(t("profile.updateFailed") || "Failed to update profile");
+      toast.error(t("profile.updateFailed"));
     } finally {
       set_is_profile_submitting(false);
     }
@@ -69,7 +69,7 @@ export function Profile() {
   const handle_password_submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password_form.new_password !== password_form.confirm_password) {
-      toast.error(t("profile.passwordMismatch") || "Passwords do not match");
+      toast.error(t("profile.passwordMismatch"));
       return;
     }
     try {
@@ -79,9 +79,9 @@ export function Profile() {
         new_password: password_form.new_password,
       });
       set_password_form({ current_password: "", new_password: "", confirm_password: "" });
-      toast.success(t("profile.passwordChanged") || "Password changed");
+      toast.success(t("profile.passwordChanged"));
     } catch {
-      toast.error(t("profile.passwordFailed") || "Failed to change password");
+      toast.error(t("profile.passwordFailed"));
     } finally {
       set_is_password_submitting(false);
     }
@@ -100,7 +100,7 @@ export function Profile() {
   return (
     <div className="space-y-6 max-w-2xl">
       <h1 className="text-3xl font-bold text-gray-900">
-        {t("nav.profile") || "Profile"}
+        {t("nav.profile")}
       </h1>
 
       {/* Account info */}
@@ -110,19 +110,19 @@ export function Profile() {
             <User className="h-5 w-5 text-blue-600" />
           </div>
           <h2 className="text-lg font-semibold text-gray-900">
-            {t("profile.accountInfo") || "Account Information"}
+            {t("profile.accountInfo")}
           </h2>
         </div>
 
         <div className="space-y-4 mb-6">
           <div className="flex items-center gap-3 text-sm">
             <Mail className="h-4 w-4 text-gray-400 shrink-0" />
-            <span className="text-gray-500 w-24">{t("profile.email") || "Email"}</span>
+            <span className="text-gray-500 w-24">{t("profile.email")}</span>
             <span className="font-medium text-gray-900">{user?.email}</span>
           </div>
           <div className="flex items-center gap-3 text-sm">
             <Shield className="h-4 w-4 text-gray-400 shrink-0" />
-            <span className="text-gray-500 w-24">{t("profile.kycLevel") || "KYC Level"}</span>
+            <span className="text-gray-500 w-24">{t("profile.kycLevel")}</span>
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${kyc.className}`}>
               {kyc.label}
             </span>
@@ -132,33 +132,33 @@ export function Profile() {
         <form onSubmit={handle_profile_submit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="first_name">{t("profile.firstName") || "First Name"}</Label>
+              <Label htmlFor="first_name">{t("profile.firstName")}</Label>
               <Input
                 id="first_name"
                 value={profile_form.first_name}
                 onChange={(e) =>
                   set_profile_form((prev) => ({ ...prev, first_name: e.target.value }))
                 }
-                placeholder={t("profile.firstNamePlaceholder") || "First name"}
+                placeholder={t("profile.firstNamePlaceholder")}
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="last_name">{t("profile.lastName") || "Last Name"}</Label>
+              <Label htmlFor="last_name">{t("profile.lastName")}</Label>
               <Input
                 id="last_name"
                 value={profile_form.last_name}
                 onChange={(e) =>
                   set_profile_form((prev) => ({ ...prev, last_name: e.target.value }))
                 }
-                placeholder={t("profile.lastNamePlaceholder") || "Last name"}
+                placeholder={t("profile.lastNamePlaceholder")}
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
             <Label htmlFor="middle_name">
-              {t("profile.middleName") || "Middle Name"}
-              <span className="ml-1 text-xs text-gray-400">({t("common.optional") || "optional"})</span>
+              {t("profile.middleName")}
+              <span className="ml-1 text-xs text-gray-400">({t("common.optional")})</span>
             </Label>
             <Input
               id="middle_name"
@@ -166,7 +166,7 @@ export function Profile() {
               onChange={(e) =>
                 set_profile_form((prev) => ({ ...prev, middle_name: e.target.value }))
               }
-              placeholder={t("profile.middleNamePlaceholder") || "Middle name"}
+              placeholder={t("profile.middleNamePlaceholder")}
             />
           </div>
 
@@ -174,7 +174,7 @@ export function Profile() {
             <Label htmlFor="phone">
               <span className="flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-gray-400" />
-                {t("profile.phone") || "Phone"}
+                {t("profile.phone")}
               </span>
             </Label>
             <Input
@@ -183,14 +183,12 @@ export function Profile() {
               onChange={(e) =>
                 set_profile_form((prev) => ({ ...prev, phone: e.target.value }))
               }
-              placeholder={t("profile.phonePlaceholder") || "+7 (700) 000-00-00"}
+              placeholder={t("profile.phonePlaceholder")}
             />
           </div>
 
           <Button type="submit" disabled={is_profile_submitting}>
-            {is_profile_submitting
-              ? t("common.saving") || "Saving..."
-              : t("profile.saveChanges") || "Save Changes"}
+            {is_profile_submitting ? t("common.saving") : t("profile.saveChanges")}
           </Button>
         </form>
       </div>
@@ -202,14 +200,14 @@ export function Profile() {
             <KeyRound className="h-5 w-5 text-blue-600" />
           </div>
           <h2 className="text-lg font-semibold text-gray-900">
-            {t("profile.changePassword") || "Change Password"}
+            {t("profile.changePassword")}
           </h2>
         </div>
 
         <form onSubmit={handle_password_submit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="current_password">
-              {t("profile.currentPassword") || "Current Password"}
+              {t("profile.currentPassword")}
             </Label>
             <Input
               id="current_password"
@@ -224,7 +222,7 @@ export function Profile() {
 
           <div className="space-y-1.5">
             <Label htmlFor="new_password">
-              {t("profile.newPassword") || "New Password"}
+              {t("profile.newPassword")}
             </Label>
             <Input
               id="new_password"
@@ -239,7 +237,7 @@ export function Profile() {
 
           <div className="space-y-1.5">
             <Label htmlFor="confirm_password">
-              {t("profile.confirmPassword") || "Confirm New Password"}
+              {t("profile.confirmPassword")}
             </Label>
             <Input
               id="confirm_password"
@@ -253,9 +251,7 @@ export function Profile() {
           </div>
 
           <Button type="submit" disabled={is_password_submitting}>
-            {is_password_submitting
-              ? t("common.saving") || "Saving..."
-              : t("profile.changePasswordBtn") || "Change Password"}
+            {is_password_submitting ? t("common.saving") : t("profile.changePasswordBtn")}
           </Button>
         </form>
       </div>

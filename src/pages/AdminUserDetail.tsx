@@ -31,7 +31,7 @@ export function AdminUserDetail() {
         set_wallets(response.data.wallets);
       } catch (error) {
         console.error("Failed to fetch user:", error);
-        toast.error(t("messages.loadUserFailed") || "Failed to load user");
+        toast.error(t("messages.loadUserFailed"));
         navigate("/admin/users");
       } finally {
         set_is_loading(false);
@@ -85,7 +85,7 @@ export function AdminUserDetail() {
   if (is_loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">{t("common.loading") || "Loading..."}</p>
+        <p className="text-gray-500">{t("common.loading")}</p>
       </div>
     );
   }
@@ -105,11 +105,11 @@ export function AdminUserDetail() {
           className="gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          {t("common.back") || "Back"}
+          {t("common.back")}
         </Button>
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            {t("admin.userDetail.title") || "User Details"}
+            {t("admin.userDetail.title")}
           </h1>
         </div>
       </div>
@@ -123,7 +123,7 @@ export function AdminUserDetail() {
             "border-blue-600 text-blue-600"
           )}
         >
-          {t("admin.userDetail.tabs.details") || "Details & Wallets"}
+          {t("admin.userDetail.tabs.details")}
         </Link>
         <Link
           to={`/admin/users/${id}/profile`}
@@ -132,73 +132,73 @@ export function AdminUserDetail() {
             "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
           )}
         >
-          {t("admin.userDetail.tabs.profile") || "Profile"}
+          {t("admin.userDetail.tabs.profile")}
         </Link>
       </div>
 
       {/* User Information Card */}
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <h2 className="text-xl font-semibold mb-4">{t("admin.userDetail.information") || "User Information"}</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("admin.userDetail.information")}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.id") || "ID"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.id")}</p>
             <p className="text-base font-medium text-gray-900">#{user.id}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.email") || "Email"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.email")}</p>
             <p className="text-base font-medium text-gray-900">{user.email}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.name") || "Name"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.name")}</p>
             <p className="text-base font-medium text-gray-900">
               {user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : "-"}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.phone") || "Phone"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.phone")}</p>
             <p className="text-base font-medium text-gray-900">{user.phone || "-"}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.kycLevel") || "KYC Level"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.kycLevel")}</p>
             <div className="mt-1">{get_kyc_badge(user.kyc_level)}</div>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.status") || "Status"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.status")}</p>
             <div className="mt-1">
               {user.is_blocked ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                   <XCircle className="h-3 w-3" />
-                  {t("admin.users.blocked") || "Blocked"}
+                  {t("admin.users.blocked")}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                   <CheckCircle2 className="h-3 w-3" />
-                  {t("admin.users.active") || "Active"}
+                  {t("admin.users.active")}
                 </span>
               )}
             </div>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.referralCode") || "Referral Code"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.referralCode")}</p>
             <p className="text-base font-medium text-gray-900">{user.referral_code || "-"}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.referredBy") || "Referred By"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.referredBy")}</p>
             <p className="text-base font-medium text-gray-900">{user.referred_by || "-"}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.registeredAt") || "Registered"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.registeredAt")}</p>
             <p className="text-base font-medium text-gray-900">
               {format(new Date(user.created_at), "dd.MM.yyyy HH:mm")}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">{t("admin.users.twoFactor") || "2FA"}</p>
+            <p className="text-sm text-gray-500">{t("admin.users.twoFactor")}</p>
             <p className="text-base font-medium text-gray-900">
               {user.two_factor_enabled ? (
-                <span className="text-green-600">{t("common.enabled") || "Enabled"}</span>
+                <span className="text-green-600">{t("common.enabled")}</span>
               ) : (
-                <span className="text-gray-600">{t("common.disabled") || "Disabled"}</span>
+                <span className="text-gray-600">{t("common.disabled")}</span>
               )}
             </p>
           </div>
@@ -208,7 +208,7 @@ export function AdminUserDetail() {
       {/* Wallets Card */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">{t("admin.userDetail.wallets") || "Wallets"}</h2>
+          <h2 className="text-xl font-semibold">{t("admin.userDetail.wallets")}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {wallets.map((wallet) => (
@@ -227,14 +227,14 @@ export function AdminUserDetail() {
               </div>
               <div className="space-y-2">
                 <div>
-                  <p className="text-xs text-gray-500">{t("wallets.balance") || "Balance"}</p>
+                  <p className="text-xs text-gray-500">{t("wallets.balance")}</p>
                   <p className="text-lg font-semibold text-gray-900">
                     {format_number(wallet.balance)} {wallet.currency.code}
                   </p>
                 </div>
                 {wallet.locked > 0 && (
                   <div>
-                    <p className="text-xs text-gray-500">{t("wallets.locked") || "Locked"}</p>
+                    <p className="text-xs text-gray-500">{t("wallets.locked")}</p>
                     <p className="text-sm font-medium text-orange-600">
                       {format_number(wallet.locked)} {wallet.currency.code}
                     </p>
@@ -248,14 +248,14 @@ export function AdminUserDetail() {
                 className="w-full mt-4 gap-2"
               >
                 <PlusCircle className="h-4 w-4" />
-                {t("admin.userDetail.deposit") || "Deposit"}
+                {t("admin.userDetail.deposit")}
               </Button>
             </div>
           ))}
         </div>
         {wallets.length === 0 && (
           <p className="text-center text-gray-500 py-8">
-            {t("admin.userDetail.noWallets") || "No wallets found"}
+            {t("admin.userDetail.noWallets")}
           </p>
         )}
       </div>

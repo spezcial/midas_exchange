@@ -32,7 +32,7 @@ export function AdminUsers() {
         set_total(response.data.total);
       } catch (error) {
         console.error("Failed to fetch users:", error);
-        toast.error(t("messages.loadUsersFailed") || "Failed to load users");
+        toast.error(t("messages.loadUsersFailed"));
       } finally {
         set_is_loading(false);
       }
@@ -73,15 +73,15 @@ export function AdminUsers() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t("admin.users.title") || "Users"}</h1>
-        <p className="text-gray-600 mt-2">{t("admin.users.subtitle") || "Manage all users and their accounts"}</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t("admin.users.title")}</h1>
+        <p className="text-gray-600 mt-2">{t("admin.users.subtitle")}</p>
       </div>
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="email-filter">{t("admin.users.searchByEmail") || "Search by Email"}</Label>
+            <Label htmlFor="email-filter">{t("admin.users.searchByEmail")}</Label>
             <form onSubmit={handle_email_filter_submit} className="flex gap-2 mt-2">
               <Input
                 id="email-filter"
@@ -96,7 +96,7 @@ export function AdminUsers() {
         </div>
 
         <div className="mt-4 text-sm text-gray-600">
-          {t("admin.users.totalUsers") || "Total Users"}: {total}
+          {t("admin.users.totalUsers")}: {total}
         </div>
       </div>
 
@@ -107,25 +107,25 @@ export function AdminUsers() {
             <thead className="bg-gray-50 border-b">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.id") || "ID"}
+                  {t("admin.users.id")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.email") || "Email"}
+                  {t("admin.users.email")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.name") || "Name"}
+                  {t("admin.users.name")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.kycLevel") || "KYC Level"}
+                  {t("admin.users.kycLevel")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.status") || "Status"}
+                  {t("admin.users.status")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.registeredAt") || "Registered"}
+                  {t("admin.users.registeredAt")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t("admin.users.actions") || "Actions"}
+                  {t("admin.users.actions")}
                 </th>
               </tr>
             </thead>
@@ -133,13 +133,13 @@ export function AdminUsers() {
               {is_loading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                    {t("common.loading") || "Loading..."}
+                    {t("common.loading")}
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                    {t("admin.users.noUsers") || "No users found"}
+                    {t("admin.users.noUsers")}
                   </td>
                 </tr>
               ) : (
@@ -163,12 +163,12 @@ export function AdminUsers() {
                       {user.is_blocked ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                           <XCircle className="h-3 w-3" />
-                          {t("admin.users.blocked") || "Blocked"}
+                          {t("admin.users.blocked")}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           <CheckCircle2 className="h-3 w-3" />
-                          {t("admin.users.active") || "Active"}
+                          {t("admin.users.active")}
                         </span>
                       )}
                     </td>
@@ -183,7 +183,7 @@ export function AdminUsers() {
                         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
                       >
                         <Eye className="h-4 w-4" />
-                        {t("admin.users.view") || "View"}
+                        {t("admin.users.view")}
                       </Button>
                     </td>
                   </tr>

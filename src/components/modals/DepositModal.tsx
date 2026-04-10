@@ -20,7 +20,6 @@ interface DepositModalProps {
   is_open: boolean;
   wallet: Wallet | null;
   on_close: () => void;
-  on_success: () => void;
 }
 
 export function DepositModal({

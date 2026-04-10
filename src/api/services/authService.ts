@@ -59,40 +59,25 @@ export interface GoogleCallbackData {
 }
 
 export const authService = {
-  /**
-   * Register a new user
-   */
   register: async (data: RegisterData): Promise<BackendAuthResponse["data"]> => {
     const response = await apiClient.post<BackendAuthResponse>("/auth/register", data);
     return response.data.data;
   },
 
-  /**
-   * Login user
-   */
   login: async (data: LoginData): Promise<BackendAuthResponse["data"]> => {
     const response = await apiClient.post<BackendAuthResponse>("/auth/login", data);
     return response.data.data;
   },
 
-  /**
-   * Logout user
-   */
   logout: async (refresh_token: string): Promise<void> => {
     await apiClient.post("/auth/logout", { refresh_token });
   },
 
-  /**
-   * Get current user
-   */
   get_current_user: async (): Promise<BackendUser> => {
     const response = await apiClient.get<{ success: boolean; data: BackendUser }>("/auth/me");
     return response.data.data;
   },
 
-  /**
-   * Refresh access token
-   */
   refresh_token: async (refresh_token: string): Promise<{ access_token: string }> => {
     const response = await apiClient.post<{ success: boolean; data: { access_token: string } }>(
       "/auth/refresh",
@@ -101,17 +86,11 @@ export const authService = {
     return response.data.data;
   },
 
-  /**
-   * Get Google OAuth URL
-   */
   get_google_oauth_url: async (): Promise<GoogleOAuthUrlResponse["data"]> => {
     const response = await apiClient.get<GoogleOAuthUrlResponse>("/auth/google/url");
     return response.data.data;
   },
 
-  /**
-   * Exchange Google authorization code for tokens
-   */
   google_callback: async (data: GoogleCallbackData): Promise<BackendAuthResponse["data"]> => {
     const response = await apiClient.post<BackendAuthResponse>("/auth/google/callback", data);
     return response.data.data;

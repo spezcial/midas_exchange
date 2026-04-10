@@ -31,7 +31,7 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
       const result = await staffService.create(form);
       onCreated(result.staff, result.temp_password);
     } catch {
-      toast.error(t("admin.staff.createFailed") || "Failed to create staff member");
+      toast.error(t("admin.staff.createFailed"));
     } finally {
       set_is_submitting(false);
     }
@@ -40,10 +40,10 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">{t("admin.staff.createTitle") || "Create Staff Member"}</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">{t("admin.staff.createTitle")}</h2>
         <form onSubmit={handle_submit} className="space-y-4">
           <div>
-            <Label htmlFor="email">{t("admin.staff.email") || "Email"}</Label>
+            <Label htmlFor="email">{t("admin.staff.email")}</Label>
             <Input
               id="email"
               type="email"
@@ -55,7 +55,7 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
             />
           </div>
           <div>
-            <Label htmlFor="first_name">{t("admin.staff.firstName") || "First Name"}</Label>
+            <Label htmlFor="first_name">{t("admin.staff.firstName")}</Label>
             <Input
               id="first_name"
               required
@@ -65,7 +65,7 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
             />
           </div>
           <div>
-            <Label htmlFor="last_name">{t("admin.staff.lastName") || "Last Name"}</Label>
+            <Label htmlFor="last_name">{t("admin.staff.lastName")}</Label>
             <Input
               id="last_name"
               required
@@ -75,7 +75,7 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
             />
           </div>
           <div>
-            <Label htmlFor="role">{t("admin.staff.role") || "Role"}</Label>
+            <Label htmlFor="role">{t("admin.staff.role")}</Label>
             <select
               id="role"
               required
@@ -93,7 +93,7 @@ function CreateStaffModal({ onClose, onCreated }: CreateModalProps) {
               {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={is_submitting} className="flex-1">
-              {is_submitting ? (t("common.submitting") || "Submitting...") : (t("admin.staff.create") || "Create")}
+              {is_submitting ? t("common.submitting") : t("admin.staff.create")}
             </Button>
           </div>
         </form>
@@ -121,15 +121,15 @@ function TempPasswordModal({ staff, temp_password, onClose }: TempPasswordModalP
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-900 mb-2">{t("admin.staff.tempPasswordTitle") || "Staff Member Created"}</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">{t("admin.staff.tempPasswordTitle")}</h2>
         <p className="text-gray-600 text-sm mb-4">
-          {t("admin.staff.tempPasswordWarning") || "This password is shown only once and cannot be retrieved again. Copy it now."}
+          {t("admin.staff.tempPasswordWarning")}
         </p>
         <div className="bg-gray-50 rounded-lg p-3 mb-4">
           {staff && (
             <>
-              <p className="text-xs text-gray-500 mb-1">{t("admin.staff.email") || "Email"}: <span className="font-medium text-gray-800">{staff.email}</span></p>
-              <p className="text-xs text-gray-500 mb-2">{t("admin.staff.role") || "Role"}: <span className="font-medium text-gray-800">{staff.role}</span></p>
+              <p className="text-xs text-gray-500 mb-1">{t("admin.staff.email")}: <span className="font-medium text-gray-800">{staff.email}</span></p>
+              <p className="text-xs text-gray-500 mb-2">{t("admin.staff.role")}: <span className="font-medium text-gray-800">{staff.role}</span></p>
             </>
           )}
           <div className="flex items-center gap-2">
@@ -137,12 +137,12 @@ function TempPasswordModal({ staff, temp_password, onClose }: TempPasswordModalP
               {temp_password ?? "—"}
             </code>
             <Button variant="outline" size="sm" onClick={handle_copy}>
-              {copied ? (t("common.copied") || "Copied!") : (t("common.copy") || "Copy")}
+              {copied ? t("common.copied") : t("common.copy")}
             </Button>
           </div>
         </div>
         <Button onClick={onClose} className="w-full">
-          {t("admin.staff.confirmedCopy") || "I have copied the password"}
+          {t("admin.staff.confirmedCopy")}
         </Button>
       </div>
     </div>
@@ -171,10 +171,10 @@ function EditStaffModal({ staff, onClose, onUpdated }: EditModalProps) {
       set_is_submitting(true);
       const updated = await staffService.update(staff.id, form);
       onUpdated(updated);
-      toast.success(t("admin.staff.updateSuccess") || "Staff member updated");
+      toast.success(t("admin.staff.updateSuccess"));
       onClose();
     } catch {
-      toast.error(t("admin.staff.updateFailed") || "Failed to update staff member");
+      toast.error(t("admin.staff.updateFailed"));
     } finally {
       set_is_submitting(false);
     }
@@ -183,10 +183,10 @@ function EditStaffModal({ staff, onClose, onUpdated }: EditModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">{t("admin.staff.editTitle") || "Edit Staff Member"}</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">{t("admin.staff.editTitle")}</h2>
         <form onSubmit={handle_submit} className="space-y-4">
           <div>
-            <Label htmlFor="edit_first_name">{t("admin.staff.firstName") || "First Name"}</Label>
+            <Label htmlFor="edit_first_name">{t("admin.staff.firstName")}</Label>
             <Input
               id="edit_first_name"
               required
@@ -196,7 +196,7 @@ function EditStaffModal({ staff, onClose, onUpdated }: EditModalProps) {
             />
           </div>
           <div>
-            <Label htmlFor="edit_last_name">{t("admin.staff.lastName") || "Last Name"}</Label>
+            <Label htmlFor="edit_last_name">{t("admin.staff.lastName")}</Label>
             <Input
               id="edit_last_name"
               required
@@ -206,7 +206,7 @@ function EditStaffModal({ staff, onClose, onUpdated }: EditModalProps) {
             />
           </div>
           <div>
-            <Label htmlFor="edit_role">{t("admin.staff.role") || "Role"}</Label>
+            <Label htmlFor="edit_role">{t("admin.staff.role")}</Label>
             <select
               id="edit_role"
               required
@@ -227,14 +227,14 @@ function EditStaffModal({ staff, onClose, onUpdated }: EditModalProps) {
               onChange={(e) => set_form({ ...form, is_active: e.target.checked })}
               className="h-4 w-4 rounded border-gray-300"
             />
-            <Label htmlFor="edit_is_active">{t("admin.staff.isActive") || "Active"}</Label>
+            <Label htmlFor="edit_is_active">{t("admin.staff.isActive")}</Label>
           </div>
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={is_submitting} className="flex-1">
-              {is_submitting ? (t("common.saving") || "Saving...") : (t("common.save"))}
+              {is_submitting ? t("common.saving") : t("common.save")}
             </Button>
           </div>
         </form>
@@ -262,7 +262,7 @@ export function AdminStaff() {
       set_staff_list(result.staff ?? []);
       set_total(result.total);
     } catch {
-      toast.error(t("admin.staff.loadFailed") || "Failed to load staff");
+      toast.error(t("admin.staff.loadFailed"));
     } finally {
       set_is_loading(false);
     }
@@ -283,13 +283,13 @@ export function AdminStaff() {
   };
 
   const handle_deactivate = async (staff: StaffUser) => {
-    if (!confirm(`${t("admin.staff.deactivateConfirm") || "Deactivate"} ${staff.email}?`)) return;
+    if (!confirm(`${t("admin.staff.deactivateConfirm")} ${staff.email}?`)) return;
     try {
       await staffService.deactivate(staff.id);
       set_staff_list((prev) => prev.map((s) => s.id === staff.id ? { ...s, is_active: false } : s));
-      toast.success(t("admin.staff.deactivateSuccess") || "Staff member deactivated");
+      toast.success(t("admin.staff.deactivateSuccess"));
     } catch {
-      toast.error(t("admin.staff.deactivateFailed") || "Failed to deactivate staff member");
+      toast.error(t("admin.staff.deactivateFailed"));
     }
   };
 
@@ -297,12 +297,12 @@ export function AdminStaff() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t("admin.staff.title") || "Staff Management"}</h1>
-          <p className="text-gray-600 mt-2">{t("admin.staff.subtitle") || "Manage staff members and their roles"}</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t("admin.staff.title")}</h1>
+          <p className="text-gray-600 mt-2">{t("admin.staff.subtitle")}</p>
         </div>
         <Button onClick={() => set_show_create_modal(true)} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
-          {t("admin.staff.createBtn") || "Create Staff"}
+          {t("admin.staff.createBtn")}
         </Button>
       </div>
 
@@ -310,7 +310,7 @@ export function AdminStaff() {
       <div className="bg-white rounded-xl shadow-sm p-6">
         <div className="flex gap-4 items-end">
           <div className="flex-1 max-w-xs">
-            <Label htmlFor="email-filter">{t("admin.users.searchByEmail") || "Search by Email"}</Label>
+            <Label htmlFor="email-filter">{t("admin.users.searchByEmail")}</Label>
             <Input
               id="email-filter"
               type="email"
@@ -322,7 +322,7 @@ export function AdminStaff() {
           </div>
         </div>
         <div className="mt-4 text-sm text-gray-600">
-          {t("admin.staff.total") || "Total"}: {total}
+          {t("admin.staff.total")}: {total}
         </div>
       </div>
 
@@ -333,11 +333,11 @@ export function AdminStaff() {
             <thead className="bg-gray-50 border-b">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.email") || "Email"}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.name") || "Name"}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.role") || "Role"}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.users.status") || "Status"}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.users.actions") || "Actions"}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.email")}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.name")}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.staff.role")}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.users.status")}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("admin.users.actions")}</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -347,7 +347,7 @@ export function AdminStaff() {
                 </tr>
               ) : staff_list.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">{t("admin.staff.noStaff") || "No staff members found"}</td>
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">{t("admin.staff.noStaff")}</td>
                 </tr>
               ) : (
                 staff_list.map((staff) => (
@@ -366,12 +366,12 @@ export function AdminStaff() {
                       {staff.is_active ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           <CheckCircle2 className="h-3 w-3" />
-                          {t("admin.users.active") || "Active"}
+                          {t("admin.users.active")}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                           <XCircle className="h-3 w-3" />
-                          {t("admin.users.blocked") || "Inactive"}
+                          {t("admin.users.blocked")}
                         </span>
                       )}
                     </td>
@@ -394,7 +394,7 @@ export function AdminStaff() {
                             onClick={() => handle_deactivate(staff)}
                           >
                             <UserX className="h-4 w-4" />
-                            {t("admin.staff.deactivate") || "Deactivate"}
+                            {t("admin.staff.deactivate")}
                           </Button>
                         )}
                       </div>

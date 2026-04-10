@@ -170,7 +170,7 @@ export function AdminOTCAnalytics() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="font-semibold text-gray-900 mb-4">{t("otc.admin.analytics.volumeOverTime")}</h2>
             <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={analytics!.by_period} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+              <AreaChart data={analytics?.by_period ?? []} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                 <defs>
                   <linearGradient id="vol_gradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
@@ -197,7 +197,7 @@ export function AdminOTCAnalytics() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="font-semibold text-gray-900 mb-4">{t("otc.admin.analytics.ordersBreakdown")}</h2>
             <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={analytics!.by_period} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+              <BarChart data={analytics?.by_period ?? []} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="period" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
@@ -206,13 +206,6 @@ export function AdminOTCAnalytics() {
                 <Bar dataKey="completed" stackId="a" fill="#22c55e" name={t("otc.statuses.completed")} />
                 <Bar dataKey="cancelled" stackId="a" fill="#9ca3af" name={t("otc.statuses.cancelled")} />
                 <Bar dataKey="expired" stackId="a" fill="#ef4444" name={t("otc.statuses.expired")} />
-                <Bar
-                  dataKey="other"
-                  stackId="a"
-                  fill="#60a5fa"
-                  name={t("otc.admin.analytics.other")}
-                  hide
-                />
               </BarChart>
             </ResponsiveContainer>
           </div>

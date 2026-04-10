@@ -210,3 +210,30 @@ First `super_admin` must be inserted directly in the DB. After that, login via `
 
 ### i18n Keys Added
 `admin.nav.otcAnalytics`, `otc.admin.export`, `otc.admin.filters.*`, `otc.admin.auditLog.*`, `otc.admin.analytics.*` — in all 3 locales (en/ru/kk).
+
+---
+
+## Code Quality Rules (established 2026-04-10)
+
+### TypeScript
+- Never use `catch (err: any)` — use `catch (err: unknown)` with explicit inline cast: `(err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? fallback`
+- Never use non-null assertions (`!`) — prefer optional chaining with a fallback (`?.` / `?? []`)
+
+### i18n
+- Never use `t("key") || "fallback"` — `t()` always returns a string; the fallback is dead code. Ensure the key exists in all 3 locale files instead.
+- `common.total`, `common.submit` keys exist in all 3 locales.
+- `otc.fields.*` section exists in all 3 locales (added during review).
+- **en.json is the canonical source** — ru.json and kk.json have more keys; keep en.json in sync when adding new UI strings.
+
+### Dead props
+- `DepositModal` has no `on_success` prop — the modal only shows static deposit instructions, so there is no submission event to respond to.
+
+### Module boundaries
+- `AdminListOTCOrdersParams` is canonical in `src/types/index.ts` — import from there, not from `otcService`.
+- `STAFF_ROLES` used in `DashboardLayout` is defined at module scope (not inside the component).
+
+### WebSocket auth
+- The OTC order detail WebSocket (`/ws/otc/:uid`) passes `access_token` as a query param due to WS handshake limitations. This exposes the token in server access logs. A ticket-based short-lived auth endpoint should be used if log security is a concern.
+
+### OAuth CSRF
+- `authStore.complete_google_login` now verifies the `state` param against `sessionStorage["oauth_state"]` before calling the backend. This guard must be preserved in any refactor of the Google login flow.

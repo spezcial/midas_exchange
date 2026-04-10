@@ -91,8 +91,8 @@ function OfferCard({
         toast.success(t("otc.messages.offerRejected"));
       }
       on_action();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error ?? t("messages.loadFailed"));
+    } catch (err: unknown) {
+      toast.error((err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? t("messages.loadFailed"));
     } finally {
       set_loading(false);
     }
@@ -222,8 +222,12 @@ export function AdminOTCOrderDetail() {
     if (!uid || !order || !access_token) return;
     if (TERMINAL_STATUSES.includes(order.status)) return;
 
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
-    const WS_BASE = API_BASE.replace(/^http/, "ws").replace(/\/api\/v1.*$/, "");
+    const WS_BASE = (import.meta.env.VITE_API_URL as string ?? "http://localhost:8080/api/v1")
+      .replace(/^http/, "ws")
+      .replace(/\/api\/v1.*$/, "");
+    // NOTE: passing the token as a query param is a known limitation — WS handshakes
+    // don't support Authorization headers. Use a short-lived ticket endpoint to avoid
+    // token exposure in server logs if this becomes a concern.
     const ws = new WebSocket(`${WS_BASE}/ws/otc/${uid}?token=${access_token}`);
 
     // Refetch on every incoming message — this also marks new messages as read on the backend.
@@ -240,8 +244,8 @@ export function AdminOTCOrderDetail() {
       await fn();
       toast.success(t(success_key));
       fetch_order();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error ?? t("messages.loadFailed"));
+    } catch (err: unknown) {
+      toast.error((err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? t("messages.loadFailed"));
     } finally {
       set_action_loading(false);
     }
@@ -254,8 +258,8 @@ export function AdminOTCOrderDetail() {
       await otcService.admin_send_message(uid, text.trim());
       set_text("");
       fetch_order();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error ?? t("messages.loadFailed"));
+    } catch (err: unknown) {
+      toast.error((err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? t("messages.loadFailed"));
     } finally {
       set_is_sending(false);
     }
@@ -272,8 +276,8 @@ export function AdminOTCOrderDetail() {
       toast.success(t("otc.messages.offerSent"));
       set_offer_open(false);
       fetch_order();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error ?? t("messages.loadFailed"));
+    } catch (err: unknown) {
+      toast.error((err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? t("messages.loadFailed"));
     } finally {
       set_is_offer_submitting(false);
     }
@@ -324,7 +328,7 @@ export function AdminOTCOrderDetail() {
           </div>
           {order.operator_id && (
             <div>
-              <div className="text-gray-500">Operator</div>
+              <div className="text-gray-500">{t("otc.fields.operator")}</div>
               <div className="font-semibold mt-0.5">#{order.operator_id}</div>
             </div>
           )}

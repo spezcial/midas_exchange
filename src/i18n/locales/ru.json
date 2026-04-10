@@ -37,7 +37,8 @@
     "create": "Создать",
     "active": "Активен",
     "inactive": "Неактивен",
-    "confirmDelete": "Вы уверены, что хотите удалить?"
+    "confirmDelete": "Вы уверены, что хотите удалить?",
+    "total": "Итого"
   },
   "nav": {
     "home": "Главная",
@@ -706,7 +707,8 @@
       "toAmount": "Сумма к получению",
       "comment": "Комментарий",
       "paymentDeadline": "Срок оплаты",
-      "cancelReason": "Причина отмены"
+      "cancelReason": "Причина отмены",
+      "operator": "Оператор"
     },
     "chat": {
       "title": "Переписка",

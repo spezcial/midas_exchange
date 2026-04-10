@@ -27,6 +27,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const STAFF_ROLES = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
+
 export function DashboardLayout() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
@@ -37,7 +39,6 @@ export function DashboardLayout() {
     navigate("/");
   };
   const user = useAuthStore((state) => state.user);
-  const STAFF_ROLES = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
   const is_staff = STAFF_ROLES.includes(user?.role ?? "");
   const is_super_admin = user?.role === "super_admin";
   const is_operator_or_admin = ["operator", "admin", "super_admin"].includes(user?.role ?? "");
@@ -55,8 +56,10 @@ export function DashboardLayout() {
     { path: "/admin/exchanges", icon: ClipboardList, label: t("admin.nav.exchanges") },
     { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
     { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
-    ...(is_operator_or_admin ? [{ path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") }] : []),
-    ...(is_operator_or_admin ? [{ path: "/admin/otc/analytics", icon: BarChart2, label: t("admin.nav.otcAnalytics") }] : []),
+    ...(is_operator_or_admin ? [
+      { path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") },
+      { path: "/admin/otc/analytics", icon: BarChart2, label: t("admin.nav.otcAnalytics") },
+    ] : []),
     ...(is_super_admin ? [{ path: "/admin/staff", icon: UserCog, label: t("admin.nav.staff") }] : []),
     ...(is_super_admin ? [{ path: "/admin/otc/config", icon: Settings2, label: t("admin.nav.otcConfig") }] : []),
   ];
@@ -111,41 +114,21 @@ export function DashboardLayout() {
 
           {/* Navigation */}
           <nav className="space-y-2">
-            {is_staff ? (
-              /* Admin Navigation */
-              admin_nav_items.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
-                    location.pathname === item.path || location.pathname.startsWith(item.path + "/")
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  )}
-                >
-                  <item.icon className="h-5 w-5 shrink-0" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              ))
-            ) : (
-              /* Client Navigation */
-              nav_items.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
-                    location.pathname === item.path || location.pathname.startsWith(item.path + "/")
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  )}
-                >
-                  <item.icon className="h-5 w-5 shrink-0" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              ))
-            )}
+            {(is_staff ? admin_nav_items : nav_items).map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={cn(
+                  "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
+                  location.pathname === item.path || location.pathname.startsWith(item.path + "/")
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-600 hover:bg-gray-50"
+                )}
+              >
+                <item.icon className="h-5 w-5 shrink-0" />
+                <span className="font-medium">{item.label}</span>
+              </Link>
+            ))}
           </nav>
         </div>
 

@@ -114,6 +114,16 @@ export const useAuthStore = create<AuthState>()(
       },
 
       complete_google_login: async (code: string, state: string) => {
+        // Validate CSRF state before making any API call
+        const stored_state = sessionStorage.getItem("oauth_state");
+        if (!stored_state || state !== stored_state) {
+          const error_message = "Invalid OAuth state. Please try again.";
+          set({ error: error_message });
+          toast.error(error_message);
+          throw new Error(error_message);
+        }
+        sessionStorage.removeItem("oauth_state");
+
         try {
           set({ is_loading: true, error: null });
           const { user, access_token, refresh_token } = await authService.google_callback({ code, state });
