@@ -236,4 +236,5 @@ First `super_admin` must be inserted directly in the DB. After that, login via `
 - The OTC order detail WebSocket (`/ws/otc/:uid`) passes `access_token` as a query param due to WS handshake limitations. This exposes the token in server access logs. A ticket-based short-lived auth endpoint should be used if log security is a concern.
 
 ### OAuth CSRF
-- `authStore.complete_google_login` now verifies the `state` param against `sessionStorage["oauth_state"]` before calling the backend. This guard must be preserved in any refactor of the Google login flow.
+- CSRF state validation lives in `GoogleOAuthCallback.tsx` (lines 29–48): gets `oauth_state` from sessionStorage, clears it, then validates it against the `state` URL param — all before calling `complete_google_login`.
+- `authStore.complete_google_login` does NOT re-validate (sessionStorage key is already cleared by the time it is called). Do not add a state check inside the store method.
