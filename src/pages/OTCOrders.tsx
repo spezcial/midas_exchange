@@ -48,6 +48,8 @@ export function OTCOrders() {
     proposed_rate: 0,
     comment: "",
   });
+  const [from_amount_input, set_from_amount_input] = useState("");
+  const [proposed_rate_input, set_proposed_rate_input] = useState("");
   const [is_submitting, set_is_submitting] = useState(false);
 
   const status_options = [
@@ -96,6 +98,8 @@ export function OTCOrders() {
     }
     set_selected_config(null);
     set_form({ from_currency_id: 0, to_currency_id: 0, from_amount: 0, proposed_rate: 0, comment: "" });
+    set_from_amount_input("");
+    set_proposed_rate_input("");
     set_is_create_open(true);
   };
 
@@ -307,13 +311,17 @@ export function OTCOrders() {
                 )}
               </Label>
               <Input
-                type="number"
-                min="0"
-                step="any"
+                type="text"
+                inputMode="decimal"
                 className="mt-1.5"
                 disabled={!selected_config}
-                value={form.from_amount || ""}
-                onChange={(e) => set_form((f) => ({ ...f, from_amount: Number(e.target.value) }))}
+                value={from_amount_input}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw !== "" && !/^\d*\.?\d*$/.test(raw)) return;
+                  set_from_amount_input(raw);
+                  set_form((f) => ({ ...f, from_amount: parseFloat(raw) || 0 }));
+                }}
               />
             </div>
 
@@ -327,13 +335,17 @@ export function OTCOrders() {
                 )}
               </Label>
               <Input
-                type="number"
-                min="0"
-                step="any"
+                type="text"
+                inputMode="decimal"
                 className="mt-1.5"
                 disabled={!selected_config}
-                value={form.proposed_rate || ""}
-                onChange={(e) => set_form((f) => ({ ...f, proposed_rate: Number(e.target.value) }))}
+                value={proposed_rate_input}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw !== "" && !/^\d*\.?\d*$/.test(raw)) return;
+                  set_proposed_rate_input(raw);
+                  set_form((f) => ({ ...f, proposed_rate: parseFloat(raw) || 0 }));
+                }}
               />
             </div>
 

@@ -178,6 +178,8 @@ export function AdminOTCOrderDetail() {
   // Offer dialog
   const [offer_open, set_offer_open] = useState(false);
   const [offer_form, set_offer_form] = useState<SendOTCOfferPayload>({ offer_rate: 0, offer_from_amount: 0 });
+  const [offer_rate_input, set_offer_rate_input] = useState("");
+  const [offer_amount_input, set_offer_amount_input] = useState("");
   const [is_offer_submitting, set_is_offer_submitting] = useState(false);
 
   // Cancel dialog
@@ -548,6 +550,8 @@ export function AdminOTCOrderDetail() {
                     className="shrink-0"
                     onClick={() => {
                       set_offer_form({ offer_rate: 0, offer_from_amount: 0 });
+                      set_offer_rate_input("");
+                      set_offer_amount_input("");
                       set_offer_open(true);
                     }}
                   >
@@ -624,23 +628,31 @@ export function AdminOTCOrderDetail() {
                 </span>
               </Label>
               <Input
-                type="number"
-                min="0"
-                step="any"
+                type="text"
+                inputMode="decimal"
                 className="mt-1.5"
-                value={offer_form.offer_rate || ""}
-                onChange={(e) => set_offer_form((f) => ({ ...f, offer_rate: Number(e.target.value) }))}
+                value={offer_rate_input}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw !== "" && !/^\d*\.?\d*$/.test(raw)) return;
+                  set_offer_rate_input(raw);
+                  set_offer_form((f) => ({ ...f, offer_rate: parseFloat(raw) || 0 }));
+                }}
               />
             </div>
             <div>
               <Label>{t("otc.chat.offerAmount")} ({from_code})</Label>
               <Input
-                type="number"
-                min="0"
-                step="any"
+                type="text"
+                inputMode="decimal"
                 className="mt-1.5"
-                value={offer_form.offer_from_amount || ""}
-                onChange={(e) => set_offer_form((f) => ({ ...f, offer_from_amount: Number(e.target.value) }))}
+                value={offer_amount_input}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw !== "" && !/^\d*\.?\d*$/.test(raw)) return;
+                  set_offer_amount_input(raw);
+                  set_offer_form((f) => ({ ...f, offer_from_amount: parseFloat(raw) || 0 }));
+                }}
               />
             </div>
             {offer_form.offer_rate > 0 && offer_form.offer_from_amount > 0 && (
