@@ -117,6 +117,10 @@ export const otcService = {
     await apiClient.put(`/admin/otc/orders/${uid}/take`);
   },
 
+  admin_accept_as_proposed: async (uid: string): Promise<void> => {
+    await apiClient.put(`/admin/otc/orders/${uid}/accept-proposed`);
+  },
+
   admin_send_message: async (uid: string, content: string): Promise<OTCMessage> => {
     const response = await apiClient.post(`/admin/otc/orders/${uid}/messages`, { content });
     return response.data;

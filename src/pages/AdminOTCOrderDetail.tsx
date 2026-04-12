@@ -299,7 +299,7 @@ export function AdminOTCOrderDetail() {
   if (!order) return null;
 
   const is_terminal = TERMINAL_STATUSES.includes(order.status);
-  const can_chat = order.status === "negotiating";
+  const can_chat = order.status === "negotiating" || order.status === "awaiting_payment";
   const from_code = order.from_currency?.code ?? `#${order.from_currency_id}`;
   const to_code = order.to_currency?.code ?? `#${order.to_currency_id}`;
 
@@ -420,6 +420,23 @@ export function AdminOTCOrderDetail() {
               </Button>
             )}
 
+            {order.status === "negotiating" && (
+              <Button
+                size="sm"
+                className="bg-emerald-600 hover:bg-emerald-700"
+                onClick={() =>
+                  run_action(
+                    () => otcService.admin_accept_as_proposed(order.uid),
+                    "otc.messages.acceptedAsProposed"
+                  )
+                }
+                disabled={action_loading}
+              >
+                <CheckCircle className="h-4 w-4 mr-1" />
+                {t("otc.actions.acceptAsProposed")}
+              </Button>
+            )}
+
             {(order.status === "awaiting_payment" || order.status === "expired") && (
               <Button
                 size="sm"
@@ -516,29 +533,38 @@ export function AdminOTCOrderDetail() {
         </div>
 
         {can_chat && (
-          <div className="px-6 py-4 border-t bg-gray-50">
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="shrink-0"
-                onClick={() => {
-                  set_offer_form({ offer_rate: 0, offer_from_amount: 0 });
-                  set_offer_open(true);
-                }}
-              >
-                {t("otc.chat.sendOffer")}
-              </Button>
-              <Input
-                value={text}
-                onChange={(e) => set_text(e.target.value)}
-                placeholder={t("otc.chat.messagePlaceholder")}
-                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send_message()}
-                className="flex-1"
-              />
-              <Button size="sm" onClick={send_message} disabled={is_sending || !text.trim()}>
-                <Send className="h-4 w-4" />
-              </Button>
+          <div className="border-t">
+            {order.status === "awaiting_payment" && (
+              <div className="px-6 py-3 bg-purple-50 text-sm text-purple-700">
+                {t("otc.chat.awaitingPaymentNote")}
+              </div>
+            )}
+            <div className="px-6 py-4 bg-gray-50">
+              <div className="flex gap-2">
+                {order.status === "negotiating" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0"
+                    onClick={() => {
+                      set_offer_form({ offer_rate: 0, offer_from_amount: 0 });
+                      set_offer_open(true);
+                    }}
+                  >
+                    {t("otc.chat.sendOffer")}
+                  </Button>
+                )}
+                <Input
+                  value={text}
+                  onChange={(e) => set_text(e.target.value)}
+                  placeholder={t("otc.chat.messagePlaceholder")}
+                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send_message()}
+                  className="flex-1"
+                />
+                <Button size="sm" onClick={send_message} disabled={is_sending || !text.trim()}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         )}

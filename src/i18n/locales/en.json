@@ -321,6 +321,57 @@
       "cancelReason": "Cancel Reason",
       "operator": "Operator"
     },
+    "actions": {
+      "cancel": "Cancel Order",
+      "cancelReason": "Cancel Reason",
+      "take": "Take Order",
+      "confirmPayment": "Confirm Payment",
+      "complete": "Complete Order",
+      "acceptAsProposed": "Accept Client's Rate"
+    },
+    "chat": {
+      "title": "Chat",
+      "messagePlaceholder": "Type a message...",
+      "send": "Send",
+      "sendOffer": "Send Offer",
+      "offerRate": "Rate",
+      "offerAmount": "Amount",
+      "offerReceive": "You Receive",
+      "accept": "Accept",
+      "reject": "Reject",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "awaitingPaymentNote": "Payment pending. Use the chat to share payment details."
+    },
+    "messages": {
+      "orderCreated": "Order created",
+      "orderCancelled": "Order cancelled",
+      "orderTaken": "Order taken",
+      "paymentConfirmed": "Payment confirmed",
+      "orderCompleted": "Order completed",
+      "offerSent": "Offer sent",
+      "offerAccepted": "Offer accepted",
+      "offerRejected": "Offer rejected",
+      "acceptedAsProposed": "Client's rate accepted"
+    },
+    "statuses": {
+      "awaiting_review": "Awaiting Review",
+      "negotiating": "Negotiating",
+      "awaiting_payment": "Awaiting Payment",
+      "payment_received": "Payment Received",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "countdown": {
+      "label": "Time to pay",
+      "expired": "Expired"
+    },
+    "title": "OTC Orders",
+    "subtitle": "Over-the-counter trades at a negotiated price",
+    "createOrder": "New Order",
+    "orderDetail": "Order Details",
+    "noOrders": "No orders",
     "create": {
       "pair": "Currency Pair",
       "fromCurrency": "From Currency",

@@ -322,6 +322,57 @@
       "cancelReason": "Бас тарту себебі",
       "operator": "Оператор"
     },
+    "actions": {
+      "cancel": "Мәмілені болдырмау",
+      "cancelReason": "Болдырмау себебі",
+      "take": "Жұмысқа алу",
+      "confirmPayment": "Төлемді растау",
+      "complete": "Мәмілені аяқтау",
+      "acceptAsProposed": "Клиент бағамын қабылдау"
+    },
+    "chat": {
+      "title": "Хат алмасу",
+      "messagePlaceholder": "Хабарлама жазыңыз...",
+      "send": "Жіберу",
+      "sendOffer": "Бағам ұсыну",
+      "offerRate": "Бағам",
+      "offerAmount": "Сома",
+      "offerReceive": "Аласыз",
+      "accept": "Қабылдау",
+      "reject": "Қабылдамау",
+      "accepted": "Қабылданды",
+      "rejected": "Қабылданбады",
+      "awaitingPaymentNote": "Төлем күтілуде. Реквизиттерді нақтылау үшін чатты пайдаланыңыз."
+    },
+    "messages": {
+      "orderCreated": "Тапсырыс жасалды",
+      "orderCancelled": "Мәміле болдырылмады",
+      "orderTaken": "Тапсырыс жұмысқа алынды",
+      "paymentConfirmed": "Төлем расталды",
+      "orderCompleted": "Мәміле аяқталды",
+      "offerSent": "Ұсыныс жіберілді",
+      "offerAccepted": "Ұсыныс қабылданды",
+      "offerRejected": "Ұсыныс қабылданбады",
+      "acceptedAsProposed": "Клиент бағамы қабылданды"
+    },
+    "statuses": {
+      "awaiting_review": "Қарауда",
+      "negotiating": "Келіссөздер",
+      "awaiting_payment": "Төлем күтілуде",
+      "payment_received": "Төлем алынды",
+      "completed": "Аяқталды",
+      "cancelled": "Болдырылмады",
+      "expired": "Мерзімі өтті"
+    },
+    "countdown": {
+      "label": "Төлемге қалған уақыт",
+      "expired": "Мерзімі өтті"
+    },
+    "title": "OTC Тапсырыстар",
+    "subtitle": "Келісімді бағамдар бойынша биржадан тыс мәмілелер",
+    "createOrder": "Жаңа тапсырыс",
+    "orderDetail": "Тапсырыс мәліметтері",
+    "noOrders": "Тапсырыстар жоқ",
     "create": {
       "pair": "Валюта жұбы",
       "fromCurrency": "Сататын валюта",

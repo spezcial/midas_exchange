@@ -742,14 +742,16 @@
       "accept": "Принять",
       "reject": "Отклонить",
       "accepted": "Принято",
-      "rejected": "Отклонено"
+      "rejected": "Отклонено",
+      "awaitingPaymentNote": "Ожидается оплата. Используйте чат для уточнения реквизитов."
     },
     "actions": {
       "cancel": "Отменить сделку",
       "cancelReason": "Причина отмены",
       "take": "Взять в работу",
       "confirmPayment": "Подтвердить оплату",
-      "complete": "Завершить сделку"
+      "complete": "Завершить сделку",
+      "acceptAsProposed": "Принять курс клиента"
     },
     "create": {
       "title": "Новая OTC сделка",
@@ -789,7 +791,8 @@
       "orderCompleted": "Сделка завершена",
       "offerSent": "Предложение отправлено",
       "offerAccepted": "Предложение принято",
-      "offerRejected": "Предложение отклонено"
+      "offerRejected": "Предложение отклонено",
+      "acceptedAsProposed": "Курс клиента принят"
     },
     "admin": {
       "title": "OTC Сделки",
