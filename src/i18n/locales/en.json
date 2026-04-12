@@ -271,6 +271,27 @@
         "details": "Details & Wallets",
         "profile": "Profile"
       }
+    },
+    "platformFees": {
+      "title": "Platform Fees",
+      "subtitle": "Revenue collected from exchange and withdrawal operations",
+      "navLabel": "Platform Fees",
+      "operation": "Operation",
+      "allOperations": "All Operations",
+      "user": "User",
+      "currency": "Currency",
+      "grossAmount": "Gross Amount",
+      "fee": "Fee Collected",
+      "date": "Date",
+      "noFees": "No fee records found",
+      "totalRecords": "Total Records",
+      "totalExchangeFees": "Total Exchange Fees",
+      "totalWithdrawalFees": "Total Withdrawal Fees",
+      "page": "Page",
+      "operations": {
+        "exchange": "Exchange",
+        "withdrawal": "Withdrawal"
+      }
     }
   },
   "messages": {

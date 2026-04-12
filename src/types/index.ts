@@ -334,3 +334,27 @@ export interface UserProfilePayload {
   phone?: string;
   kyc_level: 0 | 1 | 2 | 3;
 }
+
+export type FeeOperation = "exchange" | "withdrawal";
+
+export interface PlatformFee {
+  id: number;
+  user_id: number;
+  operation: FeeOperation;
+  currency_id: number;
+  gross_amount: number;
+  fee: number;
+  created_at: string;
+  user_email: string;
+  currency_code: string;
+  currency_symbol: string;
+}
+
+export interface PlatformFeesListResponse {
+  fees: PlatformFee[];
+  total: number;
+  totals: {
+    exchange: number;
+    withdrawal: number;
+  };
+}

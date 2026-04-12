@@ -34,6 +34,7 @@ import { AdminOTCOrders } from "@/pages/AdminOTCOrders";
 import { AdminOTCOrderDetail } from "@/pages/AdminOTCOrderDetail";
 import { AdminOTCConfig } from "@/pages/AdminOTCConfig";
 import { AdminOTCAnalytics } from "@/pages/AdminOTCAnalytics";
+import { AdminPlatformFees } from "@/pages/AdminPlatformFees";
 import { OperatorRoute } from "./OperatorRoute";
 
 const STAFF_ROLES: UserRole[] = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
@@ -113,6 +114,7 @@ export function AppRoutes() {
         <Route path="/admin/otc/:uid" element={<OperatorRoute><AdminOTCOrderDetail /></OperatorRoute>} />
 
         {/* Super admin routes */}
+        <Route path="/admin/platform-fees" element={<AdminRoute><AdminPlatformFees /></AdminRoute>} />
         <Route path="/admin/staff" element={<SuperAdminRoute><AdminStaff /></SuperAdminRoute>} />
         <Route path="/admin/otc/config" element={<SuperAdminRoute><AdminOTCConfig /></SuperAdminRoute>} />
       </Route>

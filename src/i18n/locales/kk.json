@@ -272,6 +272,27 @@
         "details": "Мәліметтер және әмияндар",
         "profile": "Профиль"
       }
+    },
+    "platformFees": {
+      "title": "Платформа комиссиялары",
+      "subtitle": "Айырбас және шығару операцияларынан түскен кіріс",
+      "navLabel": "Комиссиялар",
+      "operation": "Операция",
+      "allOperations": "Барлық операциялар",
+      "user": "Пайдаланушы",
+      "currency": "Валюта",
+      "grossAmount": "Операция сомасы",
+      "fee": "Комиссия",
+      "date": "Күні",
+      "noFees": "Комиссия жазбалары жоқ",
+      "totalRecords": "Жазбалар саны",
+      "totalExchangeFees": "Айырбас комиссиялары",
+      "totalWithdrawalFees": "Шығару комиссиялары",
+      "page": "Бет",
+      "operations": {
+        "exchange": "Айырбас",
+        "withdrawal": "Шығару"
+      }
     }
   },
   "messages": {

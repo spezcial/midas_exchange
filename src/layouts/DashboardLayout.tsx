@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,8 @@ import {
   Handshake,
   Settings2,
   BarChart2,
+  Coins,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,6 +46,15 @@ export function DashboardLayout() {
   const is_super_admin = user?.role === "super_admin";
   const is_operator_or_admin = ["operator", "admin", "super_admin"].includes(user?.role ?? "");
 
+  const otc_is_active = location.pathname.startsWith("/admin/otc");
+  const [otc_open, set_otc_open] = useState(() => otc_is_active);
+
+  useEffect(() => {
+    if (otc_is_active) {
+      set_otc_open(true);
+    }
+  }, [otc_is_active]);
+
   const nav_items: { path: string; icon: LucideIcon; label: string }[] = [
     { path: "/wallets", icon: Wallet, label: t("nav.wallets") },
     { path: "/exchange", icon: ArrowLeftRight, label: t("nav.exchange") },
@@ -56,11 +68,14 @@ export function DashboardLayout() {
     { path: "/admin/exchanges", icon: ClipboardList, label: t("admin.nav.exchanges") },
     { path: "/admin/exchange-rates", icon: TrendingUp, label: t("admin.nav.exchangeRates") },
     { path: "/admin/users", icon: Users, label: t("admin.nav.users") },
-    ...(is_operator_or_admin ? [
-      { path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") },
-      { path: "/admin/otc/analytics", icon: BarChart2, label: t("admin.nav.otcAnalytics") },
+    ...(["admin", "super_admin"].includes(user?.role ?? "") ? [
+      { path: "/admin/platform-fees", icon: Coins, label: t("admin.platformFees.navLabel") },
     ] : []),
-    ...(is_super_admin ? [{ path: "/admin/staff", icon: UserCog, label: t("admin.nav.staff") }] : []),
+  ];
+
+  const otc_children: { path: string; icon: LucideIcon; label: string }[] = [
+    { path: "/admin/otc", icon: Handshake, label: t("admin.nav.otc") },
+    { path: "/admin/otc/analytics", icon: BarChart2, label: t("admin.nav.otcAnalytics") },
     ...(is_super_admin ? [{ path: "/admin/otc/config", icon: Settings2, label: t("admin.nav.otcConfig") }] : []),
   ];
 
@@ -73,6 +88,14 @@ export function DashboardLayout() {
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
   };
+
+  const nav_link_class = (path: string, exact = false) =>
+    cn(
+      "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
+      (exact ? location.pathname === path : location.pathname === path || location.pathname.startsWith(path + "/"))
+        ? "bg-blue-50 text-blue-600"
+        : "text-gray-600 hover:bg-gray-50"
+    );
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -113,22 +136,72 @@ export function DashboardLayout() {
           </div>
 
           {/* Navigation */}
-          <nav className="space-y-2">
-            {(is_staff ? admin_nav_items : nav_items).map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={cn(
-                  "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
-                  location.pathname === item.path || location.pathname.startsWith(item.path + "/")
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-600 hover:bg-gray-50"
+          <nav className="space-y-1">
+            {is_staff ? (
+              <>
+                {/* Flat admin items */}
+                {admin_nav_items.map((item) => (
+                  <Link key={item.path} to={item.path} className={nav_link_class(item.path)}>
+                    <item.icon className="h-5 w-5 shrink-0" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                ))}
+
+                {/* OTC group */}
+                {is_operator_or_admin && (
+                  <div>
+                    <button
+                      onClick={() => set_otc_open((o) => !o)}
+                      className={cn(
+                        "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors",
+                        otc_is_active ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
+                      )}
+                    >
+                      <Handshake className="h-5 w-5 shrink-0" />
+                      <span className="font-medium flex-1">OTC</span>
+                      <ChevronDown
+                        className={cn("h-4 w-4 shrink-0 transition-transform", otc_open && "rotate-180")}
+                      />
+                    </button>
+
+                    {otc_open && (
+                      <div className="mt-1 ml-4 space-y-1 border-l border-gray-100 pl-3">
+                        {otc_children.map((child) => (
+                          <Link
+                            key={child.path}
+                            to={child.path}
+                            className={cn(
+                              "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors text-sm",
+                              location.pathname === child.path
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-600 hover:bg-gray-50"
+                            )}
+                          >
+                            <child.icon className="h-4 w-4 shrink-0" />
+                            <span className="font-medium">{child.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
-              >
-                <item.icon className="h-5 w-5 shrink-0" />
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            ))}
+
+                {/* Staff (super_admin only) */}
+                {is_super_admin && (
+                  <Link to="/admin/staff" className={nav_link_class("/admin/staff")}>
+                    <UserCog className="h-5 w-5 shrink-0" />
+                    <span className="font-medium">{t("admin.nav.staff")}</span>
+                  </Link>
+                )}
+              </>
+            ) : (
+              nav_items.map((item) => (
+                <Link key={item.path} to={item.path} className={nav_link_class(item.path)}>
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              ))
+            )}
           </nav>
         </div>
 

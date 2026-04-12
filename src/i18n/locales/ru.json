@@ -679,6 +679,27 @@
       "resolved": "Решенные",
       "assign": "Назначить",
       "reply": "Ответить"
+    },
+    "platformFees": {
+      "title": "Комиссии платформы",
+      "subtitle": "Доход, полученный от операций обмена и вывода средств",
+      "navLabel": "Комиссии",
+      "operation": "Операция",
+      "allOperations": "Все операции",
+      "user": "Пользователь",
+      "currency": "Валюта",
+      "grossAmount": "Сумма операции",
+      "fee": "Комиссия",
+      "date": "Дата",
+      "noFees": "Записи о комиссиях отсутствуют",
+      "totalRecords": "Всего записей",
+      "totalExchangeFees": "Комиссии за обмен",
+      "totalWithdrawalFees": "Комиссии за вывод",
+      "page": "Страница",
+      "operations": {
+        "exchange": "Обмен",
+        "withdrawal": "Вывод"
+      }
     }
   },
   "otc": {
