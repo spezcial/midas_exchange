@@ -236,10 +236,10 @@ export function AdminOTCOrders() {
                       User #{order.user_id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2 text-sm text-gray-900">
-                        <span>#{order.from_currency_id}</span>
+                      <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+                        <span>{order.from_currency_code}</span>
                         <ArrowRight className="h-3 w-3 text-gray-400" />
-                        <span>#{order.to_currency_id}</span>
+                        <span>{order.to_currency_code}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

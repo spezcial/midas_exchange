@@ -217,6 +217,8 @@ export interface OTCOrder {
   operator_id: number | null;
   from_currency_id: number;
   to_currency_id: number;
+  from_currency_code: string;
+  to_currency_code: string;
   from_amount: number;
   proposed_rate: number;
   agreed_rate: number | null;
