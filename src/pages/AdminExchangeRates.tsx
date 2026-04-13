@@ -4,7 +4,7 @@ import { exchangeRatesService } from "@/api/services/exchangeRatesService";
 import { walletService } from "@/api/services/walletService";
 import type { CurrencyPair, CurrencyInfo } from "@/types";
 import toast from "react-hot-toast";
-import { Plus, Edit, Trash2, Loader2, ArrowRight } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, ArrowRight, ToggleLeft, ToggleRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CreateRateModal } from "@/components/modals/CreateRateModal";
 import { EditRateModal } from "@/components/modals/EditRateModal";
@@ -29,6 +29,7 @@ export function AdminExchangeRates() {
   const [selected_rate, set_selected_rate] = useState<CurrencyPair | null>(null);
   const [rate_to_delete, set_rate_to_delete] = useState<CurrencyPair | null>(null);
   const [is_deleting, set_is_deleting] = useState(false);
+  const [toggling_id, set_toggling_id] = useState<number | null>(null);
 
   useEffect(() => {
     load_data();
@@ -74,6 +75,18 @@ export function AdminExchangeRates() {
       toast.error(error_message);
     } finally {
       set_is_deleting(false);
+    }
+  };
+
+  const handle_toggle_active = async (rate: CurrencyPair) => {
+    set_toggling_id(rate.id);
+    try {
+      await exchangeRatesService.update_rate(rate.id, { fee: rate.fee, is_active: !rate.is_active });
+      load_data();
+    } catch {
+      toast.error(t("common.error"));
+    } finally {
+      set_toggling_id(null);
     }
   };
 
@@ -147,6 +160,9 @@ export function AdminExchangeRates() {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("admin.exchangeRates.feeValue")}
                   </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("admin.users.status")}
+                  </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("admin.exchanges.actions")}
                   </th>
@@ -181,6 +197,22 @@ export function AdminExchangeRates() {
                       <span className="text-sm text-gray-900">
                         {rate.fee.toFixed(2)}%
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handle_toggle_active(rate)}
+                        disabled={toggling_id === rate.id}
+                        className={`gap-2 ${rate.is_active ? "text-green-700 hover:text-green-800 hover:bg-green-50" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
+                      >
+                        {rate.is_active ? (
+                          <ToggleRight className="h-5 w-5" />
+                        ) : (
+                          <ToggleLeft className="h-5 w-5" />
+                        )}
+                        {rate.is_active ? t("common.active") : t("common.inactive")}
+                      </Button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-2">

@@ -68,11 +68,11 @@ export function EditRateModal({
 
     set_is_submitting(true);
     try {
-      await exchangeRatesService.update_rate(rate.id, values);
+      await exchangeRatesService.update_rate(rate.id, { fee: values.fee, is_active: rate.is_active });
       toast.success(t("messages.rateUpdated"));
       on_success();
-    } catch (error: any) {
-      const error_message = error.response?.data?.error || t("messages.updateRateFailed");
+    } catch (err: unknown) {
+      const error_message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? t("messages.updateRateFailed");
       toast.error(error_message);
     } finally {
       set_is_submitting(false);

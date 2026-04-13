@@ -18,6 +18,7 @@ export interface CurrencyPair {
   to_currency_id: number;
   rate: number;
   fee: number;
+  is_active: boolean;
   from_currency: CurrencyInfo;
   to_currency: CurrencyInfo;
 }

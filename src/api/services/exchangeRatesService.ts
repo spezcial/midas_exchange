@@ -10,6 +10,7 @@ export interface CreateRateRequest {
 
 export interface UpdateRateRequest {
   fee: number;
+  is_active: boolean;
 }
 
 export interface ExchangeRatesResponse {
