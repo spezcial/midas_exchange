@@ -61,11 +61,10 @@ export function Exchange() {
         set_exchange_pairs(pairs);
         set_wallets(wallets_data);
 
-        // Extract unique currencies from pairs
+        // Only currencies that appear as from_currency have valid pairs to offer
         const currency_map = new Map<string, CurrencyInfo>();
         pairs.forEach(pair => {
           currency_map.set(pair.from_currency.code, pair.from_currency);
-          currency_map.set(pair.to_currency.code, pair.to_currency);
         });
         set_available_base_currencies(Array.from(currency_map.values()));
       } catch (error) {
