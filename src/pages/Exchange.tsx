@@ -7,6 +7,21 @@ import type { CurrencyInfo, CurrencyPair, CreateExchangeResponse, Wallet } from 
 import toast from "react-hot-toast";
 import { ExchangeSuccessModal } from "@/components/modals";
 
+function sanitize_amount_input(value: string): string {
+  let v = value.replace(/,/g, ".");
+  v = v.replace(/[^0-9.]/g, "");
+  const first_dot = v.indexOf(".");
+  const int_part = first_dot === -1 ? v : v.slice(0, first_dot);
+  const dec_part = first_dot === -1 ? null : v.slice(first_dot + 1).replace(/\./g, "");
+  const clean_int = int_part.replace(/^0+/, "") || "0";
+  return dec_part === null ? clean_int : `${clean_int}.${dec_part}`;
+}
+
+function trim_trailing_zeroes(value: string): string {
+  if (!value.includes(".")) return value;
+  return value.replace(/\.?0+$/, "");
+}
+
 export function Exchange() {
   const { t } = useTranslation();
   const [exchange_pairs, set_exchange_pairs] = useState<CurrencyPair[]>([]);
@@ -16,12 +31,14 @@ export function Exchange() {
 
   const [from_currency_code, set_from_currency_code] = useState<string>("");
   const [to_currency_code, set_to_currency_code] = useState<string>("");
-  const [from_amount, set_from_amount] = useState<number>(0);
+  const [from_amount_input, set_from_amount_input] = useState<string>("0");
   const [selected_pair, set_selected_pair] = useState<CurrencyPair | null>(null);
   const [is_exchanging, set_is_exchanging] = useState(false);
   const [is_loading, set_is_loading] = useState(false);
   const [exchange_result, set_exchange_result] = useState<CreateExchangeResponse | null>(null);
   const [is_modal_open, set_is_modal_open] = useState(false);
+
+  const from_amount = parseFloat(from_amount_input) || 0;
 
   // Calculate derived values
   const rate = selected_pair?.rate || 0;
@@ -84,17 +101,16 @@ export function Exchange() {
       .map(p => p.to_currency);
 
     const quote_remains = quote_currencies.find(c => c.code === to_currency_code);
-    if (!quote_remains && quote_currencies.length > 0) {
-      set_to_currency_code(quote_currencies[0].code);
-    }
+    const resolved_to = quote_remains ? to_currency_code : (quote_currencies[0]?.code ?? "");
 
     const pair = exchange_pairs.find(
-      p => p.from_currency.code === currency_code && p.to_currency.code === to_currency_code
+      p => p.from_currency.code === currency_code && p.to_currency.code === resolved_to
     );
 
     set_from_currency_code(currency_code);
+    set_to_currency_code(resolved_to);
     set_available_quote_currencies(quote_currencies);
-    set_selected_pair(pair || null);
+    set_selected_pair(pair ?? null);
   };
 
   const handle_to_currency_change = (currency_code: string) => {
@@ -135,7 +151,7 @@ export function Exchange() {
   // Set max amount to available balance
   const handle_set_max = () => {
     const available = get_available_balance(from_currency_code);
-    set_from_amount(available);
+    set_from_amount_input(trim_trailing_zeroes(available.toFixed(8)));
   };
 
   const handle_exchange = async () => {
@@ -161,7 +177,7 @@ export function Exchange() {
 
       set_exchange_result(result);
       set_is_modal_open(true);
-      set_from_amount(0);
+      set_from_amount_input("0");
       toast.success(t('exchange.successDetail', {
         amount: trim_trailing_zeroes(result.to_amount_with_fee.toFixed(8)),
         currency: to_currency_code
@@ -177,17 +193,6 @@ export function Exchange() {
       set_is_exchanging(false);
     }
   };
-
-  function trim_trailing_zeroes(value: string) {
-    if (value === null || value === undefined) return value;
-
-    let str = String(value);
-    if (!str.includes('.')) return str;
-
-    str = str.replace(/\.?0+$/, '');
-
-    return str;
-  }
 
   const get_currency_display = (currency: CurrencyInfo) => {
     return currency.code;
@@ -209,9 +214,10 @@ export function Exchange() {
             <div className="flex space-x-3">
               <div className="flex-1 relative">
                 <input
-                  type="number"
-                  value={from_amount}
-                  onChange={(e) => set_from_amount(parseFloat(e.target.value) || 0)}
+                  type="text"
+                  inputMode="decimal"
+                  value={from_amount_input}
+                  onChange={(e) => set_from_amount_input(sanitize_amount_input(e.target.value))}
                   className="w-full text-2xl font-semibold border border-gray-300 rounded-lg px-4 py-4 pr-20 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="0.00"
                   disabled={is_loading || is_exchanging}
