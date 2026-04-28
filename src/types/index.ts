@@ -40,6 +40,7 @@ export interface User {
 }
 
 export interface Wallet {
+  id?: number;
   balance: number;
   locked: number;
   created_at: string;
@@ -47,14 +48,28 @@ export interface Wallet {
   deposit_address?: string | null;
 }
 
-export type TransactionType = "deposit" | "withdrawal" | "exchange" | "referral";
-export type TransactionStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
+export type TransactionType =
+  | "deposit"
+  | "withdrawal"
+  | "otc_debit"
+  | "otc_credit"
+  | "exchange"
+  | "referral";
+export type TransactionStatus =
+  | "pending"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "cancelled"
+  | "canceled";
 
 export interface Transaction {
   id: number;
   user_id: number;
+  wallet_id?: number;
   type: TransactionType;
   status: TransactionStatus;
+  amount?: number;
   from_currency?: Currency;
   to_currency?: Currency;
   from_amount?: number;
