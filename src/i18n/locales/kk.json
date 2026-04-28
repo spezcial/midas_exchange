@@ -165,14 +165,52 @@
   },
   "wallets": {
     "title": "Әмияндар",
+    "subtitle": "Балансыңызды басқарыңыз",
+    "totalBalance": "Жалпы баланс (USDT эквиваленті)",
+    "totalEquity": "Жалпы баланс",
+    "hideBalance": "Балансты жасыру",
+    "showBalance": "Балансты көрсету",
+    "searchPlaceholder": "Активті іздеу",
+    "hideZeroBalances": "Нөлдік балансты жасыру",
+    "noResults": "Ештеңе табылмады",
+    "noWallets": "Қолжетімді әмияндар жоқ",
+    "noWalletsDescription": "Әмияндарды инициализациялау үшін алғашқы айырбасты жасаңыз",
+    "filter": {
+      "all": "Барлығы",
+      "crypto": "Крипто",
+      "fiat": "Фиат"
+    },
+    "table": {
+      "asset": "Актив",
+      "total": "Барлығы",
+      "available": "Қолжетімді",
+      "inOrder": "Ордерлерде",
+      "usdtValue": "≈ USDT",
+      "actions": "Әрекеттер"
+    },
+    "sortAsc": "Өсуі бойынша",
+    "sortDesc": "Кемуі бойынша",
+    "details": {
+      "tabs": {
+        "address": "Мекенжай",
+        "history": "Тарих"
+      },
+      "history": {
+        "empty": "Транзакциялар жоқ",
+        "loading": "Тарих жүктелуде..."
+      }
+    },
     "balance": "Баланс",
     "available": "Қолжетімді",
+    "availableBalance": "Қолжетімді баланс",
     "locked": "Бұғатталған",
     "deposit": "Толтыру",
     "withdraw": "Шығару",
     "history": "Тарих",
     "address": "Мекенжай",
-    "network": "Желі"
+    "network": "Желі",
+    "created": "Жасалды",
+    "inactive": "Белсенді емес"
   },
   "profile": {
     "title": "Профиль",
@@ -252,7 +290,20 @@
     "rate": "Айырбас бағамы",
     "fee": "Комиссия",
     "total": "Алуға",
-    "exchange": "Айырбастау"
+    "exchange": "Айырбастау",
+    "successModal": {
+      "title": "Айырбас аяқталды!",
+      "success": "Сіздің айырбасыңыз сәтті орындалды",
+      "orderNumber": "Айырбас нөмірі",
+      "exchangedFrom": "Жіберілді",
+      "exchangedTo": "Алынды",
+      "exchangeRate": "Айырбас бағамы",
+      "feeCharged": "Комиссия",
+      "status": "Күй",
+      "completedAt": "Аяқталу күні",
+      "viewHistory": "Тарихты қарау",
+      "makeAnother": "Тағы бір айырбас жасау"
+    }
   },
   "admin": {
     "nav": {
