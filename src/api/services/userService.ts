@@ -11,6 +11,7 @@ export interface UpdateProfileData {
 export interface ChangePasswordData {
   current_password: string;
   new_password: string;
+  action_token?: string;
 }
 
 interface ApiResponse<T> {

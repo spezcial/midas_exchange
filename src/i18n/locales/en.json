@@ -84,6 +84,55 @@
       "login": "Login",
       "orContinueWith": "Or continue with",
       "googleButton": "Continue with Google"
+    },
+    "2fa": {
+      "title": "Two-Factor Authentication",
+      "subtitle": "A verification code has been sent to your Telegram",
+      "chooseMethod": "Choose a verification method to continue",
+      "code": "Verification Code",
+      "codePlaceholder": "000000",
+      "submit": "Verify",
+      "verifying": "Verifying...",
+      "usePasskey": "Use passkey",
+      "useTelegram": "Use Telegram code",
+      "passkeyBtn": "Authenticate with passkey",
+      "passkeyFailed": "Passkey authentication failed. Please try again.",
+      "invalidCode": "Invalid or expired code. Please try again.",
+      "sessionExpired": "Session expired. Please log in again.",
+      "back": "Back to Login",
+      "sending": "Sending verification code...",
+      "sendFailed": "Failed to send verification code. Please try again.",
+      "rateLimited": "Too many requests. Please wait before requesting a new code.",
+      "resend": "Resend code"
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "backToLogin": "Back to Login",
+      "success": "Password reset successfully",
+      "step1": {
+        "subtitle": "Enter your email and we'll send a verification code to your registered phone number.",
+        "email": "Email",
+        "submit": "Send Code",
+        "sending": "Sending...",
+        "sent": "If this email has a verified phone, you will receive a code."
+      },
+      "step2": {
+        "subtitle": "Enter your phone number and the code you received via Telegram.",
+        "phone": "Phone Number",
+        "code": "Verification Code",
+        "submit": "Verify",
+        "verifying": "Verifying...",
+        "invalidCode": "Invalid or expired code. Please try again."
+      },
+      "step3": {
+        "subtitle": "Enter your new password.",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "submit": "Reset Password",
+        "resetting": "Resetting...",
+        "mismatch": "Passwords do not match",
+        "tokenExpired": "Reset session expired. Please start over."
+      }
     }
   },
   "home": {
@@ -147,7 +196,50 @@
     "updateFailed": "Failed to update profile",
     "passwordMismatch": "Passwords do not match",
     "passwordChanged": "Password changed successfully",
-    "passwordFailed": "Failed to change password"
+    "passwordFailed": "Failed to change password",
+    "2faSetup": {
+      "title": "Two-factor authentication required",
+      "subtitle": "Set up a phone number or passkey below to unlock full access to your account."
+    },
+    "phone": {
+      "section": "Phone Number",
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "noPhone": "No phone number added",
+      "add": "Add phone",
+      "change": "Change",
+      "remove": "Remove",
+      "removeBlocked": "Register a passkey first before removing your phone.",
+      "newPhone": "New phone number",
+      "otp": "Verification code",
+      "otpPlaceholder": "000000",
+      "sendCode": "Send code",
+      "sending": "Sending...",
+      "codeSent": "Code sent",
+      "codeSentTo": "Code sent to {{phone}}",
+      "verify": "Verify",
+      "verifying": "Verifying...",
+      "invalidCode": "Invalid code. Please try again.",
+      "verified_toast": "Phone number verified successfully",
+      "removed_toast": "Phone number removed",
+      "rateLimited": "Too many requests. Please wait before retrying.",
+      "alreadyInUse": "This number is already in use by another account."
+    },
+    "passkeys": {
+      "section": "Passkeys",
+      "subtitle": "Use biometrics or hardware keys for 2FA",
+      "empty": "No passkeys registered",
+      "add": "Add passkey",
+      "nameLabel": "Passkey name",
+      "namePlaceholder": "e.g. iPhone 15, MacBook Pro",
+      "register": "Register",
+      "registering": "Waiting for authenticator...",
+      "added": "Passkey added",
+      "deleted": "Passkey removed",
+      "registrationFailed": "Failed to register passkey. Please try again.",
+      "deleteBlocked": "Add a verified phone number before removing this passkey.",
+      "delete": "Remove"
+    }
   },
   "exchange": {
     "title": "Exchange",
@@ -292,6 +384,25 @@
         "exchange": "Exchange",
         "withdrawal": "Withdrawal"
       }
+    }
+  },
+  "actionVerify": {
+    "title": "Verify Identity",
+    "subtitle": "A verification code has been sent to your Telegram",
+    "passkeySubtitle": "Authenticate with your passkey to continue",
+    "code": "Verification Code",
+    "codePlaceholder": "000000",
+    "submit": "Verify",
+    "verifying": "Verifying...",
+    "usePasskey": "Use passkey instead",
+    "useTelegram": "Use Telegram code instead",
+    "passkeyBtn": "Authenticate with passkey",
+    "passkeyFailed": "Passkey authentication failed. Please try again.",
+    "invalidCode": "Invalid code. Please try again.",
+    "challengeFailed": "Failed to send verification code.",
+    "actions": {
+      "withdraw": "Withdrawal Verification",
+      "change_password": "Password Change Verification"
     }
   },
   "messages": {

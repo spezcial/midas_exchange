@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { RootLayout } from "@/layouts/RootLayout";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
@@ -28,6 +28,7 @@ import { AdminUsers } from "@/pages/AdminUsers";
 import { AdminUserDetail } from "@/pages/AdminUserDetail";
 import { AdminUserProfile } from "@/pages/AdminUserProfile";
 import { AdminStaff } from "@/pages/AdminStaff";
+import { ForgotPassword } from "@/pages/ForgotPassword";
 import { OTCOrders } from "@/pages/OTCOrders";
 import { OTCOrderDetail } from "@/pages/OTCOrderDetail";
 import { AdminOTCOrders } from "@/pages/AdminOTCOrders";
@@ -39,12 +40,18 @@ import { OperatorRoute } from "./OperatorRoute";
 
 const STAFF_ROLES: UserRole[] = ["admin", "super_admin", "operator", "support", "aml_specialist", "compliance"];
 
-// Helper component to prevent staff access to client routes
+// Helper component to prevent staff access to client routes and enforce 2FA setup
 function ClientRoute({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user);
+  const location = useLocation();
 
   if (STAFF_ROLES.includes(user?.role as UserRole)) {
     return <Navigate to="/admin/exchanges" replace />;
+  }
+
+  // Users without any 2FA method can only access the profile page to set it up
+  if (!user?.two_factor_enabled && !user?.passkey_enabled && location.pathname !== "/profile") {
+    return <Navigate to="/profile" replace />;
   }
 
   return <>{children}</>;
@@ -78,6 +85,7 @@ export function AppRoutes() {
             </PublicRoute>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       {/* OAuth callback route (standalone, no layout) */}

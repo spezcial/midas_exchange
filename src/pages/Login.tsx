@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuthStore } from "@/store/authStore";
+import { TwoFactorStep } from "@/components/auth/TwoFactorStep";
 
 type LoginFormValues = {
   email: string;
@@ -31,7 +32,9 @@ export function Login() {
   const login = useAuthStore((state) => state.login);
   const initiate_google_login = useAuthStore((state) => state.initiate_google_login);
   const is_loading = useAuthStore((state) => state.is_loading);
+  const pending_2fa_token = useAuthStore((state) => state.pending_2fa_token);
   const [google_loading, set_google_loading] = useState(false);
+  const [show_password, set_show_password] = useState(false);
 
   const login_schema = z.object({
     email: z
@@ -42,8 +45,6 @@ export function Login() {
     remember_me: z.boolean().optional(),
   });
 
-  const [show_password, set_show_password] = useState(false);
-
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(login_schema),
     defaultValues: {
@@ -52,6 +53,10 @@ export function Login() {
       remember_me: false,
     },
   });
+
+  if (pending_2fa_token) {
+    return <TwoFactorStep />;
+  }
 
   const on_submit = async (values: LoginFormValues) => {
     try {

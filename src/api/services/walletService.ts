@@ -10,6 +10,7 @@ export interface WithdrawData {
   currency: Currency;
   amount: number;
   address: string;
+  action_token?: string;
 }
 
 export interface WalletOperationResponse {

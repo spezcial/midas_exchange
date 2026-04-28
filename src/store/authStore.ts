@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import {authService, type BackendUser} from "@/api/services/authService";
+import { authService, type BackendUser } from "@/api/services/authService";
+import { twoFactorService } from "@/api/services/twoFactorService";
+import type { TwoFAMethod } from "@/types";
 import toast from "react-hot-toast";
 
 interface AuthState {
@@ -10,9 +12,17 @@ interface AuthState {
   is_authenticated: boolean;
   is_loading: boolean;
   error: string | null;
+  // 2FA pending state — not persisted
+  pending_2fa_token: string | null;
+  pending_2fa_methods: TwoFAMethod[];
+
   login: (email: string, password: string, remember_me: boolean) => Promise<void>;
   register: (email: string, first_name: string, last_name: string, password: string, referral_code?: string) => Promise<void>;
   logout: () => Promise<void>;
+  send_2fa_telegram: () => Promise<void>;
+  complete_2fa_telegram: (code: string) => Promise<void>;
+  complete_2fa_passkey: () => Promise<void>;
+  clear_2fa_state: () => void;
   update_user: (user: Partial<BackendUser>) => void;
   set_loading: (loading: boolean) => void;
   check_auth: () => Promise<void>;
@@ -30,13 +40,35 @@ export const useAuthStore = create<AuthState>()(
       is_authenticated: false,
       is_loading: false,
       error: null,
+      pending_2fa_token: null,
+      pending_2fa_methods: [],
 
       login: async (email: string, password: string, remember_me: boolean) => {
         try {
           set({ is_loading: true, error: null });
-          const { user, access_token, refresh_token } = await authService.login({ email, password, remember_me });
-          set({ user, access_token, refresh_token, is_authenticated: true, is_loading: false });
-          toast.success("Login successful!");
+          const result = await authService.login({ email, password, remember_me });
+          if (result.status === "ok") {
+            // Merge top-level flags into the user object for uniform access via user?.two_factor_enabled
+            const user = {
+              ...result.user,
+              two_factor_enabled: result.two_factor_enabled,
+              passkey_enabled: result.passkey_enabled,
+            };
+            set({
+              user,
+              access_token: result.access_token,
+              refresh_token: result.refresh_token,
+              is_authenticated: true,
+              is_loading: false,
+            });
+            toast.success("Login successful!");
+          } else {
+            set({
+              pending_2fa_token: result.temp_token,
+              pending_2fa_methods: result.methods,
+              is_loading: false,
+            });
+          }
         } catch (error) {
           const error_message = "Login failed. Please check your credentials.";
           set({ is_loading: false, error: error_message });
@@ -45,7 +77,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      register: async (email: string, first_name:string, last_name:string, password: string, referral_code?: string) => {
+      register: async (email: string, first_name: string, last_name: string, password: string, referral_code?: string) => {
         try {
           set({ is_loading: true, error: null });
           const { user, access_token, refresh_token } = await authService.register({ email, first_name, last_name, password, referral_code });
@@ -76,6 +108,68 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      send_2fa_telegram: async () => {
+        const { pending_2fa_token } = get();
+        if (!pending_2fa_token) return;
+        await twoFactorService.send_telegram_otp(pending_2fa_token);
+      },
+
+      complete_2fa_telegram: async (code: string) => {
+        const { pending_2fa_token } = get();
+        if (!pending_2fa_token) return;
+        set({ is_loading: true, error: null });
+        try {
+          const result = await twoFactorService.complete_telegram(pending_2fa_token, code);
+          const user = {
+            ...result.user,
+            two_factor_enabled: result.two_factor_enabled,
+            passkey_enabled: result.passkey_enabled,
+          };
+          set({
+            user,
+            access_token: result.access_token,
+            refresh_token: result.refresh_token,
+            is_authenticated: true,
+            is_loading: false,
+            pending_2fa_token: null,
+            pending_2fa_methods: [],
+          });
+          toast.success("Login successful!");
+        } catch (err) {
+          set({ is_loading: false });
+          throw err;
+        }
+      },
+
+      complete_2fa_passkey: async () => {
+        const { pending_2fa_token } = get();
+        if (!pending_2fa_token) return;
+        set({ is_loading: true, error: null });
+        try {
+          const result = await twoFactorService.complete_passkey_login(pending_2fa_token);
+          const user = {
+            ...result.user,
+            two_factor_enabled: result.two_factor_enabled,
+            passkey_enabled: result.passkey_enabled,
+          };
+          set({
+            user,
+            access_token: result.access_token,
+            refresh_token: result.refresh_token,
+            is_authenticated: true,
+            is_loading: false,
+            pending_2fa_token: null,
+            pending_2fa_methods: [],
+          });
+          toast.success("Login successful!");
+        } catch (err) {
+          set({ is_loading: false });
+          throw err;
+        }
+      },
+
+      clear_2fa_state: () => set({ pending_2fa_token: null, pending_2fa_methods: [] }),
+
       update_user: (updated_user) =>
         set((state) => ({
           user: state.user ? { ...state.user, ...updated_user } : null,
@@ -91,7 +185,7 @@ export const useAuthStore = create<AuthState>()(
           const user = await authService.get_current_user();
           set({ user, is_authenticated: true });
         } catch (error) {
-            console.error(error);
+          console.error(error);
           set({ user: null, access_token: null, refresh_token: null, is_authenticated: false });
         }
       },
@@ -102,10 +196,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ is_loading: true, error: null });
           const { auth_url, state } = await authService.get_google_oauth_url();
-          // Store state for verification in callback
-          sessionStorage.setItem('oauth_state', state);
-
-          // Redirect to Google
+          sessionStorage.setItem("oauth_state", state);
           window.location.href = auth_url;
         } catch (error) {
           const error_message = "Failed to initiate Google login.";

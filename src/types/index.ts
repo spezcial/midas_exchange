@@ -338,6 +338,15 @@ export interface UserProfilePayload {
   kyc_level: 0 | 1 | 2 | 3;
 }
 
+export type TwoFAMethod = "telegram" | "passkey";
+export type ActionType = "withdraw" | "change_password";
+
+export interface Passkey {
+  id: number;
+  name: string;
+  created_at: string;
+}
+
 export type FeeOperation = "exchange" | "withdrawal";
 
 export interface PlatformFee {
