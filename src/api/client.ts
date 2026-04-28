@@ -64,11 +64,16 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      // If this was the refresh endpoint itself that failed, logout
-      if (original_request.url?.includes("/auth/refresh")) {
-        await auth_store.logout();
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
+      // If this was the refresh or logout endpoint that failed, just clear state and reject
+      if (
+        original_request.url?.includes("/auth/refresh") ||
+        original_request.url?.includes("/auth/logout")
+      ) {
+        if (original_request.url?.includes("/auth/refresh")) {
+          await auth_store.logout();
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
         }
         return Promise.reject(error);
       }

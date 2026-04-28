@@ -65,12 +65,14 @@ export const useAuthStore = create<AuthState>()(
           if (refresh_token) {
             await authService.logout(refresh_token);
           }
+        } catch (err: unknown) {
+          const status = (err as { response?: { status?: number } })?.response?.status;
+          if (status !== 401) {
+            console.error(err);
+          }
+        } finally {
           set({ user: null, access_token: null, refresh_token: null, is_authenticated: false });
           toast.success("Logged out successfully");
-        } catch (error) {
-            console.error(error);
-          // Still clear local state even if API call fails
-          set({ user: null, access_token: null, refresh_token: null, is_authenticated: false });
         }
       },
 
