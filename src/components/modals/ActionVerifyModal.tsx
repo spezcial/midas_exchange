@@ -88,8 +88,11 @@ export function ActionVerifyModal({ is_open, action, on_verified, on_close }: Ac
     try {
       const { action_token } = await twoFactorService.verify_action_passkey(action);
       on_verified(action_token);
-    } catch {
-      set_error(t("actionVerify.passkeyFailed"));
+    } catch (err: unknown) {
+      if (!(err instanceof DOMException && (err.name === "NotAllowedError" || err.name === "AbortError"))) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        set_error(status === 401 ? t("actionVerify.sessionExpired") : t("actionVerify.passkeyFailed"));
+      }
     } finally {
       set_is_loading(false);
     }

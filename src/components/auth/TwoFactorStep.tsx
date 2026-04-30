@@ -39,7 +39,6 @@ export function TwoFactorStep() {
         set_telegram_phase("rate_limited");
       } else if (status === 401) {
         set_session_expired(true);
-        clear_2fa_state();
       } else {
         set_error(t("auth.2fa.sendFailed"));
         set_telegram_phase(null);
@@ -56,7 +55,6 @@ export function TwoFactorStep() {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 401) {
         set_session_expired(true);
-        clear_2fa_state();
       } else {
         set_error(t("auth.2fa.invalidCode"));
       }
@@ -68,10 +66,12 @@ export function TwoFactorStep() {
     try {
       await complete_2fa_passkey();
     } catch (err: unknown) {
+      if (err instanceof DOMException && (err.name === "NotAllowedError" || err.name === "AbortError")) {
+        return;
+      }
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 401) {
         set_session_expired(true);
-        clear_2fa_state();
       } else {
         set_error(t("auth.2fa.passkeyFailed"));
       }

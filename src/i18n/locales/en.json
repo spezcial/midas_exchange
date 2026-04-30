@@ -398,6 +398,7 @@
     "useTelegram": "Use Telegram code instead",
     "passkeyBtn": "Authenticate with passkey",
     "passkeyFailed": "Passkey authentication failed. Please try again.",
+    "sessionExpired": "Session expired. Please start over.",
     "invalidCode": "Invalid code. Please try again.",
     "challengeFailed": "Failed to send verification code.",
     "actions": {
