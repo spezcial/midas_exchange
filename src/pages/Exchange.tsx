@@ -6,6 +6,7 @@ import { walletService } from "@/api/services/walletService";
 import type { CurrencyInfo, CurrencyPair, CreateExchangeResponse, Wallet } from "@/types";
 import toast from "react-hot-toast";
 import { ExchangeSuccessModal } from "@/components/modals";
+import { CurrencySelect } from "@/components/wallets/CurrencySelect";
 
 function sanitize_amount_input(value: string): string {
   let v = value.replace(/,/g, ".");
@@ -32,6 +33,8 @@ export function Exchange() {
   const [from_currency_code, set_from_currency_code] = useState<string>("");
   const [to_currency_code, set_to_currency_code] = useState<string>("");
   const [from_amount_input, set_from_amount_input] = useState<string>("0");
+  const [to_amount_input, set_to_amount_input] = useState<string>("0");
+  const [last_edited, set_last_edited] = useState<"from" | "to">("from");
   const [selected_pair, set_selected_pair] = useState<CurrencyPair | null>(null);
   const [is_exchanging, set_is_exchanging] = useState(false);
   const [is_loading, set_is_loading] = useState(false);
@@ -39,13 +42,10 @@ export function Exchange() {
   const [is_modal_open, set_is_modal_open] = useState(false);
 
   const from_amount = parseFloat(from_amount_input) || 0;
+  const to_amount = parseFloat(to_amount_input) || 0;
 
-  // Calculate derived values
   const rate = selected_pair?.rate || 0;
   const fee = selected_pair?.fee || 0;
-  const to_amount = from_amount > 0 && rate > 0
-    ? (from_amount * (1 - fee / 100)) * rate
-    : 0;
 
   // Fetch exchange pairs and wallets on mount
   useEffect(() => {
@@ -93,6 +93,41 @@ export function Exchange() {
       set_available_quote_currencies(quote_currencies);
     }
   }, [exchange_pairs]);
+
+  // Sync to-amount when from-amount or pair changes (only if user is editing "from")
+  useEffect(() => {
+    if (last_edited !== "from") return;
+    if (rate <= 0) {
+      set_to_amount_input("0");
+      return;
+    }
+    const v = parseFloat(from_amount_input) || 0;
+    const new_to = v > 0 ? v * (1 - fee / 100) * rate : 0;
+    set_to_amount_input(trim_trailing_zeroes(new_to.toFixed(8)));
+  }, [from_amount_input, rate, fee, last_edited]);
+
+  // Sync from-amount when to-amount or pair changes (only if user is editing "to")
+  useEffect(() => {
+    if (last_edited !== "to") return;
+    if (rate <= 0) {
+      set_from_amount_input("0");
+      return;
+    }
+    const v = parseFloat(to_amount_input) || 0;
+    const denominator = rate * (1 - fee / 100);
+    const new_from = v > 0 && denominator > 0 ? v / denominator : 0;
+    set_from_amount_input(trim_trailing_zeroes(new_from.toFixed(8)));
+  }, [to_amount_input, rate, fee, last_edited]);
+
+  const handle_from_amount_change = (raw: string) => {
+    set_last_edited("from");
+    set_from_amount_input(sanitize_amount_input(raw));
+  };
+
+  const handle_to_amount_change = (raw: string) => {
+    set_last_edited("to");
+    set_to_amount_input(sanitize_amount_input(raw));
+  };
 
   const handle_from_currency_change = (currency_code: string) => {
     const quote_currencies = exchange_pairs
@@ -150,6 +185,7 @@ export function Exchange() {
   // Set max amount to available balance
   const handle_set_max = () => {
     const available = get_available_balance(from_currency_code);
+    set_last_edited("from");
     set_from_amount_input(trim_trailing_zeroes(available.toFixed(8)));
   };
 
@@ -177,6 +213,8 @@ export function Exchange() {
       set_exchange_result(result);
       set_is_modal_open(true);
       set_from_amount_input("0");
+      set_to_amount_input("0");
+      set_last_edited("from");
       toast.success(t('exchange.successDetail', {
         amount: trim_trailing_zeroes(result.to_amount_with_fee.toFixed(8)),
         currency: to_currency_code
@@ -193,31 +231,30 @@ export function Exchange() {
     }
   };
 
-  const get_currency_display = (currency: CurrencyInfo) => {
-    return currency.code;
-  };
-
   const from_currency_info = selected_pair?.from_currency || null;
   const to_currency_info = selected_pair?.to_currency || null;
 
   return (
     <>
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('exchange.title')}</h1>
+      <div className="min-h-[calc(100vh-3rem)] flex items-center justify-center">
+        <div className="w-full max-w-2xl">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 text-center sm:text-left">
+            {t('exchange.title')}
+          </h1>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="space-y-6">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+            <div className="space-y-6">
           {/* From */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">{t('exchange.from')}</label>
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 relative">
                 <input
                   type="text"
                   inputMode="decimal"
                   value={from_amount_input}
-                  onChange={(e) => set_from_amount_input(sanitize_amount_input(e.target.value))}
-                  className="w-full text-2xl font-semibold border border-gray-300 rounded-lg px-4 py-4 pr-20 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => handle_from_amount_change(e.target.value)}
+                  className="w-full text-xl sm:text-2xl font-semibold border border-gray-300 rounded-lg px-4 py-4 pr-20 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="0.00"
                   disabled={is_loading || is_exchanging}
                 />
@@ -230,18 +267,14 @@ export function Exchange() {
                   MAX
                 </button>
               </div>
-              <select
-                value={from_currency_code}
-                onChange={(e) => handle_from_currency_change(e.target.value)}
-                className="px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white font-medium"
-                disabled={is_loading || is_exchanging}
-              >
-                {available_base_currencies.map((currency) => (
-                  <option key={currency.code} value={currency.code}>
-                    {get_currency_display(currency)}
-                  </option>
-                ))}
-              </select>
+              <div className="w-full sm:w-auto">
+                <CurrencySelect
+                  value={from_currency_code}
+                  on_change={handle_from_currency_change}
+                  currencies={available_base_currencies}
+                  disabled={is_loading || is_exchanging}
+                />
+              </div>
             </div>
             <div className="flex justify-between items-center mt-2">
               <p className="text-sm text-gray-500">
@@ -271,27 +304,26 @@ export function Exchange() {
           {/* To */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">{t('exchange.to')}</label>
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1">
                 <input
                   type="text"
-                  value={trim_trailing_zeroes(to_amount.toFixed(8))}
-                  readOnly
-                  className="w-full text-2xl font-semibold border border-gray-300 rounded-lg px-4 py-4 bg-gray-50"
+                  inputMode="decimal"
+                  value={to_amount_input}
+                  onChange={(e) => handle_to_amount_change(e.target.value)}
+                  className="w-full text-xl sm:text-2xl font-semibold border border-gray-300 rounded-lg px-4 py-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="0.00"
+                  disabled={is_loading || is_exchanging || !selected_pair}
                 />
               </div>
-              <select
-                value={to_currency_code}
-                onChange={(e) => handle_to_currency_change(e.target.value)}
-                className="px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-white font-medium"
-                disabled={is_loading || is_exchanging || available_quote_currencies.length === 0}
-              >
-                {available_quote_currencies.map((currency) => (
-                  <option key={currency.code} value={currency.code}>
-                    {get_currency_display(currency)}
-                  </option>
-                ))}
-              </select>
+              <div className="w-full sm:w-auto">
+                <CurrencySelect
+                  value={to_currency_code}
+                  on_change={handle_to_currency_change}
+                  currencies={available_quote_currencies}
+                  disabled={is_loading || is_exchanging || available_quote_currencies.length === 0}
+                />
+              </div>
             </div>
           </div>
 
@@ -337,7 +369,8 @@ export function Exchange() {
               t('exchange.exchange')
             )}
           </button>
-        </div>
+            </div>
+          </div>
         </div>
       </div>
 

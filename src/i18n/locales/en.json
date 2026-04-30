@@ -164,14 +164,52 @@
   },
   "wallets": {
     "title": "Wallets",
+    "subtitle": "Manage your balances",
+    "totalBalance": "Total balance (USDT equivalent)",
+    "totalEquity": "Total balance",
+    "hideBalance": "Hide balances",
+    "showBalance": "Show balances",
+    "searchPlaceholder": "Search asset",
+    "hideZeroBalances": "Hide zero balances",
+    "noResults": "No results found",
+    "noWallets": "No wallets available",
+    "noWalletsDescription": "Make your first exchange to initialize wallets",
+    "filter": {
+      "all": "All",
+      "crypto": "Crypto",
+      "fiat": "Fiat"
+    },
+    "table": {
+      "asset": "Asset",
+      "total": "Total",
+      "available": "Available",
+      "inOrder": "In Order",
+      "usdtValue": "≈ USDT",
+      "actions": "Actions"
+    },
+    "sortAsc": "Ascending",
+    "sortDesc": "Descending",
+    "details": {
+      "tabs": {
+        "address": "Address",
+        "history": "History"
+      },
+      "history": {
+        "empty": "No transactions",
+        "loading": "Loading history..."
+      }
+    },
     "balance": "Balance",
     "available": "Available",
+    "availableBalance": "Available balance",
     "locked": "Locked",
     "deposit": "Deposit",
     "withdraw": "Withdraw",
     "history": "History",
     "address": "Address",
-    "network": "Network"
+    "network": "Network",
+    "created": "Created",
+    "inactive": "Inactive"
   },
   "profile": {
     "title": "Profile",
@@ -251,7 +289,20 @@
     "rate": "Exchange Rate",
     "fee": "Fee",
     "total": "To Receive",
-    "exchange": "Exchange"
+    "exchange": "Exchange",
+    "successModal": {
+      "title": "Exchange completed!",
+      "success": "Your exchange has been completed successfully",
+      "orderNumber": "Exchange ID",
+      "exchangedFrom": "Sent",
+      "exchangedTo": "Received",
+      "exchangeRate": "Exchange rate",
+      "feeCharged": "Fee",
+      "status": "Status",
+      "completedAt": "Completed at",
+      "viewHistory": "View history",
+      "makeAnother": "Make another exchange"
+    }
   },
   "admin": {
     "nav": {
