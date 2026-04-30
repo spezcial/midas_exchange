@@ -23,6 +23,17 @@ function trim_trailing_zeroes(value: string): string {
   return value.replace(/\.?0+$/, "");
 }
 
+function calc_to(from_val: number, pair_rate: number, pair_fee: number): string {
+  if (pair_rate <= 0 || from_val <= 0) return "0";
+  return trim_trailing_zeroes((from_val * (1 - pair_fee / 100) * pair_rate).toFixed(8));
+}
+
+function calc_from(to_val: number, pair_rate: number, pair_fee: number): string {
+  const denominator = pair_rate * (1 - pair_fee / 100);
+  if (pair_rate <= 0 || to_val <= 0 || denominator <= 0) return "0";
+  return trim_trailing_zeroes((to_val / denominator).toFixed(8));
+}
+
 export function Exchange() {
   const { t } = useTranslation();
   const [exchange_pairs, set_exchange_pairs] = useState<CurrencyPair[]>([]);
@@ -94,39 +105,18 @@ export function Exchange() {
     }
   }, [exchange_pairs]);
 
-  // Sync to-amount when from-amount or pair changes (only if user is editing "from")
-  useEffect(() => {
-    if (last_edited !== "from") return;
-    if (rate <= 0) {
-      set_to_amount_input("0");
-      return;
-    }
-    const v = parseFloat(from_amount_input) || 0;
-    const new_to = v > 0 ? v * (1 - fee / 100) * rate : 0;
-    set_to_amount_input(trim_trailing_zeroes(new_to.toFixed(8)));
-  }, [from_amount_input, rate, fee, last_edited]);
-
-  // Sync from-amount when to-amount or pair changes (only if user is editing "to")
-  useEffect(() => {
-    if (last_edited !== "to") return;
-    if (rate <= 0) {
-      set_from_amount_input("0");
-      return;
-    }
-    const v = parseFloat(to_amount_input) || 0;
-    const denominator = rate * (1 - fee / 100);
-    const new_from = v > 0 && denominator > 0 ? v / denominator : 0;
-    set_from_amount_input(trim_trailing_zeroes(new_from.toFixed(8)));
-  }, [to_amount_input, rate, fee, last_edited]);
-
   const handle_from_amount_change = (raw: string) => {
+    const sanitized = sanitize_amount_input(raw);
     set_last_edited("from");
-    set_from_amount_input(sanitize_amount_input(raw));
+    set_from_amount_input(sanitized);
+    set_to_amount_input(calc_to(parseFloat(sanitized) || 0, rate, fee));
   };
 
   const handle_to_amount_change = (raw: string) => {
+    const sanitized = sanitize_amount_input(raw);
     set_last_edited("to");
-    set_to_amount_input(sanitize_amount_input(raw));
+    set_to_amount_input(sanitized);
+    set_from_amount_input(calc_from(parseFloat(sanitized) || 0, rate, fee));
   };
 
   const handle_from_currency_change = (currency_code: string) => {
@@ -139,25 +129,40 @@ export function Exchange() {
 
     const pair = exchange_pairs.find(
       p => p.from_currency.code === currency_code && p.to_currency.code === resolved_to
-    );
+    ) ?? null;
 
     set_from_currency_code(currency_code);
     set_to_currency_code(resolved_to);
     set_available_quote_currencies(quote_currencies);
-    set_selected_pair(pair ?? null);
+    set_selected_pair(pair);
+
+    if (pair) {
+      if (last_edited === "from") {
+        set_to_amount_input(calc_to(parseFloat(from_amount_input) || 0, pair.rate, pair.fee));
+      } else {
+        set_from_amount_input(calc_from(parseFloat(to_amount_input) || 0, pair.rate, pair.fee));
+      }
+    }
   };
 
   const handle_to_currency_change = (currency_code: string) => {
     const pair = exchange_pairs.find(
       p => p.to_currency.code === currency_code && p.from_currency.code === from_currency_code
-    );
+    ) ?? null;
 
     set_to_currency_code(currency_code);
-    set_selected_pair(pair || null);
+    set_selected_pair(pair);
+
+    if (pair) {
+      if (last_edited === "from") {
+        set_to_amount_input(calc_to(parseFloat(from_amount_input) || 0, pair.rate, pair.fee));
+      } else {
+        set_from_amount_input(calc_from(parseFloat(to_amount_input) || 0, pair.rate, pair.fee));
+      }
+    }
   };
 
   const handle_swap = () => {
-    // Check if reverse pair exists
     const reverse_pair = exchange_pairs.find(
       p => p.from_currency.code === to_currency_code && p.to_currency.code === from_currency_code
     );
@@ -171,6 +176,12 @@ export function Exchange() {
       set_from_currency_code(to_currency_code);
       set_to_currency_code(from_currency_code);
       set_selected_pair(reverse_pair);
+
+      if (last_edited === "from") {
+        set_to_amount_input(calc_to(parseFloat(from_amount_input) || 0, reverse_pair.rate, reverse_pair.fee));
+      } else {
+        set_from_amount_input(calc_from(parseFloat(to_amount_input) || 0, reverse_pair.rate, reverse_pair.fee));
+      }
     } else {
       toast.error(t('exchange.reverseNotAvailable'));
     }
@@ -187,6 +198,7 @@ export function Exchange() {
     const available = get_available_balance(from_currency_code);
     set_last_edited("from");
     set_from_amount_input(trim_trailing_zeroes(available.toFixed(8)));
+    set_to_amount_input(calc_to(available, rate, fee));
   };
 
   const handle_exchange = async () => {
