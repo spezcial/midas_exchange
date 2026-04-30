@@ -256,6 +256,37 @@
     "title": "Кошельки",
     "subtitle": "Управляйте своими балансами",
     "totalBalance": "Общий баланс (USDT эквивалент)",
+    "totalEquity": "Общий баланс",
+    "hideBalance": "Скрыть балансы",
+    "showBalance": "Показать балансы",
+    "searchPlaceholder": "Поиск актива",
+    "hideZeroBalances": "Скрыть нулевые",
+    "noResults": "Ничего не найдено",
+    "filter": {
+      "all": "Все",
+      "crypto": "Крипто",
+      "fiat": "Фиат"
+    },
+    "table": {
+      "asset": "Актив",
+      "total": "Всего",
+      "available": "Доступно",
+      "inOrder": "В ордерах",
+      "usdtValue": "≈ USDT",
+      "actions": "Действия"
+    },
+    "sortAsc": "По возрастанию",
+    "sortDesc": "По убыванию",
+    "details": {
+      "tabs": {
+        "address": "Адрес",
+        "history": "История"
+      },
+      "history": {
+        "empty": "Транзакций нет",
+        "loading": "Загрузка истории..."
+      }
+    },
     "balance": "Баланс",
     "available": "Доступно",
     "availableBalance": "Доступный баланс",
@@ -353,8 +384,8 @@
     "successModal": {
       "title": "Обмен завершен!",
       "success": "Ваш обмен был успешно выполнен",
-      "orderNumber": "Номер заказа",
-      "exchangedFrom": "Обменяно",
+      "orderNumber": "Номер обмена",
+      "exchangedFrom": "Отправлено",
       "exchangedTo": "Получено",
       "exchangeRate": "Курс обмена",
       "feeCharged": "Комиссия",

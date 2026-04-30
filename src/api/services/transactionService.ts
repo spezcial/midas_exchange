@@ -12,7 +12,10 @@ export const transactionService = {
    * Get transaction history
    */
   get_history: async (params?: GetHistoryParams): Promise<Transaction[]> => {
-    const response = await apiClient.get<Transaction[]>("/transactions/history", { params });
-    return response.data;
+    const response = await apiClient.get<{ success: boolean; data: Transaction[] }>(
+      "/transactions",
+      { params }
+    );
+    return response.data.data;
   },
 };
