@@ -46,6 +46,10 @@ function decode_creation_options(opts: Record<string, unknown>): PublicKeyCreden
     ...opts,
     challenge: to_buffer(opts.challenge as string),
     user: { ...user, id: to_buffer(user.id) },
+    excludeCredentials: (opts.excludeCredentials as Array<{ id: string; type: string; transports?: string[] }> | undefined)?.map((c) => ({
+      ...c,
+      id: to_buffer(c.id),
+    })),
   } as PublicKeyCredentialCreationOptions;
 }
 
