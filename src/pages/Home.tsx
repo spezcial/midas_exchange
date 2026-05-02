@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { 
@@ -30,41 +30,47 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useExchangeStore } from "@/store/exchangeStore";
 import { format_number } from "@/lib/utils";
 import type { Currency } from "@/types";
 
-const mock_rates = [
-  { from: "USD" as Currency, to: "BTC" as Currency, rate: 0.000023, fee: 0.02, min: 10, max: 100000, updated_at: new Date() },
-  { from: "BTC" as Currency, to: "USD" as Currency, rate: 43478, fee: 0.02, min: 0.0001, max: 10, updated_at: new Date() },
-  { from: "USD" as Currency, to: "ETH" as Currency, rate: 0.00042, fee: 0.02, min: 10, max: 100000, updated_at: new Date() },
-  { from: "ETH" as Currency, to: "USD" as Currency, rate: 2380, fee: 0.02, min: 0.001, max: 100, updated_at: new Date() },
-  { from: "KZT" as Currency, to: "BTC" as Currency, rate: 0.00000005, fee: 0.025, min: 5000, max: 50000000, updated_at: new Date() },
-  { from: "BTC" as Currency, to: "KZT" as Currency, rate: 20000000, fee: 0.025, min: 0.0001, max: 10, updated_at: new Date() },
-  { from: "KZT" as Currency, to: "USDT" as Currency, rate: 0.0022, fee: 0.015, min: 5000, max: 50000000, updated_at: new Date() },
-  { from: "USDT" as Currency, to: "KZT" as Currency, rate: 455, fee: 0.015, min: 10, max: 100000, updated_at: new Date() },
+// Indicative-only mock rates for the landing-page calculator.
+// The real exchange flow lives in src/pages/Exchange.tsx and uses exchangesService.
+const mock_rates: Array<{ from: Currency; to: Currency; rate: number; fee: number }> = [
+  { from: "USD", to: "BTC", rate: 0.000023, fee: 0.02 },
+  { from: "BTC", to: "USD", rate: 43478, fee: 0.02 },
+  { from: "USD", to: "ETH", rate: 0.00042, fee: 0.02 },
+  { from: "ETH", to: "USD", rate: 2380, fee: 0.02 },
+  { from: "KZT", to: "BTC", rate: 0.00000005, fee: 0.025 },
+  { from: "BTC", to: "KZT", rate: 20000000, fee: 0.025 },
+  { from: "KZT", to: "USDT", rate: 0.0022, fee: 0.015 },
+  { from: "USDT", to: "KZT", rate: 455, fee: 0.015 },
 ];
 
 export function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    from_currency,
-    to_currency,
-    from_amount,
-    to_amount,
-    rate,
-    fee,
-    set_from_currency,
-    set_to_currency,
-    set_from_amount,
-    set_rates,
-    swap_currencies,
-  } = useExchangeStore();
 
-  useEffect(() => {
-    set_rates(mock_rates);
-  }, [set_rates]);
+  const [from_currency, set_from_currency] = useState<Currency>("USD");
+  const [to_currency, set_to_currency] = useState<Currency>("BTC");
+  const [from_amount, set_from_amount] = useState<number>(100);
+
+  const { rate, fee, to_amount } = useMemo(() => {
+    const rate_info = mock_rates.find(
+      (r) => r.from === from_currency && r.to === to_currency,
+    );
+    if (!rate_info) {
+      return { rate: 0, fee: 0, to_amount: 0 };
+    }
+    const fee_amount = from_amount * rate_info.fee;
+    const computed = (from_amount - fee_amount) * rate_info.rate;
+    return { rate: rate_info.rate, fee: rate_info.fee, to_amount: computed };
+  }, [from_currency, to_currency, from_amount]);
+
+  const swap_currencies = () => {
+    set_from_currency(to_currency);
+    set_to_currency(from_currency);
+    set_from_amount(to_amount);
+  };
 
   const currencies: Currency[] = ["KZT", "USD", "BTC", "ETH", "USDT"];
 
