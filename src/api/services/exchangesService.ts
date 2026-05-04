@@ -7,6 +7,7 @@ import type {
   ExchangesListResponse,
   AdminExchangesListResponse,
 } from "@/types";
+import { normalizeCurrencyExchange } from "@/lib/numeric";
 
 export interface GetExchangesParams {
   limit?: number;
@@ -24,7 +25,7 @@ export const exchangesService = {
       "/exchanges",
       params
     );
-    return response.data.data;
+    return normalizeCurrencyExchange(response.data.data) as CreateExchangeResponse;
   },
 
   /**
@@ -40,7 +41,8 @@ export const exchangesService = {
         },
       }
     );
-    return response.data.data;
+    const r = response.data.data;
+    return { ...r, exchanges: r.exchanges.map(normalizeCurrencyExchange) };
   },
 
   /**
@@ -50,7 +52,7 @@ export const exchangesService = {
     const response = await apiClient.get<{ success: boolean; data: CurrencyExchange }>(
       `/exchanges/${exchange_id}`
     );
-    return response.data.data;
+    return normalizeCurrencyExchange(response.data.data);
   },
 
   /**
@@ -78,7 +80,8 @@ export const exchangesService = {
         },
       }
     );
-    return response.data.data;
+    const r = response.data.data;
+    return { ...r, exchanges: r.exchanges.map(normalizeCurrencyExchange) as AdminCurrencyExchange[] };
   },
 
   /**
@@ -88,6 +91,6 @@ export const exchangesService = {
     const response = await apiClient.get<{ success: boolean; data: AdminCurrencyExchange }>(
       `/admin/exchanges/${exchange_id}`
     );
-    return response.data.data;
+    return normalizeCurrencyExchange(response.data.data) as AdminCurrencyExchange;
   },
 };

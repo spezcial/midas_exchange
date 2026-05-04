@@ -9,6 +9,7 @@ import type {
   OTCAnalytics,
   AdminListOTCOrdersParams,
 } from "@/types";
+import { normalizeOTCOrder, normalizeOTCOrderDetail, normalizeOTCMessage, normalizeOTCConfig, normalizeOTCAnalytics } from "@/lib/numeric";
 
 export interface CreateOTCOrderPayload {
   from_currency_id: number;
@@ -33,32 +34,34 @@ export const otcService = {
   // Client endpoints
   get_active_configs: async (): Promise<OTCConfigWithCurrencies[]> => {
     const response = await apiClient.get("/otc/config");
-    return response.data?.data ?? response.data;
+    const data: OTCConfigWithCurrencies[] = response.data?.data ?? response.data;
+    return data.map(normalizeOTCConfig);
   },
 
   create_order: async (data: CreateOTCOrderPayload): Promise<OTCOrder> => {
     const response = await apiClient.post("/otc/orders", data);
-    return response.data?.data ?? response.data;
+    return normalizeOTCOrder(response.data?.data ?? response.data);
   },
 
   list_orders: async (params?: ListOTCOrdersParams): Promise<OTCOrdersListResponse> => {
     const response = await apiClient.get("/otc/orders", { params });
-    return response.data?.data ?? response.data;
+    const r: OTCOrdersListResponse = response.data?.data ?? response.data;
+    return { ...r, orders: r.orders.map(normalizeOTCOrder) };
   },
 
   get_order: async (uid: string): Promise<OTCOrderDetail> => {
     const response = await apiClient.get(`/otc/orders/${uid}`);
-    return response.data?.data ?? response.data;
+    return normalizeOTCOrderDetail(response.data?.data ?? response.data);
   },
 
   send_message: async (uid: string, content: string): Promise<OTCMessage> => {
     const response = await apiClient.post(`/otc/orders/${uid}/messages`, { content });
-    return response.data;
+    return normalizeOTCMessage(response.data);
   },
 
   send_offer: async (uid: string, data: SendOTCOfferPayload): Promise<OTCMessage> => {
     const response = await apiClient.post(`/otc/orders/${uid}/offers`, data);
-    return response.data;
+    return normalizeOTCMessage(response.data);
   },
 
   accept_offer: async (uid: string, message_id: number): Promise<void> => {
@@ -76,7 +79,8 @@ export const otcService = {
   // Admin config CRUD (super_admin only)
   admin_get_configs: async (): Promise<OTCConfigWithCurrencies[]> => {
     const response = await apiClient.get("/admin/otc/config");
-    return (response.data?.data ?? response.data)?.configs ?? [];
+    const configs: OTCConfigWithCurrencies[] = (response.data?.data ?? response.data)?.configs ?? [];
+    return configs.map(normalizeOTCConfig);
   },
 
   admin_create_config: async (data: {
@@ -87,7 +91,7 @@ export const otcService = {
     is_active: boolean;
   }): Promise<OTCConfigWithCurrencies> => {
     const response = await apiClient.post("/admin/otc/config", data);
-    return response.data?.data ?? response.data;
+    return normalizeOTCConfig(response.data?.data ?? response.data);
   },
 
   admin_update_config: async (
@@ -95,7 +99,7 @@ export const otcService = {
     data: { min_from_amount: number; payment_timeout_min: number; is_active: boolean }
   ): Promise<OTCConfigWithCurrencies> => {
     const response = await apiClient.put(`/admin/otc/config/${id}`, data);
-    return response.data?.data ?? response.data;
+    return normalizeOTCConfig(response.data?.data ?? response.data);
   },
 
   admin_delete_config: async (id: number): Promise<void> => {
@@ -105,12 +109,13 @@ export const otcService = {
   // Admin / Operator endpoints
   admin_list_orders: async (params?: AdminListOTCOrdersParams): Promise<OTCOrdersListResponse> => {
     const response = await apiClient.get("/admin/otc/orders", { params });
-    return response.data?.data ?? response.data;
+    const r: OTCOrdersListResponse = response.data?.data ?? response.data;
+    return { ...r, orders: r.orders.map(normalizeOTCOrder) };
   },
 
   admin_get_order: async (uid: string): Promise<OTCOrderDetail> => {
     const response = await apiClient.get(`/admin/otc/orders/${uid}`);
-    return response.data?.data ?? response.data;
+    return normalizeOTCOrderDetail(response.data?.data ?? response.data);
   },
 
   admin_take_order: async (uid: string): Promise<void> => {
@@ -123,12 +128,12 @@ export const otcService = {
 
   admin_send_message: async (uid: string, content: string): Promise<OTCMessage> => {
     const response = await apiClient.post(`/admin/otc/orders/${uid}/messages`, { content });
-    return response.data;
+    return normalizeOTCMessage(response.data);
   },
 
   admin_send_offer: async (uid: string, data: SendOTCOfferPayload): Promise<OTCMessage> => {
     const response = await apiClient.post(`/admin/otc/orders/${uid}/offers`, data);
-    return response.data;
+    return normalizeOTCMessage(response.data);
   },
 
   admin_accept_offer: async (uid: string, message_id: number): Promise<void> => {
@@ -165,7 +170,7 @@ export const otcService = {
     granularity?: "day" | "week" | "month";
   }): Promise<OTCAnalytics> => {
     const response = await apiClient.get("/admin/otc/analytics", { params });
-    return response.data?.data ?? response.data;
+    return normalizeOTCAnalytics(response.data?.data ?? response.data);
   },
 
   // CSV export — returns a Blob for download

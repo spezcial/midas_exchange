@@ -1,5 +1,6 @@
 import { apiClient } from "../client";
 import type { CurrencyPair } from "@/types";
+import { normalizeCurrencyPair } from "@/lib/numeric";
 
 export interface CreateRateRequest {
   from_currency_id: number;
@@ -29,7 +30,7 @@ export const exchangeRatesService = {
    */
   get_all_rates: async (): Promise<CurrencyPair[]> => {
     const response = await apiClient.get<ExchangeRatesResponse>("/admin/exchange-rates");
-    return response.data.data;
+    return response.data.data.map(normalizeCurrencyPair);
   },
 
   /**
@@ -37,7 +38,7 @@ export const exchangeRatesService = {
    */
   get_rate: async (id: number): Promise<CurrencyPair> => {
     const response = await apiClient.get<ExchangeRateResponse>(`/admin/exchange-rates/${id}`);
-    return response.data.data;
+    return normalizeCurrencyPair(response.data.data);
   },
 
   /**
@@ -45,7 +46,7 @@ export const exchangeRatesService = {
    */
   create_rate: async (data: CreateRateRequest): Promise<CurrencyPair> => {
     const response = await apiClient.post<ExchangeRateResponse>("/admin/exchange-rates", data);
-    return response.data.data;
+    return normalizeCurrencyPair(response.data.data);
   },
 
   /**
@@ -53,7 +54,7 @@ export const exchangeRatesService = {
    */
   update_rate: async (id: number, data: UpdateRateRequest): Promise<CurrencyPair> => {
     const response = await apiClient.put<ExchangeRateResponse>(`/admin/exchange-rates/${id}`, data);
-    return response.data.data;
+    return normalizeCurrencyPair(response.data.data);
   },
 
   /**

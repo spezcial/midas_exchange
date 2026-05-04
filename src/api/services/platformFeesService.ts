@@ -1,5 +1,6 @@
 import { apiClient } from "../client";
 import type { PlatformFeesListResponse, FeeOperation } from "@/types";
+import { normalizePlatformFeesListResponse } from "@/lib/numeric";
 
 export interface GetPlatformFeesParams {
   limit?: number;
@@ -19,6 +20,6 @@ export const platformFeesService = {
         },
       }
     );
-    return response.data.data;
+    return normalizePlatformFeesListResponse(response.data.data);
   },
 };

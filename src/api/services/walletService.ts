@@ -1,5 +1,6 @@
 import { apiClient } from "../client";
 import type { Wallet, Currency, Transaction, CurrencyInfo } from "@/types";
+import { normalizeWallet, normalizeTransaction } from "@/lib/numeric";
 
 export interface DepositData {
   currency: Currency;
@@ -33,7 +34,7 @@ export const walletService = {
    */
   get_wallets: async (): Promise<Wallet[]> => {
     const response = await apiClient.get<{ success: boolean; data: Wallet[] }>("/wallets");
-    return response.data.data;
+    return response.data.data.map(normalizeWallet);
   },
 
   /**
@@ -41,7 +42,8 @@ export const walletService = {
    */
   deposit: async (data: DepositData): Promise<WalletOperationResponse> => {
     const response = await apiClient.post<WalletOperationResponse>("/wallets/deposit", data);
-    return response.data;
+    const r = response.data;
+    return { ...r, wallets: r.wallets.map(normalizeWallet), transaction: normalizeTransaction(r.transaction) };
   },
 
   /**
@@ -49,6 +51,7 @@ export const walletService = {
    */
   withdraw: async (data: WithdrawData): Promise<WalletOperationResponse> => {
     const response = await apiClient.post<WalletOperationResponse>("/wallets/withdraw", data);
-    return response.data;
+    const r = response.data;
+    return { ...r, wallets: r.wallets.map(normalizeWallet), transaction: normalizeTransaction(r.transaction) };
   },
 };

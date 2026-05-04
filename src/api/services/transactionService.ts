@@ -1,5 +1,6 @@
 import { apiClient } from "../client";
 import type { Transaction, TransactionType, TransactionStatus } from "@/types";
+import { normalizeTransaction } from "@/lib/numeric";
 
 export interface GetHistoryParams {
   type?: TransactionType;
@@ -16,6 +17,6 @@ export const transactionService = {
       "/transactions",
       { params }
     );
-    return response.data.data;
+    return response.data.data.map(normalizeTransaction);
   },
 };

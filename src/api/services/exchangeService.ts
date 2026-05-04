@@ -1,5 +1,6 @@
 import { apiClient } from "../client";
 import type { ExchangeRate, Currency, Transaction, Wallet, CurrencyPair } from "@/types";
+import { normalizeExchangeRate, normalizeCurrencyPair, normalizeWallet, normalizeTransaction, parseNum } from "@/lib/numeric";
 import axios from "axios";
 
 export interface CalculateExchangeData {
@@ -45,7 +46,8 @@ export const exchangeService = {
    */
   get_exchange_pairs: async (): Promise<CurrencyPairsResponse> => {
     const response = await public_api_client.get<CurrencyPairsResponse>("/exchange-rates");
-    return response.data;
+    const r = response.data;
+    return { ...r, data: r.data.map(normalizeCurrencyPair) };
   },
 
   /**
@@ -53,7 +55,7 @@ export const exchangeService = {
    */
   get_rates: async (): Promise<ExchangeRate[]> => {
     const response = await apiClient.get<ExchangeRate[]>("/exchange/rates");
-    return response.data;
+    return response.data.map(normalizeExchangeRate);
   },
 
   /**
@@ -61,7 +63,15 @@ export const exchangeService = {
    */
   calculate: async (data: CalculateExchangeData): Promise<ExchangeResult> => {
     const response = await apiClient.post<ExchangeResult>("/exchange/calculate", data);
-    return response.data;
+    const r = response.data;
+    return {
+      ...r,
+      from_amount: parseNum(r.from_amount),
+      to_amount: parseNum(r.to_amount),
+      rate: parseNum(r.rate),
+      fee: parseNum(r.fee),
+      fee_amount: parseNum(r.fee_amount),
+    };
   },
 
   /**
@@ -69,6 +79,12 @@ export const exchangeService = {
    */
   execute: async (data: CalculateExchangeData): Promise<ExecuteExchangeResponse> => {
     const response = await apiClient.post<ExecuteExchangeResponse>("/exchange/execute", data);
-    return response.data;
+    const r = response.data;
+    return {
+      ...r,
+      transaction: normalizeTransaction(r.transaction),
+      from_wallet: normalizeWallet(r.from_wallet),
+      to_wallet: normalizeWallet(r.to_wallet),
+    };
   },
 };
