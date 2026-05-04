@@ -97,7 +97,7 @@ export function normalizeOTCMessage(m: OTCMessage): OTCMessage {
 export function normalizeOTCOrderDetail(o: OTCOrderDetail): OTCOrderDetail {
   return {
     ...applyOTCOrderNumerics(o),
-    messages: o.messages.map(normalizeOTCMessage),
+    messages: (o.messages ?? []).map(normalizeOTCMessage),
   };
 }
 

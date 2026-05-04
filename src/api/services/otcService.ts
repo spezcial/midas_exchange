@@ -46,7 +46,7 @@ export const otcService = {
   list_orders: async (params?: ListOTCOrdersParams): Promise<OTCOrdersListResponse> => {
     const response = await apiClient.get("/otc/orders", { params });
     const r: OTCOrdersListResponse = response.data?.data ?? response.data;
-    return { ...r, orders: r.orders.map(normalizeOTCOrder) };
+    return { ...r, orders: (r.orders ?? []).map(normalizeOTCOrder) };
   },
 
   get_order: async (uid: string): Promise<OTCOrderDetail> => {
@@ -110,7 +110,7 @@ export const otcService = {
   admin_list_orders: async (params?: AdminListOTCOrdersParams): Promise<OTCOrdersListResponse> => {
     const response = await apiClient.get("/admin/otc/orders", { params });
     const r: OTCOrdersListResponse = response.data?.data ?? response.data;
-    return { ...r, orders: r.orders.map(normalizeOTCOrder) };
+    return { ...r, orders: (r.orders ?? []).map(normalizeOTCOrder) };
   },
 
   admin_get_order: async (uid: string): Promise<OTCOrderDetail> => {
