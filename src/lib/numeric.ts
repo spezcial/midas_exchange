@@ -3,7 +3,6 @@ import type {
   CurrencyPair,
   ExchangeRate,
   Transaction,
-  CurrencyExchange,
   OTCOrder,
   OTCOrderDetail,
   OTCMessage,
@@ -54,7 +53,13 @@ export function normalizeTransaction(t: Transaction): Transaction {
   };
 }
 
-export function normalizeCurrencyExchange(e: CurrencyExchange): CurrencyExchange {
+export function normalizeCurrencyExchange<T extends {
+  from_amount: number;
+  to_amount: number;
+  to_amount_with_fee: number;
+  exchange_rate: number;
+  fee: number;
+}>(e: T): T {
   return {
     ...e,
     from_amount: parseNum(e.from_amount),
@@ -62,7 +67,7 @@ export function normalizeCurrencyExchange(e: CurrencyExchange): CurrencyExchange
     to_amount_with_fee: parseNum(e.to_amount_with_fee),
     exchange_rate: parseNum(e.exchange_rate),
     fee: parseNum(e.fee),
-  };
+  } as T;
 }
 
 function applyOTCOrderNumerics<T extends OTCOrder>(o: T): T {

@@ -25,7 +25,7 @@ export const exchangesService = {
       "/exchanges",
       params
     );
-    return normalizeCurrencyExchange(response.data.data) as CreateExchangeResponse;
+    return normalizeCurrencyExchange(response.data.data);
   },
 
   /**
@@ -81,7 +81,7 @@ export const exchangesService = {
       }
     );
     const r = response.data.data;
-    return { ...r, exchanges: r.exchanges.map(normalizeCurrencyExchange) as AdminCurrencyExchange[] };
+    return { ...r, exchanges: r.exchanges.map(normalizeCurrencyExchange) };
   },
 
   /**
@@ -91,6 +91,6 @@ export const exchangesService = {
     const response = await apiClient.get<{ success: boolean; data: AdminCurrencyExchange }>(
       `/admin/exchanges/${exchange_id}`
     );
-    return normalizeCurrencyExchange(response.data.data) as AdminCurrencyExchange;
+    return normalizeCurrencyExchange(response.data.data);
   },
 };
